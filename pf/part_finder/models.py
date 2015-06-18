@@ -1,23 +1,25 @@
 from django.db import models
 from datetime import date
+from django.contrib.auth.models import User
+from django.db import models
 
-# Create your models here.
+class Publication(models.Model):
+    title = models.CharField(max_length=30)
 
-#Experiment model
+    def __unicode__(self):              # __unicode__ on Python 2
+        return self.title
 
-class Experiment(models.Model):
-    name = models.CharField(max_length=128)
-    id = models.CharField(max_length=128)
-    date = models.DateField(("Date"), default=date.today)
-    eventStatus = models.CharField(max_length=128)
-    paidEvent = models.CharField(max_length=128)
-    startTime = models.TimeField()
-    location = models.CharField(max_length=128)
-    ManagerId = models.IntegerField(default=000)
-    duration = models.IntegerField(default=000)
-    NoOfPartsWanted = models.IntegerField(default=000)
+    class Meta:
+        ordering = ('title',)
 
-    def __unicode__(self):  #For Python 2, use __str__ on Python 3
-        return self.name
+class Article(models.Model):
+    headline = models.CharField(max_length=100)
+    publications = models.ManyToManyField(Publication, blank=True)
 
-# ß
+    def __unicode__(self):             # __unicode__ on Python 2
+        return self.headline
+
+    class Meta:
+        ordering = ('headline',)
+
+
