@@ -1,18 +1,26 @@
 <!DOCTYPE html>
-
-{% load staticfiles %} <!-- New line -->
-
 <html>
-
     <head>
-        <title>Rango</title>
+        <title>Participant Finder</title>
     </head>
 
     <body>
-        <h1>Rango says...</h1>
-        hello world! <strong>{{ boldmessage }}</strong><br />
-        <a href="/part_finder/about/">About</a><br />
-        <img src="{% static "images/part.jpg" %}" alt="Picture of Part" /> <!-- New line -->
-    </body>
+        <h1>Latest Experiments</h1>
 
+        {% if experiments %}
+            <ul>
+                {% for experiment in experiments %}
+                <li>{{ experiment.name }}</li>
+                <li>{{ experiment.date }}</li>
+                <li>{{ experiment.startTime }}</li>
+                <li>{{ experiment.endTime }}</li>
+                <li>{{ experiment.noOfPartsWanted }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <strong>There are no experiments present.</strong>
+        {% endif %}
+
+{#        <a href="/rango/about/">About</a>#}
+    </body>
 </html>

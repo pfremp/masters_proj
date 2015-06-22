@@ -43,19 +43,35 @@ class Experiment(models.Model):
 
 
 class Participant(models.Model):
+    YN = (('Y','Yes'),('N','No'))
     # This line is required. Links UserProfile to a User model instance.
-
     user = models.OneToOneField(User)
+    #User standard details
     name = models.CharField(max_length=128, default="Participant Name")
-    # The additional attributes we wish to include.
     picture = models.ImageField(upload_to='profile_images', blank=True)
-
     dob = models.DateField(("Date"),default=date.today, blank=True)
     matric = models.CharField(max_length=128)
     email = models.EmailField(blank=True)
     contactNo = models.IntegerField(max_length=128, blank=True)
     address = models.CharField(max_length=128)
-    experiment = models.ManyToManyField(Experiment)
+
+    #Demographic informatuon
+    occupation = models.CharField(max_length=128, blank=True)
+    maritial = models.CharField(max_length=128, blank=True)
+    gender = models.CharField(max_length=128, blank=True)
+    ethnicity = models.CharField(max_length=128, blank=True)
+    religion = models.CharField(max_length=128, blank=True)
+
+    #Health information
+    height = models.IntegerField(max_length=128, blank=True, null=True)
+    weight = models.IntegerField(max_length=128, blank=True, null=True)
+
+    #Preferences
+    max_distance = models.IntegerField(max_length=128, blank=True, null=True)
+    online_only = models.IntegerField(max_length=128, blank=True, null=True)
+    paid_only = models.CharField(max_length=128, blank=True, choices=YN)
+    email_notifications = models.CharField(max_length=128, blank=True, choices=YN)
+    experiment = models.ManyToManyField(Experiment, null=True, blank=True)
 
 
 
