@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Participant Finder</title>
+    </head>
+
+    <body>
+        <h1>{{ experiment_name }}</h1>
+        {% if experiment %}
+            {% if experiment %}
+            <ul>
+
+                <li>{{ experiment.name }}</li>
+
+            </ul>
+            {% else %}
+                <strong>No pages currently in category.</strong>
+            {% endif %}
+        {% else %}
+            There are currently no experiments!
+        {% endif %}
+    </body>
+</html>
