@@ -8,13 +8,15 @@
         <h1>Latest Experiments</h1>
 
         {% if experiments %}
-            <ul>
+             <ul>
                 {% for experiment in experiments %}
-                <li>{{ experiment.name }}</li>
-                <li>{{ experiment.date }}</li>
-                <li>{{ experiment.startTime }}</li>
-                <li>{{ experiment.endTime }}</li>
-                <li>{{ experiment.noOfPartsWanted }}</li>
+{#                <li>{{ experiment.name }}</li>#}
+                <li><a href="/part_finder/experiments/{{ experiment.slug }}">{{ experiment.name }}</a></li>
+
+{#                <li>{{ experiment.date }}</li>#}
+{#                <li>{{ experiment.startTime }}</li>#}
+{#                <li>{{ experiment.endTime }}</li>#}
+{#                <li>{{ experiment.noOfPartsWanted }}</li>#}
                 {% endfor %}
             </ul>
         {% else %}
@@ -22,5 +24,9 @@
         {% endif %}
 
 {#        <a href="/rango/about/">About</a>#}
+
+    <a href="/part_finder/add_experiment/">Add an Experiment</a><br />
+    <a href="/part_finder/participant_details/">Edit Participant Details</a><br />
     </body>
 </html>
+

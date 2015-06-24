@@ -14,16 +14,27 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
+            name='Counter',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('c', models.IntegerField()),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
             name='Experiment',
             fields=[
                 ('name', models.CharField(max_length=128, blank=True)),
-                ('expId', models.CharField(default=5, max_length=128, unique=True, serialize=False, primary_key=True)),
+                ('expId', models.AutoField(unique=True, serialize=False, primary_key=True)),
                 ('date', models.DateField(default=datetime.date.today, verbose_name=b'Date', blank=True)),
                 ('paidEvent', models.CharField(max_length=128, choices=[(b'Y', b'Yes'), (b'N', b'No')])),
                 ('location', models.CharField(max_length=128)),
-                ('noOfPartsWanted', models.IntegerField(default=0)),
+                ('noOfPartsWanted', models.IntegerField()),
                 ('endTime', models.TimeField(null=True, blank=True)),
                 ('startTime', models.TimeField(null=True, blank=True)),
+                ('slug', models.SlugField(unique=True)),
             ],
             options={
             },
@@ -73,7 +84,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='experiment',
             name='researcher',
-            field=models.ForeignKey(to='part_finder.Researcher'),
+            field=models.ForeignKey(blank=True, to='part_finder.Researcher', null=True),
             preserve_default=True,
         ),
     ]

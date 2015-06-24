@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Participants Finder - {% block title %}Find Experiment Participants{% endblock %}</title>
+    </head>
+
+    <body>
+        <div>
+            {% block body_block %}{% endblock %}
+        </div>
+
+        <hr />
+        <div>
+        <ul>
+    {% if user.is_authenticated %}
+
+        <li><a href="{% url 'auth_logout' %}?next=/part_finder/">Logout</a></li>
+
+    {% else %}
+        <li><a href="{% url 'registration_register' %}">Register</a></li>
+        <li><a href="{% url 'auth_login' %}">Login</a></li>
+    {% endif %}
+
+
+    </ul>
+</div>
+
+
+
+    </body>
+</html>

@@ -7,13 +7,10 @@ from django.conf.urls.static import static # New Import
 
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'pf.views.home', name='home'),
-    # url(r'^blog/', include('blog.urls')),
 
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^part_finder/', include('part_finder.urls')),
-
+url(r'^admin/', include(admin.site.urls)),
+url(r'^part_finder/', include('part_finder.urls')),
+(r'^accounts/', include('registration.backends.simple.urls')),
 )
 
 if not settings.DEBUG:
