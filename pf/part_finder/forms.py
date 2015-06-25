@@ -2,34 +2,51 @@ __author__ = 'patrickfrempong'
 
 from django import forms
 from part_finder.models import Researcher,Experiment,Participant
+from django.contrib.auth.models import User
+from datetime import date
 
-
-class ExperimentForm (forms.ModelForm):
-    name = forms.CharField(max_length=128, help_text="Experiment Name")
-    date = forms.DateField(required=False, help_text="Experiment Date")
-    paidEvent = forms.CharField(max_length=128, help_text="Paid Event (Y or N)")
-    locations = forms.CharField(max_length=128, help_text="Location")
-    noOfPartsWanted = forms.IntegerField(max_value=1000, help_text="Number of Participants")
-    startTime = forms.TimeField(required=False, help_text="Start Time")
-    endTime = forms.TimeField(required=False, help_text="End Time")
-    researcher = forms.ModelChoiceField(queryset=Researcher.objects.all(), help_text="Researcher Name")
-
-    slug = forms.CharField(widget=forms.HiddenInput(), required=False)
+#user form superclass (common attrib)
+class UserForm(forms.ModelForm):
+    firstName = forms.CharField(max_length=30, help_text="First Name")
+    lastName = forms.CharField(max_length=30, help_text="Last Name")
+    username = forms.CharField(max_length=30, help_text="Username")
+    email = forms.EmailField(max_length=128, help_text="Email")
+    dob = forms.DateField(help_text="Date of Birth")
+    matric = forms.IntegerField(help_text="Matriculation No.")
+    institution = forms.CharField(help_text="Institution")
+    contactNo = forms.IntegerField(help_text="Contact Number")
+    password = forms.CharField(max_length=30, help_text="Password")
 
     class Meta:
         model = Experiment
-        fields = ('name', 'expId', 'date', 'paidEvent', 'locations', 'noOfPartsWanted', 'startTime', 'endTime', 'researcher')
+        fields = ('firstName', 'lastName', 'email', 'dob', 'matric', 'institution', 'contactNo', 'password')
+
+class ResearcherForm (UserForm):
+   department = forms.CharField(help_text="Department Name")
+
+   class Meta(UserForm.Meta):
+        model = Researcher
+        fields = UserForm.Meta.fields + ('department',)
+
+class ExperimentForm (forms.ModelForm):
+    LOCATIONS = (('Gla','Glasgow'),('Ldn','London'))
+    name = forms.CharField(max_length=128, help_text="Experiment Name")
+    date = forms.DateField(required=False, help_text="Experiment Date")
+    paidEvent = forms.BooleanField(help_text="Paid Event")
+    locations = forms.CharField(max_length=128, help_text="Location")
+    noOfPartsWanted = forms.IntegerField(max_value=1000, help_text="Number of Participants")
+    startTime = forms.TimeField(help_text="Start Time")
+    endTime = forms.TimeField(help_text="End Time")
+    slug = forms.CharField(widget=forms.HiddenInput(), required=False)
+
+    class Meta():
+        model = Experiment
+        fields = ('name', 'date', 'paidEvent', 'locations', 'noOfPartsWanted', 'startTime', 'endTime')
 
 
-class ParticipantForm (forms.ModelForm):
+class ParticipantForm (UserForm):
     # participant = forms.ModelChoiceField(queryset=Participant.objects.all(), help_text="Username")
 
-    name = forms.CharField(max_length=128, help_text="Participant Name")
-    picture = forms.ImageField(help_text="Upload Image", required=False)
-    dob = forms.DateField(required=False, help_text="D.O.B")
-    matric =forms.IntegerField(help_text="Matric No", required=False)
-    email = forms.EmailField(required=True, help_text="Email")
-    contactNo = forms.IntegerField(required=False, help_text="Contact No.")
     address = forms.CharField(required=False, help_text="Address", max_length=128)
 
     occupation = forms.CharField(required=False, help_text="Occupation", max_length=128)
@@ -47,9 +64,15 @@ class ParticipantForm (forms.ModelForm):
     email_notifications = forms.CharField(help_text="Email Notifications", max_length=128, required=False)
 
 
-    class Meta:
+    class Meta(UserForm.Meta):
         model = Participant
-        fields = ('user', 'name', 'picture', 'dob', 'matric', 'email', 'contactNo', 'address', 'occupation', 'marital', 'gender', 'ethnicity', 'religion', 'height', 'weight', 'max_distance', 'online_only', 'paid_only', 'email_notifications')
+        fields = UserForm.Meta.fields + ('address', 'occupation', 'marital', 'gender', 'ethnicity', 'religion', 'height', 'weight', 'max_distance', 'online_only', 'paid_only', 'email_notifications')
 
 
 # forms.IntegerField(max_length=128, help_text="Experiment ID")
+
+
+
+# application class.
+# foreign keys: participant, experiment
+# see ifinder

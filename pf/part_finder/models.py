@@ -4,32 +4,41 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.template.defaultfilters import slugify
 
-class Researcher(models.Model):
+#common user attributes
+class CommonUser(User):
     INSTITUTIONS = (('Glasgow','University of Glasgow'),('Strathclyde','Strathclyde University'))
-    user = models.OneToOneField(User)
-    name = models.CharField(max_length=128, default="Researcher Name")
-    matric = models.CharField(max_length=128)
-    institution = models.CharField(choices=INSTITUTIONS, max_length=128, null=True, blank=True)
-
+    firstName = models.CharField(max_length=30)
+    lastName = models.CharField(max_length=30)
+    dob = models.DateField(default=date.today)
+    matric = models.IntegerField()
+    institution = models.CharField(choices=INSTITUTIONS, max_length=128)
+    contactNo = models.IntegerField()
 
     def __unicode__(self):  #For Python 2, use __str__ on Python 3
         return self.name
+
+class Researcher(CommonUser):
+    department = models.CharField(max_length=128, blank=True)
+
+    def __unicode__(self):  #For Python 2, use __str__ on Python 3
+        return self.username
+
 
 class Experiment(models.Model):
     # eventIdCounter()
     PAID_EVENT = (('Y','Yes'),('N','No'))
     DURATION = (('2','2 hours'))
+    LOCATIONS = (('Gla','Glasgow'),('Ldn','London'))
     FMT = '%H:%M'
 
-    name = models.CharField(max_length=128, blank=True)
-    expId = models.AutoField(primary_key=True, unique=True)
-    date = models.DateField(("Date"), default=date.today, blank=True)
-    paidEvent = models.CharField(max_length=128, choices=PAID_EVENT)
-    location = models.CharField(max_length=128)
-    noOfPartsWanted = models.IntegerField()
-    endTime = models.TimeField(blank=True, null=True)
-    startTime = models.TimeField(blank=True, null=True)
-    researcher = models.ForeignKey(Researcher, blank=True, null=True)
+    name = models.CharField(max_length=128, blank=False)
+    date = models.DateField(("Date"), default=date.today)
+    paidEvent = models.BooleanField(default=False)
+    location = models.CharField(max_length=128, choices=LOCATIONS)
+    noOfPartsWanted = models.IntegerField(null=True)
+    endTime = models.TimeField(blank=True)
+    startTime = models.TimeField(blank=True)
+    researcher = models.ForeignKey(Researcher)
     slug = models.SlugField(unique=True)
 
     def save(self, *args, **kwargs):
@@ -41,17 +50,9 @@ class Experiment(models.Model):
 
 
 
-class Participant(models.Model):
+class Participant(CommonUser):
     YN = (('Y','Yes'),('N','No'))
-    # This line is required. Links UserProfile to a User model instance.
-    user = models.OneToOneField(User)
     #User standard details
-    name = models.CharField(max_length=128, default="Participant Name")
-    picture = models.ImageField(upload_to='profile_images', blank=True)
-    dob = models.DateField(("Date"),default=date.today, blank=True)
-    matric = models.CharField(max_length=128)
-    email = models.EmailField(blank=True)
-    contactNo = models.IntegerField(max_length=128, blank=True)
     address = models.CharField(max_length=128)
 
     #Demographic informatuon
@@ -70,12 +71,8 @@ class Participant(models.Model):
     online_only = models.IntegerField(max_length=128, blank=True, null=True)
     paid_only = models.CharField(max_length=128, blank=True, choices=YN)
     email_notifications = models.CharField(max_length=128, blank=True, choices=YN)
-    experiment = models.ManyToManyField(Experiment, null=True, blank=True)
-
-
-
-
+    experiments = models.ManyToManyField(Experiment, null=True, blank=True, related_name="participants")
 
     def __unicode__(self):  #For Python 2, use __str__ on Python 3
-        return self.name
+        return self.username
 

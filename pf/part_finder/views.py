@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from part_finder.models import Researcher, Experiment, Participant
-from part_finder.forms import ExperimentForm, ParticipantForm
+from part_finder.forms import ExperimentForm, ParticipantForm, ResearcherForm
 
 # Create your views here.
 
@@ -43,7 +43,9 @@ def add_experiment(request):
         form = ExperimentForm(request.POST)
 
         if form.is_valid():
-            form.save(commit=True)
+            experiment = form.save(commit=False)
+            experiment.user = request.user
+            form.save()
 
             return index(request)
         else:
@@ -70,3 +72,21 @@ def participant_details(request):
         form = ParticipantForm
 
     return render(request, 'part_finder/participant_details.html', {'form':form})
+
+
+#Researcher signup
+def researcher_signup(request):
+    if request.method == 'POST':
+        researcherForm = ResearcherForm(request.POST)
+
+        if researcherForm.is_valid():
+            researcherForm.save(commit=True)
+
+            return index(request)
+        else:
+            print researcherForm.errors
+
+    else:
+        researcherForm = ResearcherForm()
+
+    return render(request, 'part_finder/researcher_signup.html', {'form': researcherForm})

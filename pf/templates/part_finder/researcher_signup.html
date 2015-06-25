@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}Researcher Signup{% endblock %}
+
+{% block body_block %}
+
+<h1>Researcher Signup</h1>
+
+        <form id="researcher_signup" method="post" action="/part_finder/researcher_signup/">
+
+            {% csrf_token %}
+            {% for hidden in form.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+
+            {% for field in form.visible_fields %}
+                {{ field.errors }}
+                {{ field.help_text }}
+                {{ field }}
+            {% endfor %}
+
+            <input type="submit" name="submit" value="Register" />
+        </form>
+
+{% endblock %}
