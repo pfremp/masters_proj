@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{#{% extends "allauthbase.html" %}#}
 
 <html>
     <head>
@@ -11,15 +12,37 @@
         </div>
 
         <hr />
+<!------copied from allauthbase.html------>
+        <div>
+      <strong>Menu:</strong>
+      <ul>
+	{% if user.is_authenticated %}
+	<li><a href="{% url 'account_email' %}">Change E-mail</a></li>
+	<li><a href="{% url 'account_logout' %}?next=/part_finder/">Sign Out</a></li>
+	{% else %}
+	<li><a href="{% url 'account_login' %}">Sign In</a></li>
+	<li><a href="{% url 'account_signup' %}">Sign Up</a></li>
+	{% endif %}
+      </ul>
+    </div>
+        {% block content %}
+    {% endblock %}
+<!------------------------------------->
+
+
+        <hr />
+        <a href="/part_finder/add_experiment/">Add an Experiment</a><br />
+        <a href="/part_finder/participant_details/">Edit Participant Details</a><br />
+        <a href="/part_finder/researcher_signup/">Researcher Signup</a><br />
         <div>
         <ul>
-    {% if user.is_authenticated %}
+            {% if user.is_authenticated %}
 
-        <li><a href="{% url 'auth_logout' %}?next=/part_finder/">Logout</a></li>
+{#        <li><a href="{% url 'auth_logout' %}?next=/part_finder/">Logout</a></li>#}
 
     {% else %}
-        <li><a href="{% url 'registration_register' %}">Register</a></li>
-        <li><a href="{% url 'auth_login' %}">Login</a></li>
+
+
     {% endif %}
 
 

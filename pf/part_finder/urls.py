@@ -11,6 +11,9 @@ urlpatterns = patterns('',
     url(r'^participant_details', views.participant_details, name='participant_details'),
     url(r'^experiments/(?P<experiment_name_slug>[\w\-]+)/$', views.experiment, name='experiment'),
     url(r'^researcher_signup/$', views.researcher_signup, name='researcher_signup' ),
+    url(r'^complete_registration/$', views.complete_registration, name='complete_registration'),
+    url(r'^login_success/$', views.login_success, name='login_success'),
+
 
 
     )
