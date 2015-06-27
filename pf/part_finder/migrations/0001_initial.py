@@ -2,35 +2,17 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-from django.conf import settings
 import datetime
+from django.conf import settings
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('auth', '0001_initial'),
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
-        migrations.CreateModel(
-            name='CommonUser',
-            fields=[
-                ('user_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to=settings.AUTH_USER_MODEL)),
-                ('firstName', models.CharField(max_length=30)),
-                ('lastName', models.CharField(max_length=30)),
-                ('dob', models.DateField(default=datetime.date.today)),
-                ('matric', models.IntegerField()),
-                ('institution', models.CharField(max_length=128, choices=[(b'Glasgow', b'University of Glasgow'), (b'Strathclyde', b'Strathclyde University')])),
-                ('contactNo', models.IntegerField()),
-            ],
-            options={
-                'abstract': False,
-                'verbose_name': 'user',
-                'verbose_name_plural': 'users',
-            },
-            bases=('auth.user',),
-        ),
         migrations.CreateModel(
             name='Experiment',
             fields=[
@@ -51,7 +33,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Participant',
             fields=[
-                ('commonuser_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='part_finder.CommonUser')),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('address', models.CharField(max_length=128)),
                 ('occupation', models.CharField(max_length=128, blank=True)),
                 ('marital', models.CharField(max_length=128, blank=True)),
@@ -67,24 +49,35 @@ class Migration(migrations.Migration):
                 ('experiments', models.ManyToManyField(related_name=b'participants', null=True, to='part_finder.Experiment', blank=True)),
             ],
             options={
-                'abstract': False,
-                'verbose_name': 'user',
-                'verbose_name_plural': 'users',
             },
-            bases=('part_finder.commonuser',),
+            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='Researcher',
             fields=[
-                ('commonuser_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='part_finder.CommonUser')),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('dob', models.DateField(default=datetime.date.today)),
+                ('matric', models.IntegerField()),
+                ('institution', models.CharField(max_length=128, choices=[(b'Glasgow', b'University of Glasgow'), (b'Strathclyde', b'Strathclyde University')])),
+                ('contactNo', models.IntegerField()),
                 ('department', models.CharField(max_length=128, blank=True)),
             ],
             options={
-                'abstract': False,
-                'verbose_name': 'user',
-                'verbose_name_plural': 'users',
             },
-            bases=('part_finder.commonuser',),
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='UserProfile',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('typex', models.CharField(max_length=128, verbose_name=b'type')),
+                ('participant', models.OneToOneField(null=True, blank=True, to='part_finder.Participant')),
+                ('researcher', models.OneToOneField(null=True, blank=True, to='part_finder.Researcher')),
+                ('user', models.OneToOneField(related_name=b'profile', to=settings.AUTH_USER_MODEL)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
         ),
         migrations.AddField(
             model_name='experiment',

@@ -4,24 +4,31 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.template.defaultfilters import slugify
 
-#common user attributes
-class CommonUser(User):
+
+
+
+# #common user attributes
+# class CommonUser(models.Model):
+#     INSTITUTIONS = (('Glasgow','University of Glasgow'),('Strathclyde','Strathclyde University'))
+#     dob = models.DateField(default=date.today)
+#     matric = models.IntegerField()
+#     institution = models.CharField(choices=INSTITUTIONS, max_length=128)
+#     contactNo = models.IntegerField()
+#
+#     def __unicode__(self):  #For Python 2, use __str__ on Python 3
+#         return self.matric
+
+class Researcher(models.Model):
     INSTITUTIONS = (('Glasgow','University of Glasgow'),('Strathclyde','Strathclyde University'))
-    firstName = models.CharField(max_length=30)
-    lastName = models.CharField(max_length=30)
     dob = models.DateField(default=date.today)
     matric = models.IntegerField()
     institution = models.CharField(choices=INSTITUTIONS, max_length=128)
     contactNo = models.IntegerField()
-
-    def __unicode__(self):  #For Python 2, use __str__ on Python 3
-        return self.name
-
-class Researcher(CommonUser):
     department = models.CharField(max_length=128, blank=True)
 
+
     def __unicode__(self):  #For Python 2, use __str__ on Python 3
-        return self.username
+        return self.userprofile.user.username
 
 
 class Experiment(models.Model):
@@ -50,7 +57,7 @@ class Experiment(models.Model):
 
 
 
-class Participant(CommonUser):
+class Participant(models.Model):
     YN = (('Y','Yes'),('N','No'))
     #User standard details
     address = models.CharField(max_length=128)
@@ -74,5 +81,18 @@ class Participant(CommonUser):
     experiments = models.ManyToManyField(Experiment, null=True, blank=True, related_name="participants")
 
     def __unicode__(self):  #For Python 2, use __str__ on Python 3
-        return self.username
+        return self.userprofile.user.username
 
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, related_name='profile', unique=True)
+    typex = models.CharField("type", max_length=128, blank=False)
+    participant = models.OneToOneField(Participant, blank=True, null=True)
+    researcher = models.OneToOneField(Researcher, blank=True, null=True)
+
+    def update_res (forms):
+        researcher = forms
+        researcher.save()
+
+    def __unicode__(self):  #For Python 2, use __str__ on Python 3
+        return self.user.username

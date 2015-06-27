@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Participant Finder</title>
-    </head>
 
-    <body>
-        <h1>Latest Experiments</h1>
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}Participant Finder{% endblock %}
+
+
+{% block body_block %}
+
+<h1>Latest Experiments</h1>
 
         {% if experiments %}
              <ul>
@@ -23,12 +27,7 @@
             <strong>There are no experiments present.</strong>
         {% endif %}
 
-{#        <a href="/rango/about/">About</a>#}
 
-    <a href="/part_finder/add_experiment/">Add an Experiment</a><br />
-    <a href="/part_finder/participant_details/">Edit Participant Details</a><br />
-    <a href="/part_finder/researcher_signup/">Researcher Signup</a><br />
+{% endblock %}
 
-    </body>
-</html>
 

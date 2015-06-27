@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}Complete Registration{% endblock %}
+
+{% block body_block %}
+
+{% if user.profile.researcher == None or user.profile.participant == None  %}
+
+    {% if user.profile.typex == 'Researcher' %}
+
+        <form id="complete_registration" method="post" action="/part_finder/complete_registration/">
+
+            {% csrf_token %}
+            {% for hidden in researcher_form.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+
+            {% for field in researcher_form.visible_fields %}
+                {{ field.errors }}
+                {{ field.help_text }}
+                {{ field }}
+            {% endfor %}
+
+            <input type="submit" name="submit" value="Update Researcher Details" />
+
+    {% elif user.profile.typex == 'Participant'  %}
+
+            <form id="complete_registrationc" method="post" action="/part_finder/complete_registration/">
+
+            {% csrf_token %}
+            {% for hidden in participant_form.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+
+            {% for field in participant_form.visible_fields %}
+                {{ field.errors }}
+                {{ field.help_text }}
+                {{ field }}
+            {% endfor %}
+
+            <input type="submit" name="submit" value="Update Participant Details" />
+
+    {% else %} Invalid User Type, Please log in
+
+    {% endif %}
+
+{#    redirect url to home page#}
+
+    {% endif %}
+
+{#     {{ user.profile.typex }}#}
+{##}
+{#    {% if user_profile %}#}
+{#             <ul>#}
+{#                {% for user in user_profile %}#}
+{#                <li>{{ experiment.name }}</li>#}
+{#                <li>{{ typex }}</li>#}
+{##}
+{#                <li>{{ experiment.date }}</li>#}
+{#                <li>{{ experiment.startTime }}</li>#}
+{#                <li>{{ experiment.endTime }}</li>#}
+{#                <li>{{ experiment.noOfPartsWanted }}</li>#}
+{#                {% endfor %}#}
+{#            </ul>#}
+{#        {% else %}#}
+{#            <strong>There are no experiments present.</strong>#}
+{#        {% endif %}#}
+{##}
+{##}
+{#     {{ user_profile }}#}
+{##}
+{##}
+{#    {% for user in profile %}#}
+{##}
+{#          {{ user_profile }}#}
+
+{#    {% endfor %}#}
+
+{#    {% for user in user_profile %}#}
+{##}
+{#        {% if user == user_profile %}#}
+{##}
+{#            {{ boldmessage }}#}
+{##}
+{##}
+{#        {% else %}#}
+{##}
+{#            <h1>Booooooo!!!</h1>#}
+{##}
+{#        {% endif %}#}
+{##}
+{##}
+{#    {% endfor %}#}
+
+
+
+
+
+
+{% endblock %}
+
+
