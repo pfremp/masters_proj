@@ -81,7 +81,7 @@ INSTALLED_APPS = (
 
 )
 
-SITE_ID = 1
+SITE_ID = 2
 
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/part_finder/login_success/'
@@ -217,6 +217,11 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+TEMPLATE_LOADER = (
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.part_finder.Loader',
+)
 
 TEMPLATE_PATH = os.path.join(BASE_DIR, 'templates')
 
