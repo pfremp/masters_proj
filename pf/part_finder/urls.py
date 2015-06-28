@@ -13,9 +13,10 @@ urlpatterns = patterns('',
     url(r'^researcher_signup/$', views.researcher_signup, name='researcher_signup' ),
     url(r'^complete_registration/$', views.complete_registration, name='complete_registration'),
     url(r'^login_success/$', views.login_success, name='login_success'),
+    url(r'^login_page/$', views.login_page, name='login_page'),
+
 
 
 
     )
-
 

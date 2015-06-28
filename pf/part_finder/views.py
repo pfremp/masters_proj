@@ -18,6 +18,17 @@ def index(request):
 
 
 
+def login_page(request):
+
+    # experiments_list = Experiment.objects.order_by('date')[:10]
+    context_dict = {}
+
+
+
+    return render(request, 'login-page.html', context_dict)
+
+
+
 def login_success(request):
 
     if request.user.profile.researcher == None and request.user.profile.participant == None:

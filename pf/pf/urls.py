@@ -10,7 +10,10 @@ urlpatterns = patterns('',
 
 url(r'^admin/', include(admin.site.urls)),
 url(r'^part_finder/', include('part_finder.urls')),
+# (r'^accounts/logout/$', 'django.contrib.auth.views.logout',
+# {'next_page': '/'}),
 (r'^accounts/', include('allauth.urls')),
+
 )
 
 if not settings.DEBUG:

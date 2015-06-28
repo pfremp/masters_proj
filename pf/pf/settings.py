@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'part_finder',
 
+
     #allauth
     # The Django sites framework is required
     'django.contrib.sites',
@@ -222,6 +223,8 @@ TEMPLATE_PATH = os.path.join(BASE_DIR, 'templates')
 TEMPLATE_DIRS = (
     TEMPLATE_PATH,
 )
+
+# TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'templates',),)
 
 
 STATIC_PATH = os.path.join(BASE_DIR, 'static')
