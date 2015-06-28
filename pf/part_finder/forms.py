@@ -32,11 +32,11 @@ class ResearcherForm (forms.ModelForm):
         fields =  ('department', 'dob', 'matric', 'institution', 'contactNo')
 
 class ExperimentForm (forms.ModelForm):
-    LOCATIONS = (('Gla','Glasgow'),('Ldn','London'))
+    LOCATIONS = (('Glasgow','Glasgow'),('London','London'))
     name = forms.CharField(max_length=128, help_text="Experiment Name")
     date = forms.DateField(required=False, help_text="Experiment Date")
     paidEvent = forms.BooleanField(help_text="Paid Event")
-    locations = forms.ChoiceField(choices=LOCATIONS, help_text="Location")
+    location = forms.ChoiceField(choices=LOCATIONS, help_text="Location")
     noOfPartsWanted = forms.IntegerField(max_value=1000, help_text="Number of Participants")
     startTime = forms.TimeField(help_text="Start Time")
     endTime = forms.TimeField(help_text="End Time")
@@ -44,7 +44,7 @@ class ExperimentForm (forms.ModelForm):
 
     class Meta():
         model = Experiment
-        fields = ('name', 'date', 'paidEvent', 'locations', 'noOfPartsWanted', 'startTime', 'endTime')
+        fields = ('name', 'date', 'paidEvent', 'location', 'noOfPartsWanted', 'startTime', 'endTime')
 
 
 class ParticipantForm (forms.ModelForm):

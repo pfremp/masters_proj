@@ -7,7 +7,7 @@
     <body>
         <h1>Add an Experiment</h1>
 
-        <form id="experiment_form" method="post" action="/part_finder/add_experiment/">
+        <form id="experiment_form" method="post" action="/part_finder/add_experiment/?next={{ 'index' }}">
 
             {% csrf_token %}
             {% for hidden in form.hidden_fields %}

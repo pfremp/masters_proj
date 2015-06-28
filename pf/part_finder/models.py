@@ -35,13 +35,13 @@ class Experiment(models.Model):
     # eventIdCounter()
     PAID_EVENT = (('Y','Yes'),('N','No'))
     DURATION = (('2','2 hours'))
-    LOCATIONS = (('Glasgow','Glasgow'),('London','London'))
+    #LOCATIONS = (('Glasgow','Glasgow'),('London','London'))
     FMT = '%H:%M'
 
     name = models.CharField(max_length=128, blank=False)
     date = models.DateField(("Date"), default=date.today)
     paidEvent = models.BooleanField(default=False)
-    location = models.CharField(max_length=128, choices=LOCATIONS)
+    location = models.CharField(max_length=128)
     noOfPartsWanted = models.IntegerField(null=True)
     endTime = models.TimeField(blank=True)
     startTime = models.TimeField(blank=True)
