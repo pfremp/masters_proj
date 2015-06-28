@@ -35,7 +35,7 @@ class Experiment(models.Model):
     # eventIdCounter()
     PAID_EVENT = (('Y','Yes'),('N','No'))
     DURATION = (('2','2 hours'))
-    LOCATIONS = (('Gla','Glasgow'),('Ldn','London'))
+    LOCATIONS = (('Glasgow','Glasgow'),('London','London'))
     FMT = '%H:%M'
 
     name = models.CharField(max_length=128, blank=False)
@@ -45,7 +45,7 @@ class Experiment(models.Model):
     noOfPartsWanted = models.IntegerField(null=True)
     endTime = models.TimeField(blank=True)
     startTime = models.TimeField(blank=True)
-    researcher = models.ForeignKey(Researcher)
+    researcher = models.ForeignKey(Researcher, related_name="experiment")
     slug = models.SlugField(unique=True)
 
     def save(self, *args, **kwargs):

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-{% extends 'site_base.html' %}
+{% extends 'site_home.html' %}
 
 {% load staticfiles %}
 
@@ -8,6 +8,7 @@
 
 
 {% block body_block %}
+    <img src="{% static "images/home_banner.jpg" %}" class="img-responsive" alt="Responsive image">
 {#    <div>#}
 {#      <strong>Menu:</strong>#}
 {#      <ul>#}
@@ -23,23 +24,57 @@
 {#        {% block content %}#}
 {#    {% endblock %}#}
 
-<h1>Latest Experiments</h1>
+<h1 style=" margin-left: auto; margin-right: auto">Latest Experiments</h1>
 
-        {% if experiments %}
-             <ul>
-                {% for experiment in experiments %}
-{#                <li>{{ experiment.name }}</li>#}
-                <li><a href="/part_finder/experiments/{{ experiment.slug }}">{{ experiment.name }}</a></li>
+{% if experiments %}
+    <div class="table table-striped" data-example-id="simple-table">
+    <table class="table">
+      <caption></caption>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Dept.</th>
+          <th>Location</th>
+          <th>Date</th>
+          <th>Paid</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+    {% for experiment in experiments %}
+        <tr>
+          <th scope="row"><a href="/part_finder/experiments/{{ experiment.slug }}">{{ experiment.name }}</a></th>
+          <td>{{ experiment.researcher.department }}</td>
+          <td>{{ experiment.location }}</td>
+          <td>{{ experiment.date|date:"M d" }}</td>
+          <td>
 
-{#                <li>{{ experiment.date }}</li>#}
-{#                <li>{{ experiment.startTime }}</li>#}
-{#                <li>{{ experiment.endTime }}</li>#}
-{#                <li>{{ experiment.noOfPartsWanted }}</li>#}
-                {% endfor %}
-            </ul>
-        {% else %}
-            <strong>There are no experiments present.</strong>
-        {% endif %}
+              {% if experiment.paidEvent == True %}
+              <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+              {% else %}
+              <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+              {% endif %}
+
+
+          </td>
+          <td>
+
+              <a href="/part_finder/experiments/{{ experiment.slug }}"><button type="button" class="btn btn-default btn-xs">Info / Sign up</button></a>
+
+          </td>
+        </tr>
+    {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+{% else %}
+            <strong>There are no experiments present.</strong><!-- /example -->
+{% endif %}
+
+
+
+
 
 
 {% endblock %}
