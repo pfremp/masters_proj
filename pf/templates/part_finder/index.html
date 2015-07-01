@@ -8,7 +8,13 @@
 
 
 {% block body_block %}
-    <img src="{% static "images/home_banner.jpg" %}" class="img-responsive" alt="Responsive image">
+    <img src="{% static "images/home_banner.jpg" %}" class="img-responsive" style="padding: 0;" alt="Responsive image">
+    <hr style="margin-top: 0px;">
+
+
+
+
+    <hr style="margin-top: 0px;">
 {#    <div>#}
 {#      <strong>Menu:</strong>#}
 {#      <ul>#}
@@ -26,8 +32,23 @@
 
 <h1 style=" margin-left: auto; margin-right: auto; width: 10em;">Latest Experiments</h1>
 
-{% if experiments %}
-    <div class="table table-striped" data-example-id="simple-table">
+<div style="padding-left: 20px; padding-right: 20px;">
+
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">All</a></li>
+    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Matched</a></li>
+{#    <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Messages</a></li>#}
+{#    <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>#}
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="home">
+
+
+        {% if experiments %}
+    <div class="table table-striped" data-example-id="simple-table" >
     <table class="table">
       <caption></caption>
       <thead>
@@ -41,7 +62,7 @@
         </tr>
       </thead>
       <tbody>
-    {% for experiment in experiments %}
+    {% for experiment in experiments|slice:"10" %}
         <tr>
           <th scope="row"><a href="/part_finder/experiments/{{ experiment.slug }}">{{ experiment.name }}</a></th>
           <td>{{ experiment.researcher.department }}</td>
@@ -71,6 +92,30 @@
 {% else %}
             <strong>There are no experiments present.</strong><!-- /example -->
 {% endif %}
+
+
+
+
+
+    </div>
+    <div role="tabpanel" class="tab-pane" id="profile">
+
+
+        {%  if user.is_authenticated %}
+
+            Matched Experiments
+
+        {% else %}
+
+            Please sign in to view matched experiments.
+
+        {% endif %}
+    </div>
+{#    <div role="tabpanel" class="tab-pane" id="messages">...</div>#}
+{#    <div role="tabpanel" class="tab-pane" id="settings">...</div>#}
+  </div>
+
+</div>
 
 
 

@@ -37,6 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'part_finder',
+    'bootstrap3',
 
 
     #allauth
