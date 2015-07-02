@@ -38,6 +38,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'part_finder',
     'bootstrap3',
+    'bootstrap3_datetime',
+    'datetimewidget',
 
 
     #allauth
@@ -189,6 +191,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 )
 
 ROOT_URLCONF = 'pf.urls'
@@ -260,7 +263,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.media",
     "django.core.context_processors.static",
     "django.core.context_processors.tz",
-    "django.contrib.messages.context_processors.messages",
+    # "django.contrib.messages.context_processors.messages",
     # Required by `allauth` template tags
     'django.core.context_processors.request',
 
@@ -280,3 +283,8 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
+#Datetime picker
+
+USE_L10N = True
+USE_TZ = True
+USE_I18N = True

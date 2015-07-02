@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 
+{% load staticfiles %}
 
 <html lang="en">
   <head>
@@ -10,18 +11,64 @@
     <meta name="author" content="">
     <link rel="icon" href="http://getbootstrap.com/favicon.ico">
 
-    <title>Rango - {% block title %}How to Tango with Django!{% endblock %}</title>
+    <title>Participants Finder{% block title %}Find Participants{% endblock %}</title>
 
     <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="http://getbootstrap.com/examples/dashboard/dashboard.css" rel="stylesheet">
+    <link href="{% static 'css/simple-sidebar.css'%}" rel="stylesheet">
 
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet" type="text/css"/>
+    <script src="{{ STATIC_URL }}js/bootstrap.js"></script>
+    {{ form.media }}
+
+
+
+
   </head>
 
   <body>
+  <div id="wrapper" class="toggled">
+
+<!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#">
+                        Start Bootstrap
+                    </a>
+                </li>
+                <li>
+                    <a href="#">Dashboard</a>
+                </li>
+                <li>
+                    <a href="#">Shortcuts</a>
+                </li>
+                <li>
+                    <a href="#">Overview</a>
+                </li>
+                <li>
+                    <a href="#">Events</a>
+                </li>
+                <li>
+                    <a href="#">About</a>
+                </li>
+                <li>
+                    <a href="#">Services</a>
+                </li>
+                <li>
+                    <a href="#">Contact</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
 
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container-fluid">
@@ -32,6 +79,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
+            <a href="#menu-toggle" class="toggled navbar-brand" id="menu-toggle" ><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
           <a class="navbar-brand" href="/part_finder/">Participant Finder</a>
         </div>
         <div class="navbar-collapse collapse">
@@ -69,6 +117,9 @@
         </div>
       </div>
     </div>
+  </div>
+
+
 
 
     <!-- Bootstrap core JavaScript
@@ -78,5 +129,28 @@
     <script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="http://getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
+
+
+  <!-- jQuery -->
+    <script src="{% static 'js/jquery.js'%}"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="{% static 'js/bootstrap.min.js'%}"></script>
+
+
+  <!-- Menu Toggle Script -->
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+
+    $('#myTabs a').click(function (e) {
+      e.preventDefault()
+      $(this).tab('show')
+    })
+</script>
+
+
   </body>
 </html>

@@ -5,14 +5,15 @@ from part_finder.models import Researcher,Experiment,Participant,  UserProfile
 from django.contrib.auth.models import User
 from datetime import date
 from django.contrib.auth import get_user_model
+from datetimewidget.widgets import DateTimeWidget, DateWidget, TimeWidget
 
 
 # #user form superclass (common attrib)
 # class UserForm(forms.ModelForm):
-#     dob = forms.DateField(help_text="Date of Birth")
-#     matric = forms.IntegerField(help_text="Matriculation No.")
-#     institution = forms.CharField(help_text="Institution")
-#     contactNo = forms.IntegerField(help_text="Contact Number")
+#     dob = forms.DateField(label="Date of Birth")
+#     matric = forms.IntegerField(label="Matriculation No.")
+#     institution = forms.CharField(label="Institution")
+#     contactNo = forms.IntegerField(label="Contact Number")
 #
 #
 #     class Meta:
@@ -33,13 +34,13 @@ class ResearcherForm (forms.ModelForm):
 
 class ExperimentForm (forms.ModelForm):
     LOCATIONS = (('Glasgow','Glasgow'),('London','London'))
-    name = forms.CharField(max_length=128, help_text="Experiment Name")
-    date = forms.DateField(required=False, help_text="Experiment Date")
-    paidEvent = forms.BooleanField(help_text="Paid Event")
-    location = forms.ChoiceField(choices=LOCATIONS, help_text="Location")
-    noOfPartsWanted = forms.IntegerField(max_value=1000, help_text="Number of Participants")
-    startTime = forms.TimeField(help_text="Start Time")
-    endTime = forms.TimeField(help_text="End Time")
+    name = forms.CharField(max_length=128, label="Name", required=True)
+    date = forms.DateField(required=False, label="Experiment Date", widget=DateWidget(usel10n=True, bootstrap_version=3))
+    paidEvent = forms.BooleanField(label="Paid Event", required=False)
+    location = forms.ChoiceField(choices=LOCATIONS, label="Location")
+    noOfPartsWanted = forms.IntegerField(max_value=1000, label="No of Participants Wanted")
+    startTime = forms.TimeField(label="Start Time", widget=TimeWidget(usel10n=True, bootstrap_version=3))
+    endTime = forms.TimeField(label="End Time", widget=TimeWidget(usel10n=True, bootstrap_version=3))
     slug = forms.CharField(widget=forms.HiddenInput(), required=False)
 
     class Meta():
@@ -48,23 +49,23 @@ class ExperimentForm (forms.ModelForm):
 
 
 class ParticipantForm (forms.ModelForm):
-    # participant = forms.ModelChoiceField(queryset=Participant.objects.all(), help_text="Username")
+    # participant = forms.ModelChoiceField(queryset=Participant.objects.all(), label="Username")
 
-    address = forms.CharField(required=False, help_text="Address", max_length=128)
+    address = forms.CharField(required=False, label="Address", max_length=128)
 
-    occupation = forms.CharField(required=False, help_text="Occupation", max_length=128)
-    marital = forms.CharField(required=False, help_text="Marital Status", max_length=128)
-    gender = forms.CharField(required=False, help_text="Gender", max_length=128)
-    ethnicity = forms.CharField(required=False, help_text="Ethnicity", max_length=128)
-    religion = forms.CharField(required=False, help_text="Religion", max_length=128)
+    occupation = forms.CharField(required=False, label="Occupation", max_length=128)
+    marital = forms.CharField(required=False, label="Marital Status", max_length=128)
+    gender = forms.CharField(required=False, label="Gender", max_length=128)
+    ethnicity = forms.CharField(required=False, label="Ethnicity", max_length=128)
+    religion = forms.CharField(required=False, label="Religion", max_length=128)
 
-    height = forms.IntegerField(help_text="Height (cm)", required=False)
-    weight = forms.IntegerField(help_text="Weight (cm)", required=False)
+    height = forms.IntegerField(label="Height (cm)", required=False)
+    weight = forms.IntegerField(label="Weight (cm)", required=False)
 
-    max_distance = forms.IntegerField(help_text="Max Distance", required=False)
-    online_only = forms.CharField(help_text="Online Only", max_length=128, required=False)
-    paid_only = forms.CharField(help_text="Paid Only", max_length=128, required=False)
-    email_notifications = forms.CharField(help_text="Email Notifications", max_length=128, required=False)
+    max_distance = forms.IntegerField(label="Max Distance", required=False)
+    online_only = forms.CharField(label="Online Only", max_length=128, required=False)
+    paid_only = forms.CharField(label="Paid Only", max_length=128, required=False)
+    email_notifications = forms.CharField(label="Email Notifications", max_length=128, required=False)
 
 
     class Meta():
@@ -77,11 +78,11 @@ class SignupForm(forms.Form):
     last_name = forms.CharField(max_length=35, label='Last name')
     type = forms.ChoiceField(choices=TYPES, label='Type')
 
-    # dob = forms.DateField(help_text="Date of Birth")
-    # matric = forms.IntegerField(help_text="Matriculation No.")
-    # institution = forms.CharField(help_text="Institution")
-    # contactNo = forms.IntegerField(help_text="Contact Number")
-    # password = forms.CharField(max_length=30, help_text="Password")
+    # dob = forms.DateField(label="Date of Birth")
+    # matric = forms.IntegerField(label="Matriculation No.")
+    # institution = forms.CharField(label="Institution")
+    # contactNo = forms.IntegerField(label="Contact Number")
+    # password = forms.CharField(max_length=30, label="Password")
 
 
 

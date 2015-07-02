@@ -3,11 +3,17 @@
 
 {% load staticfiles %}
 
+
+{% load bootstrap3 %}
+
+
 {% block title %}Complete Registration{% endblock %}
 
 {% block body_block %}
 
 {% if user.profile.researcher == None or user.profile.participant == None  %}
+
+    <h1>Complete {{ user.profile.typex }} Details</h1>
 
     {% if user.profile.typex == 'Researcher' %}
 
@@ -19,16 +25,16 @@
             {% endfor %}
 
             {% for field in researcher_form.visible_fields %}
-                {{ field.errors }}
-                {{ field.help_text }}
-                {{ field }}
+{#                {{ field.errors }}#}
+{#                {{ field.label }}#}
+                {% bootstrap_field field %}
             {% endfor %}
 
-            <input type="submit" name="submit" value="Update Researcher Details" />
+            <input class="btn btn-default" type="submit" name="submit" value="Update Researcher Details" />
 
     {% elif user.profile.typex == 'Participant'  %}
 
-            <form id="complete_registrationc" method="post" action="/part_finder/complete_registration/">
+            <form id="complete_registration" method="post" action="/part_finder/complete_registration/">
 
             {% csrf_token %}
             {% for hidden in participant_form.hidden_fields %}
@@ -36,12 +42,12 @@
             {% endfor %}
 
             {% for field in participant_form.visible_fields %}
-                {{ field.errors }}
-                {{ field.help_text }}
-                {{ field }}
+{#                {{ field.errors }}#}
+{#                {{ field.label }}#}
+               {% bootstrap_field field %}
             {% endfor %}
 
-            <input type="submit" name="submit" value="Update Participant Details" />
+            <input class="btn btn-default" type="submit" name="submit" value="Update Participant Details" />
 
     {% else %} Invalid User Type, Please log in
 
