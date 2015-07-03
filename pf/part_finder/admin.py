@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from part_finder.models import Experiment,Participant,Researcher, UserProfile
+from part_finder.models import Experiment,Participant,Researcher, UserProfile, Contact, University, Locations
 from django.contrib.auth.models import User
 
 class ExperimentAdmin(admin.ModelAdmin):
@@ -20,5 +20,8 @@ admin.site.register(Participant)
 
 admin.site.register(UserProfile)
 admin.site.register(Researcher)
+admin.site.register(Contact)
+admin.site.register(University)
+admin.site.register(Locations)
 
 

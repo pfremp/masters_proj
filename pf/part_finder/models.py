@@ -1,5 +1,5 @@
 from django.db import models
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from django.contrib.auth.models import User
 from django.db import models
 from django.template.defaultfilters import slugify
@@ -18,12 +18,23 @@ from django.template.defaultfilters import slugify
 #     def __unicode__(self):  #For Python 2, use __str__ on Python 3
 #         return self.matric
 
+class University(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __unicode__(self):  #For Python 2, use __str__ on Python 3
+        return self.name
+
+class Locations(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __unicode__(self):  #For Python 2, use __str__ on Python 3
+        return self.name
+
 class Researcher(models.Model):
-    INSTITUTIONS = (('Glasgow','University of Glasgow'),('Strathclyde','Strathclyde University'))
-    dob = models.DateField(default=date.today)
-    matric = models.IntegerField()
-    institution = models.CharField(choices=INSTITUTIONS, max_length=128)
-    contactNo = models.IntegerField()
+    # INSTITUTIONS = (('Glasgow','University of Glasgow'),('Strathclyde','Strathclyde University'))
+    dob = models.DateField(("Date"), default=date.today, null=True)
+    institution = models.CharField(max_length=128, blank=True, null=True)
+    contact_no = models.IntegerField()
     department = models.CharField(max_length=128, blank=True)
 
 
@@ -32,19 +43,22 @@ class Researcher(models.Model):
 
 
 class Experiment(models.Model):
-    # eventIdCounter()
-    PAID_EVENT = (('Y','Yes'),('N','No'))
-    DURATION = (('2','2 hours'))
-    #LOCATIONS = (('Glasgow','Glasgow'),('London','London'))
-    FMT = '%H:%M'
-
+    CURRENCY = (('Credits','Credits'),('Money','Money'))
+    PMT_TYPE = (('Total','Total'),('Hourly','Hourly'), ('N/A', 'N/A'))
     name = models.CharField(max_length=128, blank=False)
+    short_description = models.CharField(max_length=128, blank=True)
+    long_description = models.CharField(max_length=500, blank=True)
     date = models.DateField(("Date"), default=date.today)
-    paidEvent = models.BooleanField(default=False)
+    start_time = models.TimeField(blank=True)
+    end_time = models.TimeField(blank=True)
+    duration = models.IntegerField(blank=True)
+    paid_event = models.BooleanField(default=False)
+    currency = models.CharField(max_length=100, choices=CURRENCY, blank=True)
+    payment_amount = models.IntegerField(max_length=1000, blank=True)
+    pmt_type = models.CharField(max_length=128, choices=PMT_TYPE, blank=True)
     location = models.CharField(max_length=128)
-    noOfPartsWanted = models.IntegerField(null=True)
-    endTime = models.TimeField(blank=True)
-    startTime = models.TimeField(blank=True)
+    address = models.CharField(max_length=128, blank=True)
+    no_of_participants_wanted = models.IntegerField(null=True, blank=True)
     researcher = models.ForeignKey(Researcher, related_name="experiment")
     slug = models.SlugField(unique=True)
 
@@ -58,14 +72,25 @@ class Experiment(models.Model):
 
 
 class Participant(models.Model):
-    YN = (('Y','Yes'),('N','No'))
+    YN = (('Yes','Yes'),('No','No'))
+    SEX = (('Male','Male'), ('Female','Female'))
     #User standard details
-    address = models.CharField(max_length=128)
+    address_line_1 = models.CharField(max_length=128, blank=True)
+    address_line_2 = models.CharField(max_length=128, blank=True)
+    city = models.CharField(max_length=128, blank=True)
+    postcode = models.CharField(max_length=128, blank=True)
+    contact_number = models.IntegerField(max_length=128, blank=True)
+    occupation = models.CharField(max_length=128, blank=True)
+    student = models.BooleanField(default=False, blank=True)
+
+    #Student Information
+    university = models.ForeignKey(University, blank=True, null=True)
+    course_name = models.CharField(max_length=100)
+    graduation_year = models.IntegerField()
+    matric = models.CharField(max_length=20)
 
     #Demographic informatuon
-    occupation = models.CharField(max_length=128, blank=True)
-    marital = models.CharField(max_length=128, blank=True)
-    gender = models.CharField(max_length=128, blank=True)
+    gender = models.CharField(max_length=128, blank=True, choices=SEX)
     ethnicity = models.CharField(max_length=128, blank=True)
     religion = models.CharField(max_length=128, blank=True)
 
@@ -75,19 +100,21 @@ class Participant(models.Model):
 
     #Preferences
     max_distance = models.IntegerField(max_length=128, blank=True, null=True)
+    uni_only = models.BooleanField(default=False, blank=True)
     online_only = models.IntegerField(max_length=128, blank=True, null=True)
-    paid_only = models.CharField(max_length=128, blank=True, choices=YN)
-    email_notifications = models.CharField(max_length=128, blank=True, choices=YN)
+    paid_only = models.BooleanField(default=False, blank=True)
+    email_notifications = models.BooleanField(default=False, blank=True)
     experiments = models.ManyToManyField(Experiment, null=True, blank=True, related_name="participants")
 
-    def __unicode__(self):  #For Python 2, use __str__ on Python 3
-        return self.userprofile.user.username
 
+    def __unicode__(self):  #For Python 2, use __str__ on Python 3
+        # return self.userprofile.user.username
+        return self.userprofile.user.username
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, related_name='profile', unique=True)
     typex = models.CharField("type", max_length=128, blank=False)
-    participant = models.OneToOneField(Participant, blank=True, null=True)
+    participant = models.OneToOneField(Participant, blank=True, null=True, related_name='userprofile')
     researcher = models.OneToOneField(Researcher, blank=True, null=True)
 
     def update_res (forms):
@@ -96,3 +123,22 @@ class UserProfile(models.Model):
 
     def __unicode__(self):  #For Python 2, use __str__ on Python 3
         return self.user.username
+
+
+class Contact(models.Model):
+    subject = models.CharField(max_length=100)
+    sender = models.CharField(max_length=100)
+    message = models.CharField(max_length=1000)
+
+    def __unicode__(self):  #For Python 2, use __str__ on Python 3
+        return self.subject
+
+class Application(models.Model):
+    STATUS = (('Pending','Pending'),('Accepted','Accepted'),('Standby','Standby'))
+    Researcher = models.OneToOneField(Researcher, null=True, related_name="application")
+    Participant = models.OneToOneField(Participant, null=True, related_name="application")
+    Experiment = models.OneToOneField(Experiment, null=True, related_name="application")
+    status = models.CharField(max_length=100, choices=STATUS)
+
+    def __unicode__(self):  #For Python 2, use __str__ on Python 3
+        return self.Experiment.name

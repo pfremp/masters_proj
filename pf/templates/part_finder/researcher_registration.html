@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+{% extends 'site_base.html' %}
+{% load staticfiles %}
+
+{% load bootstrap3 %}
+
+
+{% block title %}Complete Registration{% endblock %}
+
+{% block body_block %}
+<body>
+
+    <h1>Complete {{ user.profile.typex }} Details</h1>
+
+    {% if user.profile.typex == 'Researcher' %}
+
+        <form id="researcher_registration" method="post" action="/part_finder/researcher_registration/">
+
+            {% csrf_token %}
+            {% for hidden in researcher_form.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+
+            {% for field in researcher_form.visible_fields %}
+{#                {{ field.errors }}#}
+{#                {{ field.label }}#}
+                {% bootstrap_field field %}
+            {% endfor %}
+
+            <input class="btn btn-default" type="submit" name="submit" value="Update Researcher Details" />
+        </form>
+
+    {% else %} Invalid User Type, Please log in
+
+    {% endif %}
+
+
+</body>
+
+{% endblock %}
+
+</html>

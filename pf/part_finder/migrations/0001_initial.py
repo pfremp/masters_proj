@@ -14,17 +14,55 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
+            name='Application',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('status', models.CharField(max_length=100, choices=[(b'Pending', b'Pending'), (b'Accepted', b'Accepted'), (b'Standby', b'Standby')])),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Contact',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('subject', models.CharField(max_length=100)),
+                ('sender', models.CharField(max_length=100)),
+                ('message', models.CharField(max_length=1000)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
             name='Experiment',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=128)),
+                ('short_description', models.CharField(max_length=128, blank=True)),
+                ('long_description', models.CharField(max_length=500)),
                 ('date', models.DateField(default=datetime.date.today, verbose_name=b'Date')),
-                ('paidEvent', models.BooleanField(default=False)),
-                ('location', models.CharField(max_length=128, choices=[(b'Gla', b'Glasgow'), (b'Ldn', b'London')])),
-                ('noOfPartsWanted', models.IntegerField(null=True)),
-                ('endTime', models.TimeField(blank=True)),
-                ('startTime', models.TimeField(blank=True)),
+                ('start_time', models.TimeField(blank=True)),
+                ('end_time', models.TimeField(blank=True)),
+                ('duration', models.IntegerField(blank=True)),
+                ('paid_event', models.BooleanField(default=False)),
+                ('payment_type', models.CharField(max_length=100, choices=[(b'Credits', b'Credits'), (b'Money', b'Money')])),
+                ('payment_amount', models.IntegerField(max_length=10, blank=True)),
+                ('location', models.CharField(max_length=128)),
+                ('address', models.CharField(max_length=128)),
+                ('no_of_participants_wanted', models.IntegerField(null=True)),
                 ('slug', models.SlugField(unique=True)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Locations',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=100)),
             ],
             options={
             },
@@ -34,18 +72,26 @@ class Migration(migrations.Migration):
             name='Participant',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('address', models.CharField(max_length=128)),
+                ('address_line_1', models.CharField(max_length=128, blank=True)),
+                ('address_line_2', models.CharField(max_length=128, blank=True)),
+                ('city', models.CharField(max_length=128, blank=True)),
+                ('postcode', models.CharField(max_length=128, blank=True)),
+                ('contact_number', models.IntegerField(max_length=128, blank=True)),
                 ('occupation', models.CharField(max_length=128, blank=True)),
-                ('marital', models.CharField(max_length=128, blank=True)),
-                ('gender', models.CharField(max_length=128, blank=True)),
+                ('student', models.BooleanField(default=False)),
+                ('course_name', models.CharField(max_length=100)),
+                ('graduation_year', models.DateField()),
+                ('matric', models.CharField(max_length=20)),
+                ('gender', models.CharField(blank=True, max_length=128, choices=[(b'Male', b'Male'), (b'Female', b'Female')])),
                 ('ethnicity', models.CharField(max_length=128, blank=True)),
                 ('religion', models.CharField(max_length=128, blank=True)),
                 ('height', models.IntegerField(max_length=128, null=True, blank=True)),
                 ('weight', models.IntegerField(max_length=128, null=True, blank=True)),
                 ('max_distance', models.IntegerField(max_length=128, null=True, blank=True)),
+                ('uni_only', models.BooleanField(default=False)),
                 ('online_only', models.IntegerField(max_length=128, null=True, blank=True)),
-                ('paid_only', models.CharField(blank=True, max_length=128, choices=[(b'Y', b'Yes'), (b'N', b'No')])),
-                ('email_notifications', models.CharField(blank=True, max_length=128, choices=[(b'Y', b'Yes'), (b'N', b'No')])),
+                ('paid_only', models.BooleanField(default=False)),
+                ('email_notifications', models.BooleanField(default=False)),
                 ('experiments', models.ManyToManyField(related_name=b'participants', null=True, to='part_finder.Experiment', blank=True)),
             ],
             options={
@@ -57,10 +103,18 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('dob', models.DateField(default=datetime.date.today)),
-                ('matric', models.IntegerField()),
-                ('institution', models.CharField(max_length=128, choices=[(b'Glasgow', b'University of Glasgow'), (b'Strathclyde', b'Strathclyde University')])),
-                ('contactNo', models.IntegerField()),
+                ('contact_no', models.IntegerField()),
                 ('department', models.CharField(max_length=128, blank=True)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='University',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=100)),
             ],
             options={
             },
@@ -80,9 +134,39 @@ class Migration(migrations.Migration):
             bases=(models.Model,),
         ),
         migrations.AddField(
+            model_name='researcher',
+            name='institution',
+            field=models.ForeignKey(blank=True, to='part_finder.University', null=True),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='participant',
+            name='university',
+            field=models.ForeignKey(blank=True, to='part_finder.University', null=True),
+            preserve_default=True,
+        ),
+        migrations.AddField(
             model_name='experiment',
             name='researcher',
-            field=models.ForeignKey(to='part_finder.Researcher'),
+            field=models.ForeignKey(related_name=b'experiment', to='part_finder.Researcher'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='application',
+            name='Experiment',
+            field=models.OneToOneField(related_name=b'application', null=True, to='part_finder.Experiment'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='application',
+            name='Participant',
+            field=models.OneToOneField(related_name=b'application', null=True, to='part_finder.Participant'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='application',
+            name='Researcher',
+            field=models.OneToOneField(related_name=b'application', null=True, to='part_finder.Researcher'),
             preserve_default=True,
         ),
     ]

@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'bootstrap3',
     'bootstrap3_datetime',
     'datetimewidget',
+    'django.contrib.formtools',
 
 
     #allauth
@@ -84,11 +85,11 @@ INSTALLED_APPS = (
 
 )
 
-SITE_ID = 2
+SITE_ID = 1
 
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/part_finder/login_success/'
-LOGIN_REDIRECT_URL = '/part_finder/login_success/'
+
 
 #all auth settings
 ACCOUNT_ADAPTER ="allauth.account.adapter.DefaultAccountAdapter"
