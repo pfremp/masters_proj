@@ -10,6 +10,9 @@
 {% endblock %}
 
 {% block body_block %}
+
+{#    {%  if user.is_authenticated %}#}
+        {% if user.profile.typex == 'Participant' %}
     <h1>Complete {{ user.profile.typex }} Details</h1>
 <h2>Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</h2>
 <form action="/part_finder/participant_registration/" method="post">{% csrf_token %}
@@ -30,6 +33,18 @@
 {% endif %}
 <input class="btn btn-default" type="submit" value="{% trans "submit" %}"/>
 </form>
+{#            {% endif %}#}
+
+
+
+
+
+        {% else %}
+<h1>You must be logged in as a participant</h1>
+
+        <h1>Please Login</h1> <h1>Already Completed</h1>
+
+    {% endif %}
 {% endblock %}
 
 

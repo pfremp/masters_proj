@@ -1,7 +1,7 @@
 __author__ = 'patrickfrempong'
 
 from django import forms
-from part_finder.models import Researcher,Experiment,Participant,  UserProfile, Contact, University, Locations
+from part_finder.models import Researcher,Experiment,Participant,  UserProfile, University, Locations
 from django.contrib.auth.models import User
 from datetime import date
 from django.contrib.auth import get_user_model
@@ -59,19 +59,19 @@ class ExperimentForm (forms.ModelForm):
     date = forms.DateField(required=False, label="Experiment Date", widget=DateWidget(usel10n=True, bootstrap_version=3))
     start_time = forms.TimeField(label="Start Time", widget=TimeWidget(usel10n=True, bootstrap_version=3))
     end_time = forms.TimeField(label="End Time", widget=TimeWidget(usel10n=True, bootstrap_version=3))
-    duration = forms.IntegerField(label="Duration")
+    duration = forms.FloatField(label="Duration (hours)")
     paid_event = forms.BooleanField(label="Paid Event", required=False)
-    currency = forms.ChoiceField(label="Payment Type", choices=PAYMENT_TYPE)
-    payment_amount = forms.IntegerField(label="Payment Amount")
+    currency = forms.ChoiceField(label="Currency", choices=PAYMENT_TYPE)
+    payment_amount = forms.FloatField(label="Payment Amount")
     pmt_type = forms.ChoiceField(label="Payment Type", choices=PMT_TYPE)
-    location = forms.ChoiceField(choices=LOCATIONS, label="Location")
+    location = forms.ModelChoiceField(label="Location", queryset=Locations.objects.all(), required=False)
     address = forms.CharField(label="Address")
     no_of_participants_wanted = forms.IntegerField(max_value=10, label="No of Participants Wanted")
     slug = forms.CharField(widget=forms.HiddenInput(), required=False)
 
     class Meta():
         model = Experiment
-        fields = ('name','short_description','long_description', 'date', 'start_time', 'end_time','duration', 'paid_event','currency','payment_amount','pmt_type', 'location','address', 'no_of_participants_wanted', )
+        fields = ('name','short_description','long_description', 'date', 'start_time', 'end_time','duration', 'paid_event','currency','pmt_type','payment_amount', 'location','address', 'no_of_participants_wanted', )
 
 
 # class ParticipantForm (forms.ModelForm):
@@ -120,7 +120,7 @@ class ExperimentForm (forms.ModelForm):
 class PartDetailsForm (forms.ModelForm):
 
     YN = (('Yes','Yes'),('No','No'))
-    SEX = (('Male','Male'), ('Female','Female'))
+
     UNI = (('GCU','GCU'),('UoG','UoG'))
     address_line_1 = forms.CharField(required=False, label="Address Line 1", max_length=128)
     address_line_2 = forms.CharField(required=False, label="Address Line 2", max_length=128)
@@ -128,7 +128,7 @@ class PartDetailsForm (forms.ModelForm):
     postcode = forms.CharField(required=False, label="Postcode", max_length=128)
     contact_number = forms.IntegerField(required=False, label="Contact No")
     occupation = forms.CharField(required=False, label="Occupation", max_length=128)
-    student = forms.BooleanField(label="Student", required=True)
+    student = forms.BooleanField(label="Student", required=False)
 
     class Meta():
         model = Participant
@@ -141,16 +141,17 @@ class PartStudentForm (forms.ModelForm):
     UNI = University.objects.filter()
     university = forms.ModelChoiceField(label="University", queryset=University.objects.all(), required=False)
     course_name = forms.CharField(label="Course Name",max_length=128, required=False)
-    graduation_year = forms.IntegerField(label="Graduation Year", required=False)
+    year = forms.IntegerField(label="Year", required=False)
     matric = forms.IntegerField(label="Matric", required=False)
 
     class Meta():
         model = Participant
-        fields = ('university', 'course_name', 'graduation_year', 'matric')
+        fields = ('university', 'course_name', 'year', 'matric')
 
 class PartDemoForm (forms.ModelForm):
+    SEX = (('Male','Male'), ('Female','Female'))
     #Demographic
-    gender = forms.CharField(required=False, label="Gender", max_length=128)
+    gender = forms.ChoiceField(choices=SEX, required=False, label="Gender")
     ethnicity = forms.CharField(required=False, label="Ethnicity", max_length=128)
     religion = forms.CharField(required=False, label="Religion", max_length=128)
 
@@ -217,19 +218,19 @@ class SignupForm(forms.Form):
 # see ifinder
 
 
-
-class ContactForm1(forms.Form):
-    subject = forms.CharField(max_length=100)
-    sender = forms.EmailField()
-
-    class Meta():
-        model = Contact
-        fields = ('subject', 'sender')
-
-
-class ContactForm2(forms.Form):
-    message = forms.CharField(widget=forms.Textarea)
-
-    class Meta():
-        model = Contact
-        fields = ('message')
+#
+# class ContactForm1(forms.Form):
+#     subject = forms.CharField(max_length=100)
+#     sender = forms.EmailField()
+#
+#     class Meta():
+#         model = Contact
+#         fields = ('subject', 'sender')
+#
+#
+# class ContactForm2(forms.Form):
+#     message = forms.CharField(widget=forms.Textarea)
+#
+#     class Meta():
+#         model = Contact
+#         fields = ('message')

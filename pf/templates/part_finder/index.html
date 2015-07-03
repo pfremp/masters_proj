@@ -54,7 +54,7 @@
       <thead>
         <tr>
           <th>Name</th>
-          <th>Dept.</th>
+          <th>Description</th>
           <th>Location</th>
           <th>Date</th>
           <th>Paid</th>
@@ -65,7 +65,7 @@
     {% for experiment in experiments|slice:"10" %}
         <tr>
           <th scope="row"><a href="/part_finder/experiments/{{ experiment.slug }}">{{ experiment.name }}</a></th>
-          <td>{{ experiment.researcher.department }}</td>
+          <td>{{ experiment.short_description }}</td>
           <td>{{ experiment.location }}</td>
           <td>{{ experiment.date|date:"M d" }}</td>
           <td>

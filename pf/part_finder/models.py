@@ -51,10 +51,10 @@ class Experiment(models.Model):
     date = models.DateField(("Date"), default=date.today)
     start_time = models.TimeField(blank=True)
     end_time = models.TimeField(blank=True)
-    duration = models.IntegerField(blank=True)
+    duration = models.FloatField(blank=True)
     paid_event = models.BooleanField(default=False)
     currency = models.CharField(max_length=100, choices=CURRENCY, blank=True)
-    payment_amount = models.IntegerField(max_length=1000, blank=True)
+    payment_amount = models.FloatField(max_length=1000, blank=True)
     pmt_type = models.CharField(max_length=128, choices=PMT_TYPE, blank=True)
     location = models.CharField(max_length=128)
     address = models.CharField(max_length=128, blank=True)
@@ -79,14 +79,14 @@ class Participant(models.Model):
     address_line_2 = models.CharField(max_length=128, blank=True)
     city = models.CharField(max_length=128, blank=True)
     postcode = models.CharField(max_length=128, blank=True)
-    contact_number = models.IntegerField(max_length=128, blank=True)
+    contact_number = models.IntegerField(max_length=128, blank=True, null=True)
     occupation = models.CharField(max_length=128, blank=True)
     student = models.BooleanField(default=False, blank=True)
 
     #Student Information
     university = models.ForeignKey(University, blank=True, null=True)
     course_name = models.CharField(max_length=100)
-    graduation_year = models.IntegerField()
+    year = models.IntegerField(null=True)
     matric = models.CharField(max_length=20)
 
     #Demographic informatuon
