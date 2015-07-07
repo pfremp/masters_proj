@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-{% extends 'site_base.html' %}
+{% extends 'site_base_toggle.html' %}
 
 {% load staticfiles %}
+{% load bootstrap3 %}
 
 {% block title %}{{ experiment }}{% endblock %}
 
 {% block body_block %}
 
-    <h1>{{ experiment_name }}</h1>
+    <h1>My Profile</h1>
         {% if experiment %}
             {% if experiment %}
             <ul>

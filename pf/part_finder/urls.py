@@ -5,9 +5,11 @@ from part_finder import views
 from django.contrib import admin
 from registration.backends.simple.views import RegistrationView
 from part_finder.forms import PartDemoForm,PartDetailsForm,PartStudentForm,PartPrefForm
-from part_finder.views import  ParticipantRegistration, show_message_form_condition, ParticipantUpdate
+from part_finder.views import  ParticipantRegistration, show_message_form_condition, ParticipantUpdate, ResearcherUpdate
 from django.views.generic.edit import UpdateView
 from part_finder.models import Participant
+from django.contrib.auth.decorators import login_required
+# from django.views.generic.simple import direct_to_template
 
 
 participant_forms = [PartDetailsForm,PartStudentForm,PartDemoForm,PartPrefForm]
@@ -23,7 +25,9 @@ urlpatterns = patterns('',
     # url(r'^login_page/$', views.login_page, name='login_page'),
     url(r'^participant_registration/$', ParticipantRegistration.as_view(participant_forms, condition_dict = {'1': show_message_form_condition})),
     url(r'^researcher_registration/$', views.researcher_registration, name='researcher_registration'),
-    url(r'^user/update/$', ParticipantUpdate.as_view(), name='update_participant_details'),
+    url(r'^participant/update/$', login_required(ParticipantUpdate.as_view()), name='update_participant_details'),
+    # url(r'^profile/update/$', login_required(ProfileUpdate.as_view()), name='update_profile'),
+    url(r'^researcher/update/$', login_required(ResearcherUpdate.as_view()), name='update_researcher_details'),
 )
 
 

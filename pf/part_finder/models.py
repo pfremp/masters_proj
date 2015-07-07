@@ -119,7 +119,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, related_name='profile', unique=True)
     typex = models.CharField("type", max_length=128, blank=False)
     participant = models.OneToOneField(Participant, blank=True, null=True, related_name='userprofile')
-    researcher = models.OneToOneField(Researcher, blank=True, null=True)
+    researcher = models.OneToOneField(Researcher, blank=True, null=True, related_name='userprofile')
 
     def update_res (forms):
         researcher = forms

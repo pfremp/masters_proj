@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponse, request
 from part_finder.models import Researcher, Experiment, Participant, UserProfile, Contact, User
-from part_finder.forms import ExperimentForm, ResearcherForm, PartDetailsForm, ParticipantForm
+from part_finder.forms import ExperimentForm, ResearcherForm, PartDetailsForm, ParticipantForm, SignupForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.contrib.formtools.wizard.views import SessionWizardView
@@ -134,17 +134,47 @@ def add_experiment(request):
     return render(request, 'part_finder/add_experiment.html', {'form':form})
 
 
-#Participant update
+#Participant details update
 class ParticipantUpdate(UpdateView):
     model = Participant
     form_class = ParticipantForm
     # fields = ['address_line_1', 'address_line_2', 'city', 'postcode', 'contact_number', 'occupation', 'student','university', 'course_name', 'graduation_year', 'matric', 'gender' , 'ethnicity', 'religion', 'height', 'weight', 'max_distance', 'uni_only', 'online_only', 'paid_only']
     fields = ['address_line_1', 'address_line_2', 'city', 'postcode', 'contact_number', 'occupation', 'student','university', 'course_name', 'graduation_year', 'matric', 'gender' , 'ethnicity', 'religion', 'height', 'weight', 'max_distance', 'uni_only', 'online_only', 'paid_only']
     template_name_suffix = '_update_form'
-    success_url='/part_finder/'
+    success_url='/part_finder/participant/update'
 
     def get_object(self, queryset=None):
         return self.request.user.profile.participant
+
+
+
+
+
+# #Profile update
+# class ProfileUpdate(UpdateView):
+#     model = UserProfile
+#     form_class = SignupForm
+#     fields = ['first_name', 'last_name', 'type', 'username', 'password1', 'password2']
+#     template_name_suffix = '_update_form'
+#     success_url='/part_finder/profile/update'
+#
+#     def get_object(self, queryset=None):
+#         return self.request.user.profile
+
+
+
+
+
+#Researcher details update
+class ResearcherUpdate(UpdateView):
+    model = Researcher
+    form_class = ResearcherForm
+    fields = ['dob', 'matric', 'institution', 'contact_no', 'department']
+    template_name_suffix = '_update_form'
+    success_url='/part_finder/participant/update'
+
+    def get_object(self, queryset=None):
+        return self.request.user.profile.researcher
 
     # def get_object(self):
     #     return get_object_or_404(User, pk=request.session['user_id'])

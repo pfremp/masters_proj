@@ -7,20 +7,100 @@
 
 {% block body_block %}
 
-    <h1>{{ experiment_name }}</h1>
-        {% if experiment %}
-            {% if experiment %}
-            <ul>
+    {% if experiment %}
+    <div class="container-fluid">
+        <div class="row" style="min-height: 300px;">
+          <div class="col-md-6">
+             <h1>{{ experiment.name }}</h1>
+              <p>{{ experiment.long_description }}</p>
 
-                <li>{{ experiment.name }}</li>
 
-            </ul>
-            {% else %}
-                <strong>No pages currently in category.</strong>
-            {% endif %}
-        {% else %}
-            There are currently no experiments!
-        {% endif %}
+
+
+
+
+          </div>
+          <div class="col-md-6">
+               <div style="margin-top: 20px; padding-bottom: 35px;" class="well">
+
+                   <div class="col-md-3">
+                       {% if experiment.currency == 'Money' %}
+
+
+                           <span class="glyphicon glyphicon-gbp" aria-hidden="true" > {{experiment.payment_amount}} {{ experiment.pmt_type }}</span>
+
+                       {% else %}
+
+                            <span>{{experiment.payment_amount}} Credits</span>
+
+                       {% endif %}
+{#                       <span class="glyphicon glyphicon-gbp" aria-hidden="true">{{experiment.payment_amount}}{% if experiment.currency == 'Money' %}p/h  {% elif experiment.currency == 'Credits' %}</span>#}
+{#                       {% endif %}#}
+
+                   </div>
+                <div class="col-md-3">
+
+                    <span class="glyphicon glyphicon-time" aria-hidden="true"> {{ experiment.duration }} Hours</span>
+
+                </div>
+                <div class="col-md-3">
+
+                    <span class="glyphicon glyphicon-calendar" aria-hidden="true"> {{ experiment.date | date:'M-d' }}</span>
+
+                </div>
+              <div class="col-md-3">
+
+                  <span class="glyphicon glyphicon-user" aria-hidden="true"> {{ experiment.no_of_participants_wanted }}</span>
+
+              </div>
+
+{#                   <span class="glyphicon glyphicon-gbp" aria-hidden="true">{{experiment.payment_amount}}{% if experiment.currency == 'Money' %}p/h  {% elif experiment.currency == 'Credits' %}#}
+{#                       {% endif %}#}
+{##}
+{#                   </span>#}
+{##}
+{#                   <span class="glyphicon glyphicon-time" aria-hidden="true"></span>#}
+{#                   <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>#}
+{#                   <span class="glyphicon glyphicon-user" aria-hidden="true"></span>#}
+
+
+
+          </div>
+
+          <div class="well">google map here
+
+
+          </div>
+    </div>
+
+    <div class="row">
+
+
+
+
+        </div>
+    </div>
+
+    {% else %}
+    <p>Experiment Not Found</p>
+    {% endif %}
+
+    </div>
+
+
+{#        {% if experiment %}#}
+{#            {% if experiment %}#}
+{#            <ul>#}
+{##}
+{#                <li>{{ experiment.name }}</li>#}
+{##}
+{#            </ul>#}
+{#            {% else %}#}
+{#                <strong>No pages currently in category.</strong>#}
+{#            {% endif %}#}
+{#        {% else %}#}
+{#            There are currently no experiments!#}
+{#        {% endif %}#}
 
 {% endblock %}
 

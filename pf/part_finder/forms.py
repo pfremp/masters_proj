@@ -196,7 +196,9 @@ class SignupForm(forms.Form):
     # contactNo = forms.IntegerField(label="Contact Number")
     # password = forms.CharField(max_length=30, label="Password")
 
-
+    class Meta():
+        model = UserProfile
+        fields = ('first_name', 'last_name', 'type')
 
     # class Meta:
     #     model = get_user_model()
