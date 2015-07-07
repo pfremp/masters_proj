@@ -75,6 +75,7 @@ class Participant(models.Model):
     YN = (('Yes','Yes'),('No','No'))
     SEX = (('Male','Male'), ('Female','Female'))
     #User standard details
+
     address_line_1 = models.CharField(max_length=128, blank=True)
     address_line_2 = models.CharField(max_length=128, blank=True)
     city = models.CharField(max_length=128, blank=True)
@@ -105,6 +106,9 @@ class Participant(models.Model):
     paid_only = models.BooleanField(default=False, blank=True)
     email_notifications = models.BooleanField(default=False, blank=True)
     experiments = models.ManyToManyField(Experiment, null=True, blank=True, related_name="participants")
+
+    def ID(self, obj):
+        return obj.id
 
 
     def __unicode__(self):  #For Python 2, use __str__ on Python 3

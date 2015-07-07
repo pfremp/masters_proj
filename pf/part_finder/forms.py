@@ -74,45 +74,45 @@ class ExperimentForm (forms.ModelForm):
         fields = ('name','short_description','long_description', 'date', 'start_time', 'end_time','duration', 'paid_event','currency','pmt_type','payment_amount', 'location','address', 'no_of_participants_wanted', )
 
 
-# class ParticipantForm (forms.ModelForm):
-#     # participant = forms.ModelChoiceField(queryset=Participant.objects.all(), label="Username")
-#
-#     YN = (('Yes','Yes'),('No','No'))
-#     SEX = (('Male','Male'), ('Female','Female'))
-#     UNI = (('GCU','GCU'),('UoG','UoG'))
-#     address_line_1 = forms.CharField(required=False, label="Address Line 1", max_length=128)
-#     address_line_2 = forms.CharField(required=False, label="Address Line 2", max_length=128)
-#     city = forms.CharField(required=False, label="City", max_length=128)
-#     postcode = forms.CharField(required=False, label="Postcode", max_length=128)
-#     contact_number = forms.IntegerField(required=False, label="Contact No")
-#     occupation = forms.CharField(required=False, label="Occupation", max_length=128)
-#     student = forms.BooleanField(label="Student", required=True)
-#
-#     university = forms.ChoiceField(label="University", choices=UNI)
-#     course_name = forms.CharField(label="Course Name",max_length=128)
-#     graduation_year = forms.IntegerField(label="Graduation Year")
-#     matric = forms.IntegerField(label="Matric")
-#
-#     #Demographic
-#     gender = forms.CharField(required=False, label="Gender", max_length=128)
-#     ethnicity = forms.CharField(required=False, label="Ethnicity", max_length=128)
-#     religion = forms.CharField(required=False, label="Religion", max_length=128)
-#
-#     #Health information
-#     height = forms.IntegerField(label="Height (cm)", required=False)
-#     weight = forms.IntegerField(label="Weight (cm)", required=False)
-#
-#     #preferences
-#     max_distance = forms.IntegerField(label="Max Distance", required=False)
-#     uni_only = forms.BooleanField(label="Uni Experiments Only", required=False)
-#     online_only = forms.BooleanField(label="Online Only", required=False)
-#     paid_only = forms.BooleanField(label="Paid Only", required=False)
-#     email_notifications = forms.BooleanField(label="Email Notifications", required=False)
-#
-#
-#     class Meta():
-#         model = Participant
-#         fields = ('address_line_1', 'address_line_2', 'city', 'postcode', 'contact_number', 'occupation', 'student','university', 'course_name', 'graduation_year', 'matric', 'gender' , 'ethnicity', 'religion', 'height', 'weight', 'max_distance', 'uni_only', 'online_only', 'paid_only')
+class ParticipantForm (forms.ModelForm):
+    # participant = forms.ModelChoiceField(queryset=Participant.objects.all(), label="Username")
+
+    YN = (('Yes','Yes'),('No','No'))
+    SEX = (('Male','Male'), ('Female','Female'))
+    UNI = (('GCU','GCU'),('UoG','UoG'))
+    address_line_1 = forms.CharField(required=False, label="Address Line 1", max_length=128)
+    address_line_2 = forms.CharField(required=False, label="Address Line 2", max_length=128)
+    city = forms.CharField(required=False, label="City", max_length=128)
+    postcode = forms.CharField(required=False, label="Postcode", max_length=128)
+    contact_number = forms.IntegerField(required=False, label="Contact No")
+    occupation = forms.CharField(required=False, label="Occupation", max_length=128)
+    student = forms.BooleanField(label="Student", required=True)
+
+    university = forms.ModelChoiceField(label="University", queryset=University.objects.all(), required=False)
+    course_name = forms.CharField(label="Course Name",max_length=128)
+    graduation_year = forms.IntegerField(label="Graduation Year")
+    matric = forms.IntegerField(label="Matric")
+
+    #Demographic
+    gender = forms.CharField(required=False, label="Gender", max_length=128)
+    ethnicity = forms.CharField(required=False, label="Ethnicity", max_length=128)
+    religion = forms.CharField(required=False, label="Religion", max_length=128)
+
+    #Health information
+    height = forms.IntegerField(label="Height (cm)", required=False)
+    weight = forms.IntegerField(label="Weight (cm)", required=False)
+
+    #preferences
+    max_distance = forms.IntegerField(label="Max Distance", required=False)
+    uni_only = forms.BooleanField(label="Uni Experiments Only", required=False)
+    online_only = forms.BooleanField(label="Online Only", required=False)
+    paid_only = forms.BooleanField(label="Paid Only", required=False)
+    email_notifications = forms.BooleanField(label="Email Notifications", required=False)
+
+
+    class Meta():
+        model = Participant
+        fields = ('address_line_1', 'address_line_2', 'city', 'postcode', 'contact_number', 'occupation', 'student','university', 'course_name', 'graduation_year', 'matric', 'gender' , 'ethnicity', 'religion', 'height', 'weight', 'max_distance', 'uni_only', 'online_only', 'paid_only')
 
 
 

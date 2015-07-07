@@ -5,7 +5,10 @@ from part_finder import views
 from django.contrib import admin
 from registration.backends.simple.views import RegistrationView
 from part_finder.forms import PartDemoForm,PartDetailsForm,PartStudentForm,PartPrefForm
-from part_finder.views import  ParticipantRegistration, show_message_form_condition
+from part_finder.views import  ParticipantRegistration, show_message_form_condition, ParticipantUpdate
+from django.views.generic.edit import UpdateView
+from part_finder.models import Participant
+
 
 participant_forms = [PartDetailsForm,PartStudentForm,PartDemoForm,PartPrefForm]
 
@@ -20,9 +23,8 @@ urlpatterns = patterns('',
     # url(r'^login_page/$', views.login_page, name='login_page'),
     url(r'^participant_registration/$', ParticipantRegistration.as_view(participant_forms, condition_dict = {'1': show_message_form_condition})),
     url(r'^researcher_registration/$', views.researcher_registration, name='researcher_registration'),
+    url(r'^user/update/$', ParticipantUpdate.as_view(), name='update_participant_details'),
+)
 
 
-
-
-    )
-
+# url(r'^myobject/update/(?P<pk>\w+)/$' UpdateView.as_view(model=myModel, template_name="myupdate.html")) - See more at: http://glitterbug.in/blog/django-class-based-generic-views-the-good-the-bad-/show/#sthash.wehZtdWJ.dpuf

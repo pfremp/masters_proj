@@ -1,11 +1,13 @@
 from django.shortcuts import render
-from django.shortcuts import render_to_response
-from django.http import HttpResponse
-from part_finder.models import Researcher, Experiment, Participant, UserProfile, Contact
-from part_finder.forms import ExperimentForm, ResearcherForm
+from django.shortcuts import render_to_response, get_object_or_404
+from django.http import HttpResponse, request
+from part_finder.models import Researcher, Experiment, Participant, UserProfile, Contact, User
+from part_finder.forms import ExperimentForm, ResearcherForm, PartDetailsForm, ParticipantForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.contrib.formtools.wizard.views import SessionWizardView
+from django.views.generic.edit import UpdateView
+
 # Create your views here.
 
 #Homepage
@@ -132,22 +134,52 @@ def add_experiment(request):
     return render(request, 'part_finder/add_experiment.html', {'form':form})
 
 
+#Participant update
+class ParticipantUpdate(UpdateView):
+    model = Participant
+    form_class = ParticipantForm
+    # fields = ['address_line_1', 'address_line_2', 'city', 'postcode', 'contact_number', 'occupation', 'student','university', 'course_name', 'graduation_year', 'matric', 'gender' , 'ethnicity', 'religion', 'height', 'weight', 'max_distance', 'uni_only', 'online_only', 'paid_only']
+    fields = ['address_line_1', 'address_line_2', 'city', 'postcode', 'contact_number', 'occupation', 'student','university', 'course_name', 'graduation_year', 'matric', 'gender' , 'ethnicity', 'religion', 'height', 'weight', 'max_distance', 'uni_only', 'online_only', 'paid_only']
+    template_name_suffix = '_update_form'
+    success_url='/part_finder/'
+
+    def get_object(self, queryset=None):
+        return self.request.user.profile.participant
+
+    # def get_object(self):
+    #     return get_object_or_404(User, pk=request.session['user_id'])
+
+    # def get_object(self, request):
+    #     return get_object_or_404(Participant, pk=request.session['user_id'])
+
+
+    # def get_object(self, queryset=None):
+    #     return self.request.user
+
+    # def get_object(self):
+    #     return self.request.user.get_profile()
+
+    # def get_object(self):
+    #     return Participant.objects.get(pk=self.request.GET.get('pk'))
+    #     # return Participant.objects.get(user=self.request.GET.get('user'))
+    #     # return Participant.objects.get(Participant.userprofile.user=self.request.user)
+    # def get_object(self):
+    #     return Participant.objects.get(Participant.userprofile.user=self.request.user)
+        # return Participant.objects.get(id=self.request.id)
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+# def update_location(request, pk=None):
+#     obj = get_object_or_404(Participant, pk=pk)
+#     form = LocationForm(request.POST or None,
+#                         request.FILES or None, instance=obj)
+#     if request.method == 'POST':
+#         if form.is_valid():
+#            form.save()
+#            return redirect('/accounts/loggedin/locations/all/')
+#     return render(request, 'locations/location_update.html', {'form': form})
+#
 
 
 

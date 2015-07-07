@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+{% extends 'site_base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}Update Profile{% endblock %}
+
+{% block body_block %}
+
+    <h1>Update</h1>
+
+
+    <form action="/part_finder/update_user_profile/" method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Update" />
+    </form>
+
+{% endblock %}
+
+
