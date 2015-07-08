@@ -24,7 +24,12 @@ def no_user_profile(request):
         return True
     else:
         return False
-
+    # try:
+    #     if request.user.profile.researcher == None and request.user.profile.participant == None:
+    #         return True
+    #     # else: return False
+    # except UserProfile.DoesNotExist:
+    #     return True
 
 
 #Check registration status once logged in

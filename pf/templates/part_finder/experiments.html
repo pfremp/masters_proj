@@ -8,99 +8,127 @@
 {% block body_block %}
 
     {% if experiment %}
-    <div class="container-fluid">
+        <div class="container-fluid">
         <div class="row" style="min-height: 300px;">
-          <div class="col-md-6">
-             <h1>{{ experiment.name }}</h1>
-              <p>{{ experiment.long_description }}</p>
+            <div class="col-md-6">
+                <h1>{{ experiment.name }}</h1>
+
+                <p>{{ experiment.long_description }}</p>
 
 
+            </div>
+            <div class="col-md-6">
+                <div style="margin-top: 20px; padding-bottom: 35px;" class="well">
+
+                    <div class="col-md-3">
+                        {% if experiment.currency == 'Money' %}
 
 
+                            <span class="glyphicon glyphicon-gbp"
+                                  aria-hidden="true"> {{ experiment.payment_amount }} {{ experiment.pmt_type }}</span>
 
+                        {% else %}
 
-          </div>
-          <div class="col-md-6">
-               <div style="margin-top: 20px; padding-bottom: 35px;" class="well">
+                            <span>{{ experiment.payment_amount }} Credits</span>
 
-                   <div class="col-md-3">
-                       {% if experiment.currency == 'Money' %}
+                        {% endif %}
+                        {#                       <span class="glyphicon glyphicon-gbp" aria-hidden="true">{{experiment.payment_amount}}{% if experiment.currency == 'Money' %}p/h  {% elif experiment.currency == 'Credits' %}</span>#}
+                        {#                       {% endif %}#}
 
+                    </div>
+                    <div class="col-md-3">
 
-                           <span class="glyphicon glyphicon-gbp" aria-hidden="true" > {{experiment.payment_amount}} {{ experiment.pmt_type }}</span>
+                        <span class="glyphicon glyphicon-time"
+                              aria-hidden="true"> {{ experiment.duration }} Hours</span>
 
-                       {% else %}
+                    </div>
+                    <div class="col-md-3">
 
-                            <span>{{experiment.payment_amount}} Credits</span>
+                        <span class="glyphicon glyphicon-calendar"
+                              aria-hidden="true"> {{ experiment.date | date:'M-d' }}</span>
 
-                       {% endif %}
-{#                       <span class="glyphicon glyphicon-gbp" aria-hidden="true">{{experiment.payment_amount}}{% if experiment.currency == 'Money' %}p/h  {% elif experiment.currency == 'Credits' %}</span>#}
-{#                       {% endif %}#}
+                    </div>
+                    <div class="col-md-3">
 
-                   </div>
-                <div class="col-md-3">
+                        <span class="glyphicon glyphicon-user"
+                              aria-hidden="true"> {{ experiment.no_of_participants_wanted }}</span>
 
-                    <span class="glyphicon glyphicon-time" aria-hidden="true"> {{ experiment.duration }} Hours</span>
+                    </div>
+
+                    {#                   <span class="glyphicon glyphicon-gbp" aria-hidden="true">{{experiment.payment_amount}}{% if experiment.currency == 'Money' %}p/h  {% elif experiment.currency == 'Credits' %}#}
+                    {#                       {% endif %}#}
+                    {##}
+                    {#                   </span>#}
+                    {##}
+                    {#                   <span class="glyphicon glyphicon-time" aria-hidden="true"></span>#}
+                    {#                   <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>#}
+                    {#                   <span class="glyphicon glyphicon-user" aria-hidden="true"></span>#}
+
 
                 </div>
-                <div class="col-md-3">
 
-                    <span class="glyphicon glyphicon-calendar" aria-hidden="true"> {{ experiment.date | date:'M-d' }}</span>
+                <div class="well">
+
+                    <img style="width: 100%;" src="/static/images/gmph.png">
 
                 </div>
-              <div class="col-md-3">
+            </div>
+        </div>
+        <div class="row">
 
-                  <span class="glyphicon glyphicon-user" aria-hidden="true"> {{ experiment.no_of_participants_wanted }}</span>
+        <ul class="nav nav-tabs">
+            <li role="presentation" class="active"><a href="#tab" aria-controls="tab" role="tab" data-toggle="tab">Tab
+                1</a></li>
+            <li role="presentation"><a href="#tab2" aria-controls="profile" role="tab" data-toggle="tab">Tab 2</a></li>
+            <li role="presentation"><a href="#tab3" aria-controls="profile" role="tab" data-toggle="tab">Tab 3</a></li>
+        </ul>
 
-              </div>
-
-{#                   <span class="glyphicon glyphicon-gbp" aria-hidden="true">{{experiment.payment_amount}}{% if experiment.currency == 'Money' %}p/h  {% elif experiment.currency == 'Credits' %}#}
-{#                       {% endif %}#}
-{##}
-{#                   </span>#}
-{##}
-{#                   <span class="glyphicon glyphicon-time" aria-hidden="true"></span>#}
-{#                   <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>#}
-{#                   <span class="glyphicon glyphicon-user" aria-hidden="true"></span>#}
-
-
-
-          </div>
-
-          <div class="well">google map here
+        <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="tab">
+            <div class="well" style="min-height: 300px;"></div>
+        </div>
 
 
-          </div>
-    </div>
+        <div role="tabpanel" class="tab-pane" id="tab2">
+        <div class="well" style="min-height: 300px;></div>
 
-    <div class="row">
+        </div>
 
+
+        </div>
+        </div>
+        </div>
 
 
 
         </div>
-    </div>
+
+
+
+
+
+
 
     {% else %}
-    <p>Experiment Not Found</p>
+        <p>Experiment Not Found</p>
     {% endif %}
 
     </div>
 
 
-{#        {% if experiment %}#}
-{#            {% if experiment %}#}
-{#            <ul>#}
-{##}
-{#                <li>{{ experiment.name }}</li>#}
-{##}
-{#            </ul>#}
-{#            {% else %}#}
-{#                <strong>No pages currently in category.</strong>#}
-{#            {% endif %}#}
-{#        {% else %}#}
-{#            There are currently no experiments!#}
-{#        {% endif %}#}
+    {#        {% if experiment %}#}
+    {#            {% if experiment %}#}
+    {#            <ul>#}
+    {##}
+    {#                <li>{{ experiment.name }}</li>#}
+    {##}
+    {#            </ul>#}
+    {#            {% else %}#}
+    {#                <strong>No pages currently in category.</strong>#}
+    {#            {% endif %}#}
+    {#        {% else %}#}
+    {#            There are currently no experiments!#}
+    {#        {% endif %}#}
 
 {% endblock %}
 

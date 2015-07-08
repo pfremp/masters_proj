@@ -60,7 +60,7 @@ class Experiment(models.Model):
     address = models.CharField(max_length=128, blank=True)
     no_of_participants_wanted = models.IntegerField(null=True, blank=True)
     researcher = models.ForeignKey(Researcher, related_name="experiment")
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
@@ -88,7 +88,7 @@ class Participant(models.Model):
     university = models.ForeignKey(University, blank=True, null=True)
     course_name = models.CharField(max_length=100)
     year = models.IntegerField(null=True)
-    matric = models.CharField(max_length=20)
+    matric = models.CharField(max_length=20, null=True)
 
     #Demographic informatuon
     gender = models.CharField(max_length=128, blank=True, choices=SEX)
@@ -102,7 +102,8 @@ class Participant(models.Model):
     #Preferences
     max_distance = models.IntegerField(max_length=128, blank=True, null=True)
     uni_only = models.BooleanField(default=False, blank=True)
-    online_only = models.IntegerField(max_length=128, blank=True, null=True)
+    online_only = models.BooleanField(default=False, blank=True)
+    # online_only = models.IntegerField(max_length=128, blank=True, null=True)
     paid_only = models.BooleanField(default=False, blank=True)
     email_notifications = models.BooleanField(default=False, blank=True)
     experiments = models.ManyToManyField(Experiment, null=True, blank=True, related_name="participants")

@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'bootstrap3_datetime',
     'datetimewidget',
     'django.contrib.formtools',
+    'django.core.mail',
 
 
     #allauth
@@ -162,7 +163,7 @@ SOCIALACCOUNT_ADAPTER ="allauth.socialaccount.adapter.DefaultSocialAccountAdapte
 
 SOCIALACCOUNT_QUERY_EMAIL =ACCOUNT_EMAIL_REQUIRED
 
-SOCIALACCOUNT_AUTO_SIGNUP =True
+SOCIALACCOUNT_AUTO_SIGNUP =False
 
 SOCIALACCOUNT_EMAIL_REQUIRED =ACCOUNT_EMAIL_REQUIRED
 

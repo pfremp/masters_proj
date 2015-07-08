@@ -54,7 +54,7 @@
       <thead>
         <tr>
           <th>Name</th>
-          <th>Description</th>
+          <th>Dept.</th>
           <th>Location</th>
           <th>Date</th>
           <th>Paid</th>
@@ -70,7 +70,7 @@
           <td>{{ experiment.date|date:"M d" }}</td>
           <td>
 
-              {% if experiment.paidEvent == True %}
+              {% if experiment.paid_event == True %}
               <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
               {% else %}
               <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
