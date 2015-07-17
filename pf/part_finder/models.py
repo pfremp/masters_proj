@@ -130,13 +130,7 @@ class UserProfile(models.Model):
         return self.user.username
 
 
-class Contact(models.Model):
-    subject = models.CharField(max_length=100)
-    sender = models.CharField(max_length=100)
-    message = models.CharField(max_length=1000)
 
-    def __unicode__(self):  #For Python 2, use __str__ on Python 3
-        return self.subject
 
 class Application(models.Model):
     STATUS = (('Pending','Pending'),('Accepted','Accepted'),('Standby','Standby'))
@@ -147,3 +141,29 @@ class Application(models.Model):
 
     def __unicode__(self):  #For Python 2, use __str__ on Python 3
         return self.Experiment.name
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class Contact(models.Model):
+    subject = models.CharField(max_length=100)
+    sender = models.CharField(max_length=100)
+    message = models.CharField(max_length=1000)
+
+    def __unicode__(self):  #For Python 2, use __str__ on Python 3
+        return self.subject
