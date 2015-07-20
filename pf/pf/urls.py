@@ -13,6 +13,7 @@ url(r'^part_finder/', include('part_finder.urls')),
 # (r'^accounts/logout/$', 'django.contrib.auth.views.logout',
 # {'next_page': '/'}),
 (r'^accounts/', include('allauth.urls')),
+url(r'^autocomplete/', include('autocomplete_light.urls')),
 
 )
 

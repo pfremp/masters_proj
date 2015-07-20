@@ -3,8 +3,8 @@ from datetime import date, datetime, timedelta
 from django.contrib.auth.models import User
 from django.db import models
 from django.template.defaultfilters import slugify
-
-
+from cities_light.models import City, Country,Region
+import cities_light
 
 
 # #common user attributes
@@ -39,7 +39,8 @@ class Researcher(models.Model):
 
 
     def __unicode__(self):  #For Python 2, use __str__ on Python 3
-        return self.userprofile.user.username
+        # return self.userprofile.user.username
+        return self.department
 
 
 class Experiment(models.Model):
@@ -73,15 +74,25 @@ class Experiment(models.Model):
 
 class Participant(models.Model):
     YN = (('Yes','Yes'),('No','No'))
-    SEX = (('Male','Male'), ('Female','Female'))
+    SEX = (('Male','Male'), ('Female','Female'), ('PNTS','Prefer not to say'))
+    EDUCATION = (('School', 'School'), ('College','College') , ('University' , 'University'))
+    # CITIES = (cities_light.signals.country_items_pre_import.connect(filter_country_import))
     #User standard details
 
-    address_line_1 = models.CharField(max_length=128, blank=True)
-    address_line_2 = models.CharField(max_length=128, blank=True)
-    city = models.CharField(max_length=128, blank=True)
-    postcode = models.CharField(max_length=128, blank=True)
+    # address_line_1 = models.CharField(max_length=128, blank=True)
+    # address_line_2 = models.CharField(max_length=128, blank=True)
+    # city = models.CharField(max_length=128, blank=True)
+    # postcode = models.CharField(max_length=128, blank=True)
+    # city = models.CharField(choices=CITIES, max_length=1000, blank=True)
+    dob = models.DateField(("Date"), default=date.today, null=True)
+    country = models.ForeignKey('cities_light.country', null=True)
+    # country = models.CharField(max_length=128, blank=True, null=True)
+    region = models.ForeignKey('cities_light.region', null=True)
+    city = models.ForeignKey('cities_light.city', null=True)
     contact_number = models.IntegerField(max_length=128, blank=True, null=True)
     occupation = models.CharField(max_length=128, blank=True)
+
+    education = models.CharField(choices=EDUCATION, blank=True, max_length=1000)
     student = models.BooleanField(default=False, blank=True)
 
     #Student Information
@@ -148,8 +159,14 @@ class Application(models.Model):
 
 
 
+#TEST AUTO COMPLETE
+class Dummy(models.Model):
+    parent = models.ForeignKey('self', null=True, blank=True)
+    country = models.ForeignKey('cities_light.country')
+    region = models.ForeignKey('cities_light.region')
 
-
+    def __unicode__(self):
+        return '%s %s' % (self.country, self.region)
 
 
 

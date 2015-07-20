@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponse, request
-from part_finder.models import Researcher, Experiment, Participant, UserProfile, Contact, User
-from part_finder.forms import ExperimentForm, ResearcherForm, PartDetailsForm, ParticipantForm, SignupForm
+from part_finder.models import Researcher, Experiment, Participant, UserProfile, Contact, User,Dummy
+from part_finder.forms import ExperimentForm, ResearcherForm, PartDetailsForm, ParticipantForm, SignupForm, DummyForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
-from django.contrib.formtools.wizard.views import SessionWizardView
+# from django.contrib.formtools.wizard.views import SessionWizardView
+from formtools.wizard.views import WizardView, SessionWizardView
 from django.views.generic.edit import UpdateView
 
 # Create your views here.
@@ -78,6 +79,7 @@ def show_message_form_condition(wizard):
 
 
 
+
 # Particiapnt Registration form
 # Multi-page form using django form wizard
 class ParticipantRegistration(SessionWizardView):
@@ -137,6 +139,25 @@ def add_experiment(request):
         form = ExperimentForm()
 
     return render(request, 'part_finder/add_experiment.html', {'form':form})
+
+
+#dummy_form
+# @login_required
+def dummy(request):
+    if request.method == 'POST':
+        form = DummyForm(request.POST)
+        if form.is_valid():
+            dummy = form.save(commit=False)
+            # res = request.user.profile.researcher
+            # experiment.researcher = res
+            form.save()
+            return index(request)
+        else:
+            print form.errors
+    else:
+        form = DummyForm()
+
+    return render(request, 'part_finder/dummy.html', {'form':form})
 
 
 #Participant details update

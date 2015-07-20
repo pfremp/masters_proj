@@ -40,8 +40,12 @@ INSTALLED_APPS = (
     'bootstrap3',
     'bootstrap3_datetime',
     'datetimewidget',
-    'django.contrib.formtools',
+    # 'django.contrib.formtools',
     'django.core.mail',
+    'cities_light',
+    'autocomplete_light',
+    # 'django-formtools',
+    'formtools',
 
 
     #allauth
@@ -290,3 +294,42 @@ AUTHENTICATION_BACKENDS = (
 USE_L10N = True
 USE_TZ = True
 USE_I18N = True
+
+#
+# Django cities
+CITIES_LIGHT_TRANSLATION_LANGUAGES = ['en']
+CITIES_LIGHT_INCLUDE_COUNTRIES = ['GB', 'FR']
+
+SOUTH_MIGRATION_MODULES = {
+    'cities_light': 'cities_light.south_migrations',
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'console':{
+            'level':'DEBUG',
+            'class':'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+    },
+    'loggers': {
+        'cities_light': {
+            'handlers':['console'],
+            'propagate': True,
+            'level':'DEBUG',
+        },
+        # also use this one to see SQL queries
+        'django': {
+            'handlers':['console'],
+            'propagate': True,
+            'level':'DEBUG',
+        },
+    }
+}
