@@ -1,0 +1,14 @@
+<html>
+    <body>
+        <form method="post" action="">
+            {% csrf_token %}
+            <table>
+                {{ form.as_table }}
+            </table>
+            <input type="submit" />
+        </form>
+
+        <script src="{{ STATIC_URL }}js/jquery.js"></script>
+        {% include 'autocomplete_light/static.html' %}
+    </body>
+</html>

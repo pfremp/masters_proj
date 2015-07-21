@@ -25,13 +25,17 @@
 
 {# <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>#}
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js" type="text/javascript"></script>
+
+
     <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet" type="text/css"/>
+
     <script src="{{ STATIC_URL }}js/bootstrap.js"></script>
     <script src="{{ STATIC_URL }}js/jquery.js"></script>
     {% include 'autocomplete_light/static.html' %}
+      <link href="{{ STATIC_URL }}css/part_finder.css" rel="stylesheet" type="text/css"/>
     {{ form.media }}
 
-
+    {% block extra_head %}{% endblock %}
 
 
   </head>

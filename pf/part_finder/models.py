@@ -5,6 +5,10 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from cities_light.models import City, Country,Region
 import cities_light
+from django.core import urlresolvers
+from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
+
 
 
 # #common user attributes
@@ -24,23 +28,16 @@ class University(models.Model):
     def __unicode__(self):  #For Python 2, use __str__ on Python 3
         return self.name
 
-class Locations(models.Model):
-    name = models.CharField(max_length=100)
-
-    def __unicode__(self):  #For Python 2, use __str__ on Python 3
-        return self.name
-
 class Researcher(models.Model):
     # INSTITUTIONS = (('Glasgow','University of Glasgow'),('Strathclyde','Strathclyde University'))
-    dob = models.DateField(("Date"), default=date.today, null=True)
-    institution = models.CharField(max_length=128, blank=True, null=True)
+    university = models.ForeignKey(University, blank=True, null=True)
+    department = models.CharField(max_length=128, blank=True, null=True)
     contact_no = models.IntegerField()
-    department = models.CharField(max_length=128, blank=True)
-
+    url = models.URLField(max_length=128, blank=True)
 
     def __unicode__(self):  #For Python 2, use __str__ on Python 3
-        # return self.userprofile.user.username
-        return self.department
+        return self.userprofile.user.username
+        # return self.department
 
 
 class Experiment(models.Model):
@@ -49,18 +46,21 @@ class Experiment(models.Model):
     name = models.CharField(max_length=128, blank=False)
     short_description = models.CharField(max_length=128, blank=True)
     long_description = models.CharField(max_length=500, blank=True)
-    date = models.DateField(("Date"), default=date.today)
-    start_time = models.TimeField(blank=True)
-    end_time = models.TimeField(blank=True)
+    # date = models.DateField(("Date"), default=date.today, null=True)
+    # start_time = models.TimeField(blank=True)
+    # end_time = models.TimeField(blank=True)
     duration = models.FloatField(blank=True)
     paid_event = models.BooleanField(default=False)
     currency = models.CharField(max_length=100, choices=CURRENCY, blank=True)
     payment_amount = models.FloatField(max_length=1000, blank=True)
     pmt_type = models.CharField(max_length=128, choices=PMT_TYPE, blank=True)
-    location = models.CharField(max_length=128)
     address = models.CharField(max_length=128, blank=True)
-    no_of_participants_wanted = models.IntegerField(null=True, blank=True)
+    location = models.CharField(max_length=128)
+
+    # no_of_participants_wanted = models.IntegerField(null=True, blank=True)
+    language_req = models.CharField(max_length=128, blank=True)
     researcher = models.ForeignKey(Researcher, related_name="experiment")
+    url = models.URLField(blank=True)
     slug = models.SlugField(unique=True, null=True, blank=True)
 
     def save(self, *args, **kwargs):
@@ -76,22 +76,14 @@ class Participant(models.Model):
     YN = (('Yes','Yes'),('No','No'))
     SEX = (('Male','Male'), ('Female','Female'), ('PNTS','Prefer not to say'))
     EDUCATION = (('School', 'School'), ('College','College') , ('University' , 'University'))
-    # CITIES = (cities_light.signals.country_items_pre_import.connect(filter_country_import))
-    #User standard details
 
-    # address_line_1 = models.CharField(max_length=128, blank=True)
-    # address_line_2 = models.CharField(max_length=128, blank=True)
-    # city = models.CharField(max_length=128, blank=True)
-    # postcode = models.CharField(max_length=128, blank=True)
-    # city = models.CharField(choices=CITIES, max_length=1000, blank=True)
     dob = models.DateField(("Date"), default=date.today, null=True)
     country = models.ForeignKey('cities_light.country', null=True)
-    # country = models.CharField(max_length=128, blank=True, null=True)
     region = models.ForeignKey('cities_light.region', null=True)
     city = models.ForeignKey('cities_light.city', null=True)
     contact_number = models.IntegerField(max_length=128, blank=True, null=True)
     occupation = models.CharField(max_length=128, blank=True)
-
+    lang = models.CharField(max_length=128, blank=True)
     education = models.CharField(choices=EDUCATION, blank=True, max_length=1000)
     student = models.BooleanField(default=False, blank=True)
 
@@ -103,9 +95,6 @@ class Participant(models.Model):
 
     #Demographic informatuon
     gender = models.CharField(max_length=128, blank=True, choices=SEX)
-    ethnicity = models.CharField(max_length=128, blank=True)
-    religion = models.CharField(max_length=128, blank=True)
-
     #Health information
     height = models.IntegerField(max_length=128, blank=True, null=True)
     weight = models.IntegerField(max_length=128, blank=True, null=True)
@@ -172,7 +161,26 @@ class Dummy(models.Model):
 
 
 
+class TodoList(models.Model):
+    name = models.CharField(max_length=100)
 
+    def __unicode__(self):
+        return self.name
+
+class TodoItem(models.Model):
+
+    # name = models.CharField(max_length=150, help_text="e.g. Buy milk, wash dog etc", null=True)
+    date = models.DateField(("Date"), default=date.today, null=True)
+    start_time = models.TimeField(blank=True, null=True)
+    end_time = models.TimeField(blank=True, null=True)
+    no_of_parts = models.IntegerField(blank=True, null=True)
+    experiment = models.ForeignKey(Experiment, null=True)
+
+    def __unicode__(self):
+        return self.experiment.name or u'hey'
+
+
+##.name + " (" + str(self.experiment) + ")"
 
 
 
@@ -184,3 +192,18 @@ class Contact(models.Model):
 
     def __unicode__(self):  #For Python 2, use __str__ on Python 3
         return self.subject
+
+
+
+#
+# @python_2_unicode_compatible
+# class NonAdminAddAnotherModel(models.Model):
+#     name = models.CharField(max_length=100)
+#     widgets = models.ManyToManyField('self', blank=True)
+#
+#     def get_absolute_url(self):
+#         return urlresolvers.reverse(
+#             'non_admin_add_another_model_update', args=(self.pk,))
+#
+#     def __str__(self):
+#         return self.name

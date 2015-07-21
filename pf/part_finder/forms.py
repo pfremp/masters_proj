@@ -1,7 +1,7 @@
 __author__ = 'patrickfrempong'
 
 from django import forms
-from part_finder.models import Researcher,Experiment,Participant,  UserProfile, University, Locations, Dummy
+from part_finder.models import Researcher,Experiment,Participant,  UserProfile, University, TodoItem, TodoList
 from django.contrib.auth.models import User
 from datetime import date
 from django.contrib.auth import get_user_model
@@ -9,69 +9,29 @@ from datetimewidget.widgets import DateTimeWidget, DateWidget, TimeWidget
 from cities_light.models import City, Country
 import cities_light
 import autocomplete_light
+# from .models import NonAdminAddAnotherModel
+import autocomplete_light.shortcuts as al
+
+from django.forms import ModelForm
 
 
-class DummyForm(autocomplete_light.ModelForm):
-    class Media:
-        """
-        We're currently using Media here, but that forced to move the
-        javascript from the footer to the extrahead block ...
-
-        So that example might change when this situation annoys someone a lot.
-        """
-        js = ('js/dependant_autocomplete.js',)
-
-    class Meta:
-        model = Dummy
-        exclude = []
-
-
-# def filter_city_import(sender, items, **kwargs):
-#     if items[8] not in ('FR', 'US', 'BE'):
-#         raise cities_light.InvalidItems()
+# class UniversityForm(forms.ModelForm):
+#     name = forms.CharField(max_length=128)
 #
-# # cities_light.signals.city_items_pre_import.connect(filter_city_import)
-
-
-# #user form superclass (common attrib)
-# class UserForm(forms.ModelForm):
-#     dob = forms.DateField(label="Date of Birth")
-#     matric = forms.IntegerField(label="Matriculation No.")
-#     institution = forms.CharField(label="Institution")
-#     contactNo = forms.IntegerField(label="Contact Number")
-#
-#
-#     class Meta:
-#         model = Experiment
-#         fields = ('dob', 'matric', 'institution', 'contactNo')
-
-
-class UniversityForm(forms.ModelForm):
-    name = forms.CharField(max_length=128)
-
-    class Meta():
-        model = University
-        fields = ('name',)
-
-class LocationFrom(forms.ModelForm):
-    name = forms.CharField(max_length=128)
-
-    class Meta():
-        model = Locations
-        fields = ('name',)
+#     class Meta():
+#         model = University
+#         fields = ('name',)
 
 
 class ResearcherForm (forms.ModelForm):
-
-
-   matric = forms.IntegerField(label="Matriculation No.", required=True)
-   institution = forms.CharField(label="Institution", max_length=128)
+   university = forms.ModelChoiceField(label="University", queryset=University.objects.all(), required=False)
+   department = forms.CharField(label="Department Name", max_length=128)
    contact_no = forms.IntegerField(label="Contact Number")
-   department = forms.CharField(label="Department Name")
+   url = forms.CharField(label="Department Name")
 
    class Meta():
         model = Researcher
-        fields =  ('dob', 'matric', 'institution', 'contact_no', 'department')
+        fields =  ('university','department', 'contact_no', 'url')
 
 class ExperimentForm (forms.ModelForm):
     PAYMENT_TYPE = (('Credits','Credits'),('Money','Money'))
@@ -80,26 +40,25 @@ class ExperimentForm (forms.ModelForm):
     PMT_TYPE = (('Total','Total'),('Hourly','Hourly'), ('N/A', 'N/A'))
     name = forms.CharField(max_length=128, label="Name", required=True)
     short_description = forms.CharField(max_length=128)
-    long_description = forms.CharField(max_length=500)
+    long_description = forms.CharField(max_length=500, widget=forms.Textarea)
     date = forms.DateField(required=False, label="Experiment Date", widget=DateWidget(usel10n=True, bootstrap_version=3))
-    start_time = forms.TimeField(label="Start Time", widget=TimeWidget(usel10n=True, bootstrap_version=3))
-    end_time = forms.TimeField(label="End Time", widget=TimeWidget(usel10n=True, bootstrap_version=3))
+    # start_time = forms.TimeField(label="Start Time", widget=TimeWidget(usel10n=True, bootstrap_version=3))
+    # end_time = forms.TimeField(label="End Time", widget=TimeWidget(usel10n=True, bootstrap_version=3))
     duration = forms.FloatField(label="Duration (hours)")
     paid_event = forms.BooleanField(label="Paid Event", required=False)
     currency = forms.ChoiceField(label="Currency", choices=PAYMENT_TYPE)
     payment_amount = forms.FloatField(label="Payment Amount")
     pmt_type = forms.ChoiceField(label="Payment Type", choices=PMT_TYPE)
-    location = forms.ModelChoiceField(label="Location", queryset=Locations.objects.all(), required=False)
+    location = forms.ChoiceField(label="Location", choices=LOCATIONS, required=False)
     address = forms.CharField(label="Address")
-    no_of_participants_wanted = forms.IntegerField(max_value=10, label="No of Participants Wanted")
+    # no_of_participants_wanted = forms.IntegerField(max_value=10, label="No of Participants Wanted")
+    # language_req
+    url = forms.URLField(max_length=False, required=False)
     slug = forms.CharField(widget=forms.HiddenInput(), required=False)
 
     class Meta():
         model = Experiment
-        fields = ('name','short_description','long_description', 'date', 'start_time', 'end_time','duration', 'paid_event','currency','pmt_type','payment_amount', 'location','address', 'no_of_participants_wanted', )
-
-
-
+        fields = ('name','short_description','long_description','duration', 'paid_event','currency','pmt_type','payment_amount', 'location','address', )
 
 
 class ParticipantForm (forms.ModelForm):
@@ -108,27 +67,19 @@ class ParticipantForm (forms.ModelForm):
     YN = (('Yes','Yes'),('No','No'))
     SEX = (('Male','Male'), ('Female','Female'), ('PNTS','Prefer not to say'))
     UNI = (('GCU','GCU'),('UoG','UoG'))
-    EDUCATION = (('School', 'School'), ('College','College') , ('University' , 'University'))
+    EDUCATION = (('School', 'School'),('SQ1', 'School Qualification1'), ('College','College') , ('University' , 'University'))
     YOS = (('1' , '1'), ('2' , '2'),('3' , '3'),('4' , '4'),('5' , '5'))
-    # address_line_1 = forms.CharField(required=False, label="Address Line 1", max_length=128)
-    # address_line_2 = forms.CharField(required=False, label="Address Line 2", max_length=128)
-    # city = cities_light.signals.city_items_pre_import.connect(filter_city_import)
-    # city = forms.ModelChoiceField(label="City", queryset=City.objects.all(), required=False)
-    # city = forms.CharField(required=False, label="City", max_length=128)
-    # postcode = forms.CharField(required=False, label="Postcode", max_length=128)
+
     dob = forms.DateField(label="Date of Birth", widget=DateWidget(usel10n=True, bootstrap_version=3), required=False)
-    # region = forms.CharField(required=False, label='Region', max_length=128)
-    # region = autocomplete_light.ChoiceField('OsAutocomplete')
-    # city = forms.CharField(required=False, label='City', max_length=128)
     contact_number = forms.IntegerField(required=False, label="Contact No")
     occupation = forms.CharField(required=False, label="Occupation", max_length=128)
     education = forms.ChoiceField(choices=EDUCATION, label="Level of Education", required=True)
     student = forms.BooleanField(label="Student", required=False)
 
     university = forms.ModelChoiceField(label="University", queryset=University.objects.all(), required=False)
-    course_name = forms.CharField(label="Course Name",max_length=128)
-    year_of_study = forms.IntegerField(label="Year of Study")
-    matric = forms.CharField(label="Matric")
+    course_name = forms.CharField(label="Course Name",max_length=128, required=False)
+    year_of_study = forms.IntegerField(label="Year of Study", required=False)
+    matric = forms.CharField(label="Matric", required=False)
 
     #Demographic
     gender = forms.CharField(required=False, label="Gender", max_length=128)
@@ -149,7 +100,7 @@ class ParticipantForm (forms.ModelForm):
 
     class Meta():
         model = Participant
-        fields = ('dob','country','region','city','contact_number','occupation','education','university', 'course_name', 'year', 'matric', 'gender' , 'ethnicity', 'religion', 'height', 'weight', 'max_distance', 'uni_only', 'online_only', 'paid_only')
+        fields = ('dob','country','region','city','contact_number','occupation','education','student','lang','university', 'course_name', 'year', 'matric', 'gender' ,'height', 'weight', 'max_distance', 'uni_only', 'online_only', 'paid_only')
 
 
 
@@ -160,22 +111,11 @@ class PartDetailsForm (autocomplete_light.ModelForm):
     EDUCATION = (('School', 'School'), ('College','College') , ('University' , 'University'))
     UNI = (('GCU','GCU'),('UoG','UoG'))
     dob = forms.DateField(label="Date of Birth", widget=DateWidget(usel10n=True, bootstrap_version=3), required=False)
-    # country = autocomplete_light.ChoiceField('CountryAutocomplete', required=False)
-    # region = autocomplete_light.ChoiceField('RegionAutocompleteRegion', required=False)
-    # region = autocomplete_light.ChoiceField('OsAutocomplete')
-    # region = autocomplete.ChoiceField   CharField(required=False, label='Region', max_length=128)
-    # city = autocomplete_light.ChoiceField('CityAutocompleteCity', required=False)
     contact_number = forms.IntegerField(required=False, label="Contact No")
     occupation = forms.CharField(required=False, label="Occupation", max_length=128)
     education = forms.ChoiceField(choices=EDUCATION, label="Level of Education", required=True)
     student = forms.BooleanField(label="Student", required=False)
-    # address_line_1 = forms.CharField(required=False, label="Address Line 1", max_length=128)
-    # address_line_2 = forms.CharField(required=False, label="Address Line 2", max_length=128)
-    # # city = forms.CharField(required=False, label="City", max_length=128)
-    # city = forms.ModelChoiceField(label="City", queryset=City.objects.all(), required=False)
-    # postcode = forms.CharField(required=False, label="Postcode", max_length=128)
-    # contact_number = forms.IntegerField(required=False, label="Contact No")
-    # occupation = forms.CharField(required=False, label="Occupation", max_length=128)
+    lang = autocomplete_light.MultipleChoiceField('OsAutocomplete', required=False, label='Languages')
 
     class Media:
         """
@@ -189,17 +129,13 @@ class PartDetailsForm (autocomplete_light.ModelForm):
     # class Meta:
     #     model = Participant
     #     exclude = []
-
-
     class Meta():
         model = Participant
-        fields = ('dob','country','region','city','contact_number','occupation','education')
+        fields = ('dob','country','region','city','contact_number','occupation','education','lang')
 
 
 class PartStudentForm (forms.ModelForm):
     YOS = (('1' , '1'), ('2' , '2'),('3' , '3'),('4' , '4'),('5' , '5'))
-    # UNI = (('GCU','GCU'),('UoG','UoG'))
-    UNI = University.objects.filter()
     university = forms.ModelChoiceField(label="University", queryset=University.objects.all(), required=False)
     course_name = forms.CharField(label="Course Name",max_length=128, required=False)
     year_of_study = forms.ChoiceField(choices=YOS, label="Year of Study", required=False)
@@ -213,9 +149,6 @@ class PartDemoForm (forms.ModelForm):
     SEX = (('Male','Male'), ('Female','Female'), ('PNTS','Prefer not to say'))
     #Demographic
     gender = forms.ChoiceField(choices=SEX, required=False, label="Gender")
-    # ethnicity = forms.CharField(required=False, label="Ethnicity", max_length=128)
-    # religion = forms.CharField(required=False, label="Religion", max_length=128)
-
     #Health information
     height = forms.IntegerField(label="Height (cm)", required=False)
     weight = forms.IntegerField(label="Weight (kg)", required=False)
@@ -237,12 +170,7 @@ class PartPrefForm (forms.ModelForm):
 
     class Meta():
         model = Participant
-        fields = ('max_distance', 'uni_only', 'online_only', 'paid_only')
-
-
-
-
-
+        fields = ('max_distance', 'uni_only', 'online_only', 'paid_only','email_notifications')
 
 
 class SignupForm(forms.Form):
@@ -250,12 +178,6 @@ class SignupForm(forms.Form):
     first_name = forms.CharField(max_length=35, label='First name')
     last_name = forms.CharField(max_length=35, label='Last name')
     type = forms.ChoiceField(choices=TYPES, label='Type')
-
-    # dob = forms.DateField(label="Date of Birth")
-    # matric = forms.IntegerField(label="Matriculation No.")
-    # institution = forms.CharField(label="Institution")
-    # contactNo = forms.IntegerField(label="Contact Number")
-    # password = forms.CharField(max_length=30, label="Password")
 
     class Meta():
         model = UserProfile
@@ -297,3 +219,24 @@ class SignupForm(forms.Form):
 #     class Meta():
 #         model = Contact
 #         fields = ('message')
+
+#
+# NonAdminAddAnotherModelForm = al.modelform_factory(NonAdminAddAnotherModel,
+#         exclude=[])
+
+
+class TodoListForm(ModelForm):
+  class Meta:
+    model = TodoList
+    exclude = ('',)
+
+class TodoItemForm(ModelForm):
+    date = forms.DateField(required=False, label="Experiment Date", widget=DateWidget(usel10n=True, bootstrap_version=3))
+    start_time = forms.TimeField(label="Start Time", widget=TimeWidget(usel10n=True, bootstrap_version=3))
+    end_time = forms.TimeField(label="End Time", widget=TimeWidget(usel10n=True, bootstrap_version=3))
+    no_of_parts = forms.IntegerField(max_value=1000, label="No of Participants Wanted")
+
+    class Meta:
+        model = TodoItem
+        fields = ('date', 'start_time', 'end_time', 'no_of_parts',)
+        # exclude = ('experiment',)

@@ -2,13 +2,17 @@ from django.shortcuts import render
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponse, request
 from part_finder.models import Researcher, Experiment, Participant, UserProfile, Contact, User,Dummy
-from part_finder.forms import ExperimentForm, ResearcherForm, PartDetailsForm, ParticipantForm, SignupForm, DummyForm
+from part_finder.forms import ExperimentForm, ResearcherForm, PartDetailsForm, ParticipantForm, SignupForm, TodoList, TodoItemForm, TodoListForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 # from django.contrib.formtools.wizard.views import SessionWizardView
 from formtools.wizard.views import WizardView, SessionWizardView
 from django.views.generic.edit import UpdateView
 
+from django.forms.formsets import formset_factory, BaseFormSet
+from django.http import HttpResponse, HttpResponseRedirect
+from django.core.context_processors import csrf
+from django.template import RequestContext # For CSRF
 # Create your views here.
 
 #Homepage
@@ -122,42 +126,129 @@ def experiment (request, experiment_name_slug):
         pass
     return render(request, 'part_finder/experiments.html', context_dict)
 
-#add experiment form
+# #add experiment form
+# @login_required
+# def add_experiment(request):
+#     if request.method == 'POST':
+#         form = ExperimentForm(request.POST)
+#         if form.is_valid():
+#             experiment = form.save(commit=False)
+#             res = request.user.profile.researcher
+#             experiment.researcher = res
+#             form.save()
+#             return index(request)
+#         else:
+#             print form.errors
+#     else:
+#         form = ExperimentForm()
+#
+#     return render(request, 'part_finder/add_experiment.html', {'form':form})
+#
+
 @login_required
 def add_experiment(request):
+
+    class RequiredFormSet(BaseFormSet):
+        def __init__(self, *args, **kwargs):
+            super(RequiredFormSet, self).__init__(*args, **kwargs)
+            for form in self.forms:
+                form.empty_permitted = False
+
+    TodoItemFormSet = formset_factory(TodoItemForm, max_num=10, formset=RequiredFormSet)
+
     if request.method == 'POST':
         form = ExperimentForm(request.POST)
-        if form.is_valid():
+        todo_list_form = TodoListForm(request.POST) # A form bound to the POST data
+        # Create a formset from the submitted data
+        todo_item_formset = TodoItemFormSet(request.POST, request.FILES)
+        if form.is_valid() and todo_list_form.is_valid() and todo_item_formset.is_valid():
             experiment = form.save(commit=False)
             res = request.user.profile.researcher
             experiment.researcher = res
             form.save()
+
+            for form in todo_item_formset.forms:
+                todo_item = form.save(commit=False)
+                # todo_item.list = todo_list
+                todo_item.experiment = experiment
+                todo_item.save()
+
+
+
+        # if todo_list_form.is_valid() and todo_item_formset.is_valid():
+        #     todo_list = todo_list_form.save()
+        #     for form in todo_item_formset.forms:
+        #         todo_item = form.save(commit=False)
+        #         # todo_item.list = todo_list
+        #         todo_item.experiment = experiment
+        #         todo_item.save()
+
+
             return index(request)
         else:
             print form.errors
     else:
         form = ExperimentForm()
+        todo_list_form = TodoListForm()
+        todo_item_formset = TodoItemFormSet()
 
-    return render(request, 'part_finder/add_experiment.html', {'form':form})
+    # For CSRF protection
+    # See http://docs.djangoproject.com/en/dev/ref/contrib/csrf/
+    c = {'form':form, 'todo_list_form': todo_list_form,
+         'todo_item_formset': todo_item_formset,
+        }
+    c.update(csrf(request))
+
+    return render(request, 'part_finder/add_experiment.html', c)
 
 
-#dummy_form
-# @login_required
-def dummy(request):
-    if request.method == 'POST':
-        form = DummyForm(request.POST)
-        if form.is_valid():
-            dummy = form.save(commit=False)
-            # res = request.user.profile.researcher
-            # experiment.researcher = res
-            form.save()
-            return index(request)
-        else:
-            print form.errors
-    else:
-        form = DummyForm()
 
-    return render(request, 'part_finder/dummy.html', {'form':form})
+
+
+    # if request.method == 'POST': # If the form has been submitted...
+    #     todo_list_form = TodoListForm(request.POST) # A form bound to the POST data
+    #     # Create a formset from the submitted data
+    #     todo_item_formset = TodoItemFormSet(request.POST, request.FILES)
+    #
+    #     if todo_list_form.is_valid() and todo_item_formset.is_valid():
+    #         todo_list = todo_list_form.save()
+    #         for form in todo_item_formset.forms:
+    #             todo_item = form.save(commit=False)
+    #             todo_item.list = todo_list
+    #             todo_item.save()
+    #
+    #         return HttpResponseRedirect('thanks') # Redirect to a 'success' page
+    # else:
+    #     todo_list_form = TodoListForm()
+    #     todo_item_formset = TodoItemFormSet()
+    #
+    # # For CSRF protection
+    # # See http://docs.djangoproject.com/en/dev/ref/contrib/csrf/
+    # c = {'todo_list_form': todo_list_form,
+    #      'todo_item_formset': todo_item_formset,
+    #     }
+    # c.update(csrf(request))
+    #
+    # return render_to_response('todo.html', c)
+
+
+# #dummy_form
+# # @login_required
+# def dummy(request):
+#     if request.method == 'POST':
+#         form = DummyForm(request.POST)
+#         if form.is_valid():
+#             dummy = form.save(commit=False)
+#             # res = request.user.profile.researcher
+#             # experiment.researcher = res
+#             form.save()
+#             return index(request)
+#         else:
+#             print form.errors
+#     else:
+#         form = DummyForm()
+#
+#     return render(request, 'part_finder/dummy.html', {'form':form})
 
 
 #Participant details update
@@ -165,7 +256,7 @@ class ParticipantUpdate(UpdateView):
     model = Participant
     form_class = ParticipantForm
     # fields = ['address_line_1', 'address_line_2', 'city', 'postcode', 'contact_number', 'occupation', 'student','university', 'course_name', 'graduation_year', 'matric', 'gender' , 'ethnicity', 'religion', 'height', 'weight', 'max_distance', 'uni_only', 'online_only', 'paid_only']
-    fields = ['address_line_1', 'address_line_2', 'city', 'postcode', 'contact_number', 'occupation', 'student','university', 'course_name', 'graduation_year', 'matric', 'gender' , 'ethnicity', 'religion', 'height', 'weight', 'max_distance', 'uni_only', 'online_only', 'paid_only']
+    # fields = ['address_line_1', 'address_line_2', 'city', 'postcode', 'contact_number', 'occupation', 'student','university', 'course_name', 'graduation_year', 'matric', 'gender' , 'ethnicity', 'religion', 'height', 'weight', 'max_distance', 'uni_only', 'online_only', 'paid_only']
     template_name_suffix = '_update_form'
     success_url='/part_finder/participant/update'
 
@@ -239,7 +330,43 @@ class ResearcherUpdate(UpdateView):
 
 
 
+#TEST TO DO FORM
+def todo(request):
+    # This class is used to make empty formset forms required
+    # See http://stackoverflow.com/questions/2406537/django-formsets-make-first-required/4951032#4951032
+    class RequiredFormSet(BaseFormSet):
+        def __init__(self, *args, **kwargs):
+            super(RequiredFormSet, self).__init__(*args, **kwargs)
+            for form in self.forms:
+                form.empty_permitted = False
 
+    TodoItemFormSet = formset_factory(TodoItemForm, max_num=10, formset=RequiredFormSet)
+
+    if request.method == 'POST': # If the form has been submitted...
+        todo_list_form = TodoListForm(request.POST) # A form bound to the POST data
+        # Create a formset from the submitted data
+        todo_item_formset = TodoItemFormSet(request.POST, request.FILES)
+
+        if todo_list_form.is_valid() and todo_item_formset.is_valid():
+            todo_list = todo_list_form.save()
+            for form in todo_item_formset.forms:
+                todo_item = form.save(commit=False)
+                todo_item.list = todo_list
+                todo_item.save()
+
+            return HttpResponseRedirect('thanks') # Redirect to a 'success' page
+    else:
+        todo_list_form = TodoListForm()
+        todo_item_formset = TodoItemFormSet()
+
+    # For CSRF protection
+    # See http://docs.djangoproject.com/en/dev/ref/contrib/csrf/
+    c = {'todo_list_form': todo_list_form,
+         'todo_item_formset': todo_item_formset,
+        }
+    c.update(csrf(request))
+
+    return render_to_response('todo.html', c)
 
 
 

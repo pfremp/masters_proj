@@ -10,6 +10,11 @@ from django.views.generic.edit import UpdateView
 from part_finder.models import Participant
 from django.contrib.auth.decorators import login_required
 # from django.views.generic.simple import direct_to_template
+# from .forms import NonAdminAddAnotherModelForm
+# from .models import NonAdminAddAnotherModel
+import autocomplete_light.shortcuts as al
+from django.views import generic
+
 
 
 participant_forms = [PartDetailsForm,PartStudentForm,PartDemoForm,PartPrefForm]
@@ -17,7 +22,7 @@ participant_forms = [PartDetailsForm,PartStudentForm,PartDemoForm,PartPrefForm]
 urlpatterns = patterns('',
     url(r'^$', views.index, name='index'),
     url(r'^add_experiment/$', views.add_experiment, name='add_experiment'),
-    url(r'^dummy/$', views.dummy, name='dummy'),
+    # url(r'^dummy/$', views.dummy, name='dummy'),
     # url(r'^participant_details', views.participant_details, name='participant_details'),
     url(r'^experiments/(?P<experiment_name_slug>[\w\-]+)/$', views.experiment, name='experiment'),
     # url(r'^researcher_signup/$', views.researcher_signup, name='researcher_signup' ),
@@ -30,6 +35,15 @@ urlpatterns = patterns('',
     # url(r'^profile/update/$', login_required(ProfileUpdate.as_view()), name='update_profile'),
     url(r'^researcher/update/$', login_required(ResearcherUpdate.as_view()), name='update_researcher_details'),
     url(r'^autocomplete/', include('autocomplete_light.urls')),
+    url(r'^todo/$', views.todo, name='todo'),
+
+    #
+    # url(r'$', al.CreateView.as_view(
+    #     model=NonAdminAddAnotherModel, form_class=NonAdminAddAnotherModelForm),
+    #     name='non_admin_add_another_model_create'),
+    # url(r'(?P<pk>\d+)/$', generic.UpdateView.as_view(
+    #     model=NonAdminAddAnotherModel, form_class=NonAdminAddAnotherModelForm),
+    #     name='non_admin_add_another_model_update'),
 )
 
 

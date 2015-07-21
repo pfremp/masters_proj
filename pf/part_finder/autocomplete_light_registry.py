@@ -1,7 +1,9 @@
 import autocomplete_light.shortcuts as autocomplete_light
 from cities_light.models import Country, Region, City
+# from .models import NonAdminAddAnotherModel
+import autocomplete_light.shortcuts as al
 
-
+#countries auto complete
 autocomplete_light.register(Country, search_fields=('name', 'name_ascii',),
     autocomplete_js_attributes={'placeholder': 'country name ..'})
 
@@ -39,3 +41,18 @@ class AutocompleteCity(autocomplete_light.AutocompleteModelBase):
 
 autocomplete_light.register(Region, AutocompleteRegion)
 autocomplete_light.register(City, AutocompleteCity)
+
+
+
+# autocomplete_light.register(NonAdminAddAnotherModel,
+#     add_another_url_name='non_admin_add_another_model_create')
+
+
+
+#languages autocomplete
+class OsAutocomplete(al.AutocompleteListBase):
+    choices = ['English', 'French', 'Spanish', 'German', 'Mandarin', 'Cantonese', 'Italian', 'Portugese']
+
+
+
+al.register(OsAutocomplete)
