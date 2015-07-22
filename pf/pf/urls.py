@@ -14,6 +14,7 @@ url(r'^part_finder/', include('part_finder.urls')),
 # {'next_page': '/'}),
 (r'^accounts/', include('allauth.urls')),
 url(r'^autocomplete/', include('autocomplete_light.urls')),
+url(r'^chaining/', include('smart_selects.urls')),
 
 )
 

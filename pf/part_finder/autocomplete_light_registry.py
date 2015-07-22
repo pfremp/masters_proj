@@ -56,3 +56,12 @@ class OsAutocomplete(al.AutocompleteListBase):
 
 
 al.register(OsAutocomplete)
+
+
+# class OsAutocomplete(al.AutocompleteListBase):
+#     choices = ['English', 'French', 'Spanish', 'German', 'Mandarin', 'Cantonese', 'Italian', 'Portugese']
+
+
+
+al.register(OsAutocomplete)
+

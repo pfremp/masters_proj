@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponse, request
-from part_finder.models import Researcher, Experiment, Participant, UserProfile, Contact, User,Dummy
-from part_finder.forms import ExperimentForm, ResearcherForm, PartDetailsForm, ParticipantForm, SignupForm, TodoList, TodoItemForm, TodoListForm
+from part_finder.models import Researcher, Experiment, Participant, UserProfile, Contact, User,Dummy, Payment
+from part_finder.forms import ExperimentForm, ResearcherForm, PartDetailsForm, ParticipantForm, SignupForm, TodoList, TodoItemForm, TodoListForm, PaymentForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 # from django.contrib.formtools.wizard.views import SessionWizardView
@@ -17,7 +17,8 @@ from django.template import RequestContext # For CSRF
 
 #Homepage
 def index(request):
-    experiments_list = Experiment.objects.order_by('date')[:10]
+    experiments_list = Experiment.objects.all()[:10]
+    # experiments_list = Experiment.objects.order_by('date')[:10]
     context_dict = {'experiments' : experiments_list}
     return render(request, 'part_finder/index.html', context_dict)
 
@@ -159,13 +160,19 @@ def add_experiment(request):
     if request.method == 'POST':
         form = ExperimentForm(request.POST)
         todo_list_form = TodoListForm(request.POST) # A form bound to the POST data
+        payment_form = PaymentForm(request.POST)
         # Create a formset from the submitted data
         todo_item_formset = TodoItemFormSet(request.POST, request.FILES)
-        if form.is_valid() and todo_list_form.is_valid() and todo_item_formset.is_valid():
+        if form.is_valid() and todo_list_form.is_valid() and todo_item_formset.is_valid() and payment_form.is_valid():
             experiment = form.save(commit=False)
             res = request.user.profile.researcher
             experiment.researcher = res
             form.save()
+
+            #payment form details
+            payment = payment_form.save(commit=False)
+            payment.experiment = experiment
+            payment_form.save()
 
             for form in todo_item_formset.forms:
                 todo_item = form.save(commit=False)
@@ -191,11 +198,12 @@ def add_experiment(request):
         form = ExperimentForm()
         todo_list_form = TodoListForm()
         todo_item_formset = TodoItemFormSet()
+        payment_form = PaymentForm()
 
     # For CSRF protection
     # See http://docs.djangoproject.com/en/dev/ref/contrib/csrf/
     c = {'form':form, 'todo_list_form': todo_list_form,
-         'todo_item_formset': todo_item_formset,
+         'todo_item_formset': todo_item_formset, 'payment_form': payment_form
         }
     c.update(csrf(request))
 

@@ -1,7 +1,7 @@
 __author__ = 'patrickfrempong'
 
 from django import forms
-from part_finder.models import Researcher,Experiment,Participant,  UserProfile, University, TodoItem, TodoList
+from part_finder.models import Researcher,Experiment,Participant,  UserProfile, University, TodoItem, TodoList, Payment_type,Payment, Is_paid, Currency
 from django.contrib.auth.models import User
 from datetime import date
 from django.contrib.auth import get_user_model
@@ -13,7 +13,7 @@ import autocomplete_light
 import autocomplete_light.shortcuts as al
 
 from django.forms import ModelForm
-
+from smart_selects.db_fields import GroupedForeignKey
 
 # class UniversityForm(forms.ModelForm):
 #     name = forms.CharField(max_length=128)
@@ -41,24 +41,36 @@ class ExperimentForm (forms.ModelForm):
     name = forms.CharField(max_length=128, label="Name", required=True)
     short_description = forms.CharField(max_length=128)
     long_description = forms.CharField(max_length=500, widget=forms.Textarea)
-    date = forms.DateField(required=False, label="Experiment Date", widget=DateWidget(usel10n=True, bootstrap_version=3))
+    # date = forms.DateField(required=False, label="Experiment Date", widget=DateWidget(usel10n=True, bootstrap_version=3))
     # start_time = forms.TimeField(label="Start Time", widget=TimeWidget(usel10n=True, bootstrap_version=3))
     # end_time = forms.TimeField(label="End Time", widget=TimeWidget(usel10n=True, bootstrap_version=3))
-    duration = forms.FloatField(label="Duration (hours)")
-    paid_event = forms.BooleanField(label="Paid Event", required=False)
-    currency = forms.ChoiceField(label="Currency", choices=PAYMENT_TYPE)
-    payment_amount = forms.FloatField(label="Payment Amount")
-    pmt_type = forms.ChoiceField(label="Payment Type", choices=PMT_TYPE)
-    location = forms.ChoiceField(label="Location", choices=LOCATIONS, required=False)
+    # duration = forms.FloatField(label="Duration (hours)")
+    # paid_event = forms.BooleanField(label="Paid Event", required=False)
+    # currency = forms.ChoiceField(label="Currency", choices=PAYMENT_TYPE)
+    # payment_amount = forms.FloatField(label="Payment Amount")
+    # pmt_type = forms.ChoiceField(label="Payment Type", choices=PMT_TYPE)
+    # location = forms.ChoiceField(label="Location", choices=LOCATIONS, required=False)
+    location = autocomplete_light.ChoiceField('CityAutocompleteCity', required=False, label='Location')
     address = forms.CharField(label="Address")
     # no_of_participants_wanted = forms.IntegerField(max_value=10, label="No of Participants Wanted")
     # language_req
-    url = forms.URLField(max_length=False, required=False)
+    url = forms.URLField(max_length=200, required=False)
     slug = forms.CharField(widget=forms.HiddenInput(), required=False)
+
+
+    class Media:
+        """
+        We're currently using Media here, but that forced to move the
+        javascript from the footer to the extrahead block ...
+
+        So that example might change when this situation annoys someone a lot.
+        """
+        js = ('js/dependant_autocomplete.js',)
+
 
     class Meta():
         model = Experiment
-        fields = ('name','short_description','long_description','duration', 'paid_event','currency','pmt_type','payment_amount', 'location','address', )
+        fields = ('name','short_description','long_description','duration', 'location','address', )
 
 
 class ParticipantForm (forms.ModelForm):
@@ -97,6 +109,14 @@ class ParticipantForm (forms.ModelForm):
     paid_only = forms.BooleanField(label="Paid Only", required=False)
     email_notifications = forms.BooleanField(label="Email Notifications", required=False)
 
+    class Media:
+        """
+        We're currently using Media here, but that forced to move the
+        javascript from the footer to the extrahead block ...
+
+        So that example might change when this situation annoys someone a lot.
+        """
+        js = ('js/dependant_autocomplete.js',)
 
     class Meta():
         model = Participant
@@ -231,12 +251,24 @@ class TodoListForm(ModelForm):
     exclude = ('',)
 
 class TodoItemForm(ModelForm):
-    date = forms.DateField(required=False, label="Experiment Date", widget=DateWidget(usel10n=True, bootstrap_version=3))
-    start_time = forms.TimeField(label="Start Time", widget=TimeWidget(usel10n=True, bootstrap_version=3))
-    end_time = forms.TimeField(label="End Time", widget=TimeWidget(usel10n=True, bootstrap_version=3))
-    no_of_parts = forms.IntegerField(max_value=1000, label="No of Participants Wanted")
+    CHOICES = (('choice','choice'),('choice1','choice1') )
+    date = forms.DateField(required=False, label="Experiment Date (YYYY-MM-DD)")
+    start_time = forms.TimeField(label="Start Time (HH:MM)", required=False)
+    end_time = forms.TimeField(label="End Time (HH:MM)", required=False)
+    no_of_parts = forms.IntegerField(label="No of Participants Wanted")
 
     class Meta:
         model = TodoItem
         fields = ('date', 'start_time', 'end_time', 'no_of_parts',)
         # exclude = ('experiment',)
+
+class PaymentForm(forms.ModelForm):
+    # is_paid = forms.CharField(label="Paid Experiment", required=False)
+    # currency = forms.ModelChoiceField(label="Currency", queryset=Currency.objects.all(), required=False)
+    # payment_type = forms.ModelChoiceField(label="Payment Type", queryset=Payment_type.objects.all(), required=False)
+    # amount = forms.IntegerField(label="Payment Amount", required=False)
+
+    class Meta:
+        model = Payment
+        fields = ('is_paid','currency', 'payment_type', 'amount')
+        exclude = ('experiment',)

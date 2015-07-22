@@ -46,6 +46,7 @@ INSTALLED_APPS = (
     'autocomplete_light',
     # 'django-formtools',
     'formtools',
+    'smart_selects',
 
 
     #allauth

@@ -8,6 +8,7 @@ import cities_light
 from django.core import urlresolvers
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
+from smart_selects.db_fields import ChainedForeignKey
 
 
 
@@ -50,12 +51,13 @@ class Experiment(models.Model):
     # start_time = models.TimeField(blank=True)
     # end_time = models.TimeField(blank=True)
     duration = models.FloatField(blank=True)
-    paid_event = models.BooleanField(default=False)
-    currency = models.CharField(max_length=100, choices=CURRENCY, blank=True)
-    payment_amount = models.FloatField(max_length=1000, blank=True)
-    pmt_type = models.CharField(max_length=128, choices=PMT_TYPE, blank=True)
+    # paid_event = models.BooleanField(default=False)
+    # currency = models.CharField(max_length=100, choices=CURRENCY, blank=True)
+    # payment_amount = models.FloatField(max_length=1000, blank=True)
+    # pmt_type = models.CharField(max_length=128, choices=PMT_TYPE, blank=True)
     address = models.CharField(max_length=128, blank=True)
-    location = models.CharField(max_length=128)
+    # location = models.CharField(max_length=128, null=True)
+    location = models.ForeignKey('cities_light.city', null=True)
 
     # no_of_participants_wanted = models.IntegerField(null=True, blank=True)
     language_req = models.CharField(max_length=128, blank=True)
@@ -207,3 +209,75 @@ class Contact(models.Model):
 #
 #     def __str__(self):
 #         return self.name
+
+
+# class Continent(models.Model):
+#     continent = models.CharField(max_length=128, null=True)
+#
+#     def __unicode__(self):
+#         return self.continent
+#
+# class Country(models.Model):
+#     country = models.CharField(max_length=128, null=True)
+#     continent = models.ForeignKey(Continent)
+#
+#     def __unicode__(self):
+#         return self.country
+#
+# class Area(models.Model):
+#     area = models.CharField(max_length=128, null=True)
+#     country = models.ForeignKey(Country)
+#
+#     def __unicode__(self):
+#         return self.area
+#
+# class Location(models.Model):
+#     continent = models.ForeignKey(Continent)
+#     country = ChainedForeignKey(
+#         Country,
+#         chained_field="continent",
+#         chained_model_field="continent",
+#         show_all=False,
+#         auto_choose=True
+#     )
+#     area = ChainedForeignKey(Area, chained_field="country", chained_model_field="country")
+#     amount = models.IntegerField(null=True)
+#     # street = models.CharField(max_length=100)
+#     #
+#     #
+
+
+
+class Is_paid(models.Model):
+    is_paid = models.CharField(max_length=128, null=True)
+
+    def __unicode__(self):
+        return self.is_paid
+
+class Currency(models.Model):
+    currency = models.CharField(max_length=128, null=True)
+    is_paid = models.ForeignKey(Is_paid)
+
+    def __unicode__(self):
+        return self.currency
+
+class Payment_type(models.Model):
+    payment_type = models.CharField(max_length=128, null=True)
+    currency = models.ForeignKey(Currency)
+
+    def __unicode__(self):
+        return self.payment_type
+
+class Payment(models.Model):
+    is_paid = models.ForeignKey(Is_paid)
+    currency = ChainedForeignKey(
+        Currency,
+        chained_field="is_paid",
+        chained_model_field="is_paid",
+        show_all=False,
+        auto_choose=True
+    )
+    payment_type = ChainedForeignKey(Payment_type, chained_field="currency", chained_model_field="currency")
+    amount = models.IntegerField(null=True)
+    experiment = models.ForeignKey(Experiment, null=True, related_name='experiment')
+    # street = models.CharField(max_length=100)

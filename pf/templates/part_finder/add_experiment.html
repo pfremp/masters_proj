@@ -49,6 +49,12 @@
 {#        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>#}
 
         <script type="text/javascript">
+
+
+
+
+
+
 $(document).ready(function() {
   // Code adapted from http://djangosnippets.org/snippets/1389/
   function updateElementIndex(el, prefix, ndx) {
@@ -122,7 +128,12 @@ $(document).ready(function() {
     return deleteForm(this, 'form');
   });
 });
+
+
 </script>
+
+
+
         <title>Participant Finder</title>
 {#    </head>#}
     {% endblock %}
@@ -156,26 +167,51 @@ $(document).ready(function() {
                 {% endif %}
             {% endfor %}
 
+
+            {% for field in payment_form.visible_fields %}
+
+            <!-- check for date field -->
+{#                {% if field.name == 'Name'  %}#}
+
+
+                {{ field.errors }}
+{#                {{ field.label }}#}
+                {% bootstrap_field field %}
+
+{#                {% endif %}#}
+            {% endfor %}
+
+
+
+
         <h2>Time Slots</h2>
     {{ todo_item_formset.management_form }}
 {#    {% bootstrap_formset todo_item_formset %}#}
     {% for form in todo_item_formset.forms %}
-    <div class="item" >
+    <div class="item">
 {#      {{ form.as_p }}#}
 {#      {% bootstrap_form form layout='inline'%}#}
-{#      {% bootstrap_form form layout='horizontal' %}#}
+      {% bootstrap_form form layout='horizontal' %}
 {#        {{ form.date }}#}
 
-                    <table style="width:100%">
-              <tr>
-                <td>{% bootstrap_field form.date %}</td>
-                <td>{% bootstrap_field form.start_time %}</td>
-                <td>{% bootstrap_field form.end_time %}</td>
+{#                    <table>#}
+{#              <tr>#}
+{#                <td>{% bootstrap_field form.date %}</td>#}
+{#                 <td>{% bootstrap_field form.start_time %}</td>#}
+{#                <td>{% bootstrap_field form.end_time %}</td>#}
+{#                <td>{% bootstrap_field form.no_of_parts %}</td>#}
+{#              </tr>#}
+{##}
+{#            </table>#}
 
-                <td>{% bootstrap_field form.no_of_parts %}</td>
-              </tr>
 
-            </table>
+
+{#                <p>{% bootstrap_field form.date %}</p>#}
+{#                 <p>{% bootstrap_field form.start_time %}</p>#}
+{#                <p>{% bootstrap_field form.end_time %}</p>#}
+{#                <p>{% bootstrap_field form.no_of_parts %}</p>#}
+
+
 
 
       <p style=""><a class="delete" href="#">Delete</a></p>
