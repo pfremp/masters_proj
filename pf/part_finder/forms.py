@@ -35,28 +35,16 @@ class ResearcherForm (forms.ModelForm):
 
 class ExperimentForm (forms.ModelForm):
     PAYMENT_TYPE = (('Credits','Credits'),('Money','Money'))
-    # LOCATIONS = Locations.objects.all()
     LOCATIONS = (('Glasgow','Glasgow'),('London','London'))
     PMT_TYPE = (('Total','Total'),('Hourly','Hourly'), ('N/A', 'N/A'))
     name = forms.CharField(max_length=128, label="Name", required=True)
     short_description = forms.CharField(max_length=128)
     long_description = forms.CharField(max_length=500, widget=forms.Textarea)
-    # date = forms.DateField(required=False, label="Experiment Date", widget=DateWidget(usel10n=True, bootstrap_version=3))
-    # start_time = forms.TimeField(label="Start Time", widget=TimeWidget(usel10n=True, bootstrap_version=3))
-    # end_time = forms.TimeField(label="End Time", widget=TimeWidget(usel10n=True, bootstrap_version=3))
-    # duration = forms.FloatField(label="Duration (hours)")
-    # paid_event = forms.BooleanField(label="Paid Event", required=False)
-    # currency = forms.ChoiceField(label="Currency", choices=PAYMENT_TYPE)
-    # payment_amount = forms.FloatField(label="Payment Amount")
-    # pmt_type = forms.ChoiceField(label="Payment Type", choices=PMT_TYPE)
-    # location = forms.ChoiceField(label="Location", choices=LOCATIONS, required=False)
     city = autocomplete_light.ModelChoiceField('CityAutocompleteCity', required=False, label='Location')
     address = forms.CharField(label="Address")
-    # no_of_participants_wanted = forms.IntegerField(max_value=10, label="No of Participants Wanted")
     language_req = autocomplete_light.MultipleChoiceField('OsAutocomplete', required=False, label='Language(s) Required')
     url = forms.URLField(max_length=200, required=False)
     slug = forms.CharField(widget=forms.HiddenInput(), required=False)
-
 
     class Media:
         """
@@ -73,10 +61,7 @@ class ExperimentForm (forms.ModelForm):
         fields = ('name','short_description','long_description','duration', 'city','address', 'language_req' )
 
 
-class ParticipantForm (forms.ModelForm):
-    # participant = forms.ModelChoiceField(queryset=Participant.objects.all(), label="Username")
-
-    YN = (('Yes','Yes'),('No','No'))
+class ParticipantForm (autocomplete_light.ModelForm):
     SEX = (('Male','Male'), ('Female','Female'), ('PNTS','Prefer not to say'))
     UNI = (('GCU','GCU'),('UoG','UoG'))
     EDUCATION = (('School', 'School'),('SQ1', 'School Qualification1'), ('College','College') , ('University' , 'University'))
@@ -87,16 +72,16 @@ class ParticipantForm (forms.ModelForm):
     occupation = forms.CharField(required=False, label="Occupation", max_length=128)
     education = forms.ChoiceField(choices=EDUCATION, label="Level of Education", required=True)
     student = forms.BooleanField(label="Student", required=False)
+    lang = autocomplete_light.MultipleChoiceField('OsAutocomplete', required=False, label='Languages')
 
     university = forms.ModelChoiceField(label="University", queryset=University.objects.all(), required=False)
     course_name = forms.CharField(label="Course Name",max_length=128, required=False)
-    year_of_study = forms.IntegerField(label="Year of Study", required=False)
+    year_of_study = forms.ChoiceField(choices=YOS, label="Year of Study", required=False)
     matric = forms.CharField(label="Matric", required=False)
 
     #Demographic
     gender = forms.CharField(required=False, label="Gender", max_length=128)
-    ethnicity = forms.CharField(required=False, label="Ethnicity", max_length=128)
-    religion = forms.CharField(required=False, label="Religion", max_length=128)
+
 
     #Health information
     height = forms.IntegerField(label="Height (cm)", required=False)
@@ -120,7 +105,7 @@ class ParticipantForm (forms.ModelForm):
 
     class Meta():
         model = Participant
-        fields = ('dob','country','region','city','contact_number','occupation','education','student','lang','university', 'course_name', 'year', 'matric', 'gender' ,'height', 'weight', 'max_distance', 'uni_only', 'online_only', 'paid_only')
+        fields = ('dob','country','region','city','contact_number','occupation','education','student','lang','university', 'course_name', 'year_of_study', 'matric', 'gender' ,'height', 'weight', 'max_distance', 'uni_only', 'online_only', 'paid_only')
 
 
 
@@ -128,7 +113,7 @@ class ParticipantForm (forms.ModelForm):
 class PartDetailsForm (autocomplete_light.ModelForm):
 
     YN = (('Yes','Yes'),('No','No'))
-    EDUCATION = (('School', 'School'), ('College','College') , ('University' , 'University'))
+    EDUCATION = (('School', 'School'),('SQ1', 'School Qualification1'), ('College','College') , ('University' , 'University'))
     UNI = (('GCU','GCU'),('UoG','UoG'))
     dob = forms.DateField(label="Date of Birth", widget=DateWidget(usel10n=True, bootstrap_version=3), required=False)
     contact_number = forms.IntegerField(required=False, label="Contact No")
@@ -218,6 +203,29 @@ class SignupForm(forms.Form):
         userprofile.save()
 
 
+class TimeSlotForm(ModelForm):
+    CHOICES = (('choice','choice'),('choice1','choice1') )
+    date = forms.DateField(required=False, label="Experiment Date (YYYY-MM-DD)")
+    start_time = forms.TimeField(label="Start Time (HH:MM)", required=False)
+    end_time = forms.TimeField(label="End Time (HH:MM)", required=False)
+    no_of_parts = forms.IntegerField(label="No of Participants Wanted", required=False)
+
+    class Meta:
+        model = TimeSlot
+        fields = ('date', 'start_time', 'end_time', 'no_of_parts',)
+        # exclude = ('experiment',)
+
+class PaymentForm(forms.ModelForm):
+    # is_paid = forms.CharField(label="Paid Experiment", required=False)
+    # currency = forms.ModelChoiceField(label="Currency", queryset=Currency.objects.all(), required=False)
+    # payment_type = forms.ModelChoiceField(label="Payment Type", queryset=Payment_type.objects.all(), required=False)
+    # amount = forms.IntegerField(label="Payment Amount", required=False)
+
+    class Meta:
+        model = Payment
+        fields = ('is_paid','currency', 'payment_type', 'amount')
+        exclude = ('experiment',)
+
 # application class.
 # foreign keys: participant, experiment
 # see ifinder
@@ -250,25 +258,3 @@ class TimeSlotFrom(ModelForm):
     model = TodoList
     exclude = ('',)
 
-class TimeSlotForm(ModelForm):
-    CHOICES = (('choice','choice'),('choice1','choice1') )
-    date = forms.DateField(required=False, label="Experiment Date (YYYY-MM-DD)")
-    start_time = forms.TimeField(label="Start Time (HH:MM)", required=False)
-    end_time = forms.TimeField(label="End Time (HH:MM)", required=False)
-    no_of_parts = forms.IntegerField(label="No of Participants Wanted", required=False)
-
-    class Meta:
-        model = TimeSlot
-        fields = ('date', 'start_time', 'end_time', 'no_of_parts',)
-        # exclude = ('experiment',)
-
-class PaymentForm(forms.ModelForm):
-    # is_paid = forms.CharField(label="Paid Experiment", required=False)
-    # currency = forms.ModelChoiceField(label="Currency", queryset=Currency.objects.all(), required=False)
-    # payment_type = forms.ModelChoiceField(label="Payment Type", queryset=Payment_type.objects.all(), required=False)
-    # amount = forms.IntegerField(label="Payment Amount", required=False)
-
-    class Meta:
-        model = Payment
-        fields = ('is_paid','currency', 'payment_type', 'amount')
-        exclude = ('experiment',)

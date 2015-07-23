@@ -11,7 +11,7 @@
     <h1>My Participant Details</h1>
 
 
-    <form action="" method="post">{% csrf_token %}
+    <form action="" method="post" novalidate>{% csrf_token %}
 {#    {{ form.as_p }}#}
        {% bootstrap_form form %}
     <input class="btn btn-default" type="submit" value="Update" />

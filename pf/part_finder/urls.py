@@ -22,7 +22,7 @@ participant_forms = [PartDetailsForm,PartStudentForm,PartDemoForm,PartPrefForm]
 urlpatterns = patterns('',
     url(r'^$', views.index, name='index'),
     url(r'^add_experiment/$', views.add_experiment, name='add_experiment'),
-    # url(r'^dummy/$', views.dummy, name='dummy'),
+
     # url(r'^participant_details', views.participant_details, name='participant_details'),
     url(r'^experiments/(?P<experiment_name_slug>[\w\-]+)/$', views.experiment, name='experiment'),
     # url(r'^researcher_signup/$', views.researcher_signup, name='researcher_signup' ),
@@ -35,7 +35,11 @@ urlpatterns = patterns('',
     # url(r'^profile/update/$', login_required(ProfileUpdate.as_view()), name='update_profile'),
     url(r'^researcher/update/$', login_required(ResearcherUpdate.as_view()), name='update_researcher_details'),
     url(r'^autocomplete/', include('autocomplete_light.urls')),
+
+
+    #test urls
     url(r'^todo/$', views.todo, name='todo'),
+    # url(r'^dummy/$', views.dummy, name='dummy'),
 
     #
     # url(r'$', al.CreateView.as_view(

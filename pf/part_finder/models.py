@@ -26,19 +26,18 @@ from smart_selects.db_fields import ChainedForeignKey
 class University(models.Model):
     name = models.CharField(max_length=100)
 
-    def __unicode__(self):  #For Python 2, use __str__ on Python 3
+    def __unicode__(self):
         return self.name
 
 class Researcher(models.Model):
-    # INSTITUTIONS = (('Glasgow','University of Glasgow'),('Strathclyde','Strathclyde University'))
     university = models.ForeignKey(University, blank=True, null=True)
     department = models.CharField(max_length=128, blank=True, null=True)
     contact_no = models.IntegerField()
     url = models.URLField(max_length=128, blank=True)
 
-    def __unicode__(self):  #For Python 2, use __str__ on Python 3
+    def __unicode__(self):
         return self.userprofile.user.username
-        # return self.department
+
 
 
 class Experiment(models.Model):
@@ -47,19 +46,9 @@ class Experiment(models.Model):
     name = models.CharField(max_length=128, blank=False)
     short_description = models.CharField(max_length=128, blank=True)
     long_description = models.CharField(max_length=500, blank=True)
-    # date = models.DateField(("Date"), default=date.today, null=True)
-    # start_time = models.TimeField(blank=True)
-    # end_time = models.TimeField(blank=True)
     duration = models.FloatField(blank=True)
-    # paid_event = models.BooleanField(default=False)
-    # currency = models.CharField(max_length=100, choices=CURRENCY, blank=True)
-    # payment_amount = models.FloatField(max_length=1000, blank=True)
-    # pmt_type = models.CharField(max_length=128, choices=PMT_TYPE, blank=True)
     address = models.CharField(max_length=128, blank=True)
-    # location = models.CharField(max_length=128, null=True)
     city = models.ForeignKey('cities_light.city', null=True)
-
-    # no_of_participants_wanted = models.IntegerField(null=True, blank=True)
     language_req = models.CharField(max_length=128, blank=True)
     researcher = models.ForeignKey(Researcher, related_name="experiment")
     url = models.URLField(blank=True)
@@ -77,7 +66,7 @@ class Experiment(models.Model):
 class Participant(models.Model):
     YN = (('Yes','Yes'),('No','No'))
     SEX = (('Male','Male'), ('Female','Female'), ('PNTS','Prefer not to say'))
-    EDUCATION = (('School', 'School'), ('College','College') , ('University' , 'University'))
+    EDUCATION = (('School', 'School'),('SQ1', 'School Qualification1'), ('College','College') , ('University' , 'University'))
 
     dob = models.DateField(("Date"), default=date.today, null=True)
     country = models.ForeignKey('cities_light.country', null=True)
@@ -105,7 +94,6 @@ class Participant(models.Model):
     max_distance = models.IntegerField(max_length=128, blank=True, null=True)
     uni_only = models.BooleanField(default=False, blank=True)
     online_only = models.BooleanField(default=False, blank=True)
-    # online_only = models.IntegerField(max_length=128, blank=True, null=True)
     paid_only = models.BooleanField(default=False, blank=True)
     email_notifications = models.BooleanField(default=False, blank=True)
     experiments = models.ManyToManyField(Experiment, null=True, blank=True, related_name="participants")
@@ -113,8 +101,7 @@ class Participant(models.Model):
     def ID(self, obj):
         return obj.id
 
-
-    def __unicode__(self):  #For Python 2, use __str__ on Python 3
+    def __unicode__(self):
         # return self.userprofile.user.username
         return self.userprofile.user.username
 
@@ -128,7 +115,7 @@ class UserProfile(models.Model):
         researcher = forms
         researcher.save()
 
-    def __unicode__(self):  #For Python 2, use __str__ on Python 3
+    def __unicode__(self):
         return self.user.username
 
 
@@ -141,12 +128,78 @@ class Application(models.Model):
     Experiment = models.OneToOneField(Experiment, null=True, related_name="application")
     status = models.CharField(max_length=100, choices=STATUS)
 
-    def __unicode__(self):  #For Python 2, use __str__ on Python 3
+    def __unicode__(self):
         return self.Experiment.name
 
 
 
+class TodoList(models.Model):
+    name = models.CharField(max_length=100)
 
+    def __unicode__(self):
+        return self.name
+
+
+#Renames to time slot below
+class TimeSlot(models.Model):
+
+    date = models.DateField(("Date"), default=date.today, null=True)
+    start_time = models.TimeField(blank=True, null=True)
+    end_time = models.TimeField(blank=True, null=True)
+    no_of_parts = models.IntegerField(blank=True, null=True)
+    experiment = models.ForeignKey(Experiment, null=True)
+
+    def __unicode__(self):
+        return self.experiment.name
+
+
+
+
+class Is_paid(models.Model):
+    is_paid = models.CharField(max_length=128, null=True)
+
+    def __unicode__(self):
+        return self.is_paid
+
+class Currency(models.Model):
+    currency = models.CharField(max_length=128, null=True)
+    is_paid = models.ForeignKey(Is_paid)
+
+    def __unicode__(self):
+        return self.currency
+
+class Payment_type(models.Model):
+    payment_type = models.CharField(max_length=128, null=True)
+    currency = models.ForeignKey(Currency)
+
+    def __unicode__(self):
+        return self.payment_type
+
+class Payment(models.Model):
+    is_paid = models.ForeignKey(Is_paid)
+    currency = ChainedForeignKey(
+        Currency,
+        chained_field="is_paid",
+        chained_model_field="is_paid",
+        show_all=False,
+        auto_choose=True
+    )
+    payment_type = ChainedForeignKey(Payment_type, chained_field="currency", chained_model_field="currency")
+    amount = models.IntegerField(null=True)
+    experiment = models.ForeignKey(Experiment, null=True, related_name='experiment')
+    # street = models.CharField(max_length=100)
+
+
+
+
+
+class Contact(models.Model):
+    subject = models.CharField(max_length=100)
+    sender = models.CharField(max_length=100)
+    message = models.CharField(max_length=1000)
+
+    def __unicode__(self):
+        return self.subject
 
 
 
@@ -158,31 +211,6 @@ class Dummy(models.Model):
 
     def __unicode__(self):
         return '%s %s' % (self.country, self.region)
-
-
-
-
-
-class TodoList(models.Model):
-    name = models.CharField(max_length=100)
-
-    def __unicode__(self):
-        return self.name
-
-
-
-#Renames to time slot below
-class TimeSlot(models.Model):
-
-    # name = models.CharField(max_length=150, help_text="e.g. Buy milk, wash dog etc", null=True)
-    date = models.DateField(("Date"), default=date.today, null=True)
-    start_time = models.TimeField(blank=True, null=True)
-    end_time = models.TimeField(blank=True, null=True)
-    no_of_parts = models.IntegerField(blank=True, null=True)
-    experiment = models.ForeignKey(Experiment, null=True)
-
-    def __unicode__(self):
-        return self.experiment.name
 
 
 #Renames to time slot below
@@ -216,13 +244,6 @@ class TimeSlot(models.Model):
 
 
 
-class Contact(models.Model):
-    subject = models.CharField(max_length=100)
-    sender = models.CharField(max_length=100)
-    message = models.CharField(max_length=1000)
-
-    def __unicode__(self):  #For Python 2, use __str__ on Python 3
-        return self.subject
 
 
 
@@ -277,36 +298,3 @@ class Contact(models.Model):
 
 
 
-class Is_paid(models.Model):
-    is_paid = models.CharField(max_length=128, null=True)
-
-    def __unicode__(self):
-        return self.is_paid
-
-class Currency(models.Model):
-    currency = models.CharField(max_length=128, null=True)
-    is_paid = models.ForeignKey(Is_paid)
-
-    def __unicode__(self):
-        return self.currency
-
-class Payment_type(models.Model):
-    payment_type = models.CharField(max_length=128, null=True)
-    currency = models.ForeignKey(Currency)
-
-    def __unicode__(self):
-        return self.payment_type
-
-class Payment(models.Model):
-    is_paid = models.ForeignKey(Is_paid)
-    currency = ChainedForeignKey(
-        Currency,
-        chained_field="is_paid",
-        chained_model_field="is_paid",
-        show_all=False,
-        auto_choose=True
-    )
-    payment_type = ChainedForeignKey(Payment_type, chained_field="currency", chained_model_field="currency")
-    amount = models.IntegerField(null=True)
-    experiment = models.ForeignKey(Experiment, null=True, related_name='experiment')
-    # street = models.CharField(max_length=100)
