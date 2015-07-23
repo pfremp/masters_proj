@@ -53,7 +53,7 @@ class ExperimentForm (forms.ModelForm):
     city = autocomplete_light.ModelChoiceField('CityAutocompleteCity', required=False, label='Location')
     address = forms.CharField(label="Address")
     # no_of_participants_wanted = forms.IntegerField(max_value=10, label="No of Participants Wanted")
-    # language_req
+    language_req = autocomplete_light.MultipleChoiceField('OsAutocomplete', required=False, label='Language(s) Required')
     url = forms.URLField(max_length=200, required=False)
     slug = forms.CharField(widget=forms.HiddenInput(), required=False)
 
@@ -70,7 +70,7 @@ class ExperimentForm (forms.ModelForm):
 
     class Meta():
         model = Experiment
-        fields = ('name','short_description','long_description','duration', 'city','address', )
+        fields = ('name','short_description','long_description','duration', 'city','address', 'language_req' )
 
 
 class ParticipantForm (forms.ModelForm):
@@ -255,7 +255,7 @@ class TimeSlotForm(ModelForm):
     date = forms.DateField(required=False, label="Experiment Date (YYYY-MM-DD)")
     start_time = forms.TimeField(label="Start Time (HH:MM)", required=False)
     end_time = forms.TimeField(label="End Time (HH:MM)", required=False)
-    no_of_parts = forms.IntegerField(label="No of Participants Wanted")
+    no_of_parts = forms.IntegerField(label="No of Participants Wanted", required=False)
 
     class Meta:
         model = TimeSlot
