@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from part_finder.models import Experiment,Participant,Researcher, UserProfile, Contact, University,TodoList, TodoItem, Payment_type, Payment, Is_paid, Currency
+from part_finder.models import Experiment,Participant,Researcher, UserProfile, Contact, University,TodoList, TimeSlot, Payment_type, Payment, Is_paid, Currency
 from django.contrib.auth.models import User
 # from .models import NonAdminAddAnotherModel
 import autocomplete_light
@@ -26,7 +26,7 @@ admin.site.register(Researcher)
 admin.site.register(Contact)
 admin.site.register(University)
 admin.site.register(TodoList)
-admin.site.register(TodoItem)
+admin.site.register(TimeSlot)
 admin.site.register(Is_paid)
 admin.site.register(Currency)
 admin.site.register(Payment_type)

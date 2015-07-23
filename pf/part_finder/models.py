@@ -57,7 +57,7 @@ class Experiment(models.Model):
     # pmt_type = models.CharField(max_length=128, choices=PMT_TYPE, blank=True)
     address = models.CharField(max_length=128, blank=True)
     # location = models.CharField(max_length=128, null=True)
-    location = models.ForeignKey('cities_light.city', null=True)
+    city = models.ForeignKey('cities_light.city', null=True)
 
     # no_of_participants_wanted = models.IntegerField(null=True, blank=True)
     language_req = models.CharField(max_length=128, blank=True)
@@ -169,7 +169,10 @@ class TodoList(models.Model):
     def __unicode__(self):
         return self.name
 
-class TodoItem(models.Model):
+
+
+#Renames to time slot below
+class TimeSlot(models.Model):
 
     # name = models.CharField(max_length=150, help_text="e.g. Buy milk, wash dog etc", null=True)
     date = models.DateField(("Date"), default=date.today, null=True)
@@ -179,7 +182,33 @@ class TodoItem(models.Model):
     experiment = models.ForeignKey(Experiment, null=True)
 
     def __unicode__(self):
-        return self.experiment.name or u'hey'
+        return self.experiment.name
+
+
+#Renames to time slot below
+# class TodoItemxx(models.Model):
+#
+#     # name = models.CharField(max_length=150, help_text="e.g. Buy milk, wash dog etc", null=True)
+#     date = models.DateField(("Date"), default=date.today, null=True)
+#     start_time = models.TimeField(blank=True, null=True)
+#     end_time = models.TimeField(blank=True, null=True)
+#     no_of_parts = models.IntegerField(blank=True, null=True)
+#     experiment = models.ForeignKey(Experiment, null=True)
+#
+#     def __unicode__(self):
+#         return self.experiment.name
+
+# class TimeSlot(models.Model):
+#
+#     # name = models.CharField(max_length=150, help_text="e.g. Buy milk, wash dog etc", null=True)
+#     date = models.DateField(("Date"), default=date.today, null=True)
+#     start_time = models.TimeField(blank=True, null=True)
+#     end_time = models.TimeField(blank=True, null=True)
+#     no_of_parts = models.IntegerField(blank=True, null=True)
+#     experiment = models.ForeignKey(Experiment, null=True)
+#
+#     def __unicode__(self):
+#         return self.experiment.name
 
 
 ##.name + " (" + str(self.experiment) + ")"

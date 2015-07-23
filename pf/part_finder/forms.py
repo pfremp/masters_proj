@@ -1,7 +1,7 @@
 __author__ = 'patrickfrempong'
 
 from django import forms
-from part_finder.models import Researcher,Experiment,Participant,  UserProfile, University, TodoItem, TodoList, Payment_type,Payment, Is_paid, Currency
+from part_finder.models import Researcher,Experiment,Participant,  UserProfile, University, TimeSlot, TodoList, Payment_type,Payment, Is_paid, Currency
 from django.contrib.auth.models import User
 from datetime import date
 from django.contrib.auth import get_user_model
@@ -50,7 +50,7 @@ class ExperimentForm (forms.ModelForm):
     # payment_amount = forms.FloatField(label="Payment Amount")
     # pmt_type = forms.ChoiceField(label="Payment Type", choices=PMT_TYPE)
     # location = forms.ChoiceField(label="Location", choices=LOCATIONS, required=False)
-    location = autocomplete_light.ChoiceField('CityAutocompleteCity', required=False, label='Location')
+    city = autocomplete_light.ModelChoiceField('CityAutocompleteCity', required=False, label='Location')
     address = forms.CharField(label="Address")
     # no_of_participants_wanted = forms.IntegerField(max_value=10, label="No of Participants Wanted")
     # language_req
@@ -70,7 +70,7 @@ class ExperimentForm (forms.ModelForm):
 
     class Meta():
         model = Experiment
-        fields = ('name','short_description','long_description','duration', 'location','address', )
+        fields = ('name','short_description','long_description','duration', 'city','address', )
 
 
 class ParticipantForm (forms.ModelForm):
@@ -245,12 +245,12 @@ class SignupForm(forms.Form):
 #         exclude=[])
 
 
-class TodoListForm(ModelForm):
+class TimeSlotFrom(ModelForm):
   class Meta:
     model = TodoList
     exclude = ('',)
 
-class TodoItemForm(ModelForm):
+class TimeSlotForm(ModelForm):
     CHOICES = (('choice','choice'),('choice1','choice1') )
     date = forms.DateField(required=False, label="Experiment Date (YYYY-MM-DD)")
     start_time = forms.TimeField(label="Start Time (HH:MM)", required=False)
@@ -258,7 +258,7 @@ class TodoItemForm(ModelForm):
     no_of_parts = forms.IntegerField(label="No of Participants Wanted")
 
     class Meta:
-        model = TodoItem
+        model = TimeSlot
         fields = ('date', 'start_time', 'end_time', 'no_of_parts',)
         # exclude = ('experiment',)
 
