@@ -112,13 +112,27 @@ def process_form_data(form_list, request):
     return form_data
 
 
+#
+# #experiment page
+# def experiment (request, experiment_name_slug):
+#
+#     context_dict = {}
+#     try:
+#         experiment = Experiment.objects.get(slug=experiment_name_slug)
+#         context_dict['experiment_name'] = experiment.name
+#         experiment_list = Experiment.objects.filter(slug=experiment_name_slug)
+#         context_dict['single_experiment'] = experiment_list
+#         context_dict['experiment'] = experiment
+#     except Experiment.DoesNotExist:
+#         pass
+#     return render(request, 'part_finder/experiments.html', context_dict)
 
-#experiment page
-def experiment (request, experiment_name_slug):
+    #experiment page
+def experiment (request, experiment_name_slug, r_slug):
 
     context_dict = {}
     try:
-        experiment = Experiment.objects.get(slug=experiment_name_slug)
+        experiment = Experiment.objects.get(slug=experiment_name_slug, researcher_slug=r_slug)
         context_dict['experiment_name'] = experiment.name
         experiment_list = Experiment.objects.filter(slug=experiment_name_slug)
         context_dict['single_experiment'] = experiment_list

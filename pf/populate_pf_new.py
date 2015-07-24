@@ -6,7 +6,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pf.settings')
 import django
 django.setup()
 
-from part_finder.models import Experiment, Researcher, Participant, UserProfile, University, Locations
+from part_finder.models import Experiment, Researcher, Participant, UserProfile, University, Application, TimeSlot, Is_paid, Currency, Payment_type, Payment
 from django.contrib.auth.models import User
 
 
@@ -28,27 +28,16 @@ def populate():
     strath = add_uni(name='Strathclyde University')
     edin = add_uni(name='Edinburgh University')
 
-    # #locations
-    # loc1 = add_loc(name='Glasgow')
-    # loc2 = add_loc(name='London')
-    # loc3 = add_loc(name='Edinburgh')
-    # loc4 = add_loc(name='Manchester')
-
     #researcher
-    res1 = add_res(dob='1960-04-15', institution='University of Glasgow', contact_no='01413256987', department='Maths')
-    res2 = add_res(dob='1970-02-13', institution='Glasgow Caledonian University', contact_no='01326587458', department='Computing')
+    res1 = add_res( university=gla, contact_no='01413256987', department='Maths', url='http://gla.ac.uk')
+    res2 = add_res( university=gcu, contact_no='01326587458', department='Computing', url='http://gcu.ac.uk')
     # res3 = add_res(dob='1980-05-03', institution='Strathclyde University', contact_no='08452145874', department='Marketing')
     # res4 = add_res(dob='1990-01-01', institution='Edinburgh University', contact_no='02158965874', department='Computing')
 
-    #Experiment
-    exp1 = add_exp(name='Marketing Experiment', short_description='Participate in a branding experiment for new soft drink',
-                   long_description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-                    date='2015-07-20', start_time='10:00:00', end_time='13:00:00', duration=3, paid_event=True, currency='Money', payment_amount=7, pmt_type='Hourly', location='Glasgow',
-                   no_of_participants_wanted=13, researcher=res1, address="65 Montrose Street, Glasgow, G23 XX3")
 
     #participant
-    par1 = add_par(address_line_1='23 Mulbery Street', address_line_2='Suite 101', city='Glasgow', postcode='G23 X3D', contact_number='02154785985', occupation='Student', student=True, university=gla, course_name='Information Technology', year='3', matric='325414785', gender='Male', ethnicity='White British', religion='Catholic', max_distance=10, uni_only=True, online_only=False, paid_only=False, email_notifications=False)
-    par2 = add_par(address_line_1='5 Buchanan Road', address_line_2='Flat 3/01', city='London', postcode='LN2 X3D', contact_number='08965785985', occupation='Student', student=True, university=edin, course_name='Marketing', year='1', matric='1478514525', gender='Female', ethnicity='Asian British', religion='', max_distance=23, uni_only=True, online_only=False, paid_only=False, email_notifications=False)
+    par1 = add_par(dob='1960-04-15', country=None, region=None, city=None, contact_number='02154785985', occupation='Student', lang='', education='School', student=True, university=gla, course_name='Information Technology', year='3', height=150, weight=80, matric='325414785', gender='Male', max_distance=10, uni_only=True, online_only=False, paid_only=False, email_notifications=False)
+    par2 = add_par(dob='1970-02-13', country=None, region=None, city=None, contact_number='08965785985', occupation='Student', lang='', education='School', student=True, university=edin, course_name='Marketing', year='1', height=185, weight=50, matric='1478514525', gender='Female', max_distance=23, uni_only=True, online_only=False, paid_only=False, email_notifications=False)
 
 
     #userprofile
@@ -57,6 +46,26 @@ def populate():
 
     res_profile1 = add_up(user=res_user1, typex='Researcher', participant=None, researcher=res1)
     res_profile2 = add_up(user=res_user2, typex='Researcher', participant=None, researcher=res2)
+
+
+    #Experiment
+    exp1 = add_exp(name='Marketing Experiment', short_description='Participate in a branding experiment for new soft drink', long_description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.", duration=3, researcher=res1, address="65 Montrose Street, Glasgow, G23 XX3", url='http://expeiment.url', language_req='', city=None)
+
+    #Add experiment to participant
+    add_exp_to_par(exp1, par1)
+
+    #setup payment
+    ip1 = is_paid(is_paid='Yes')
+    ip2 = is_paid(is_paid='No')
+
+    cur_cash = add_currency(currency='Cash', is_paid=ip1)
+
+    # pay_type = add_payment_type(payment_type='Hourly', currrency=cur_cash)
+
+    # payment = add_payment(is_paid=ip1, currency=cur_cash, payment_type=pay_type,)
+
+    # par1.experiments.add(exp1)
+    # update_par1 = add_exp_to_par(exp1, par1)
 
     # #2 Researchers Users
     # res_user1 = add_user(id='201', username='Res1', email='mrr@hotmail.com', password=1, is_active = True)
@@ -93,19 +102,13 @@ def add_uni(name):
     uni.save()
     return uni
 
-
-# def add_loc(name):
-#     loc = Locations.objects.get_or_create(name=name)[0]
-#     loc.save()
-#     return loc
-
-def add_res(dob, institution, contact_no, department):
-    r = Researcher.objects.get_or_create(dob=dob, institution=institution, contact_no=contact_no, department=department)[0]
+def add_res(university, department, contact_no, url):
+    r = Researcher.objects.get_or_create(university=university, department=department, contact_no=contact_no, url=url)[0]
     r.save()
     return r
 
-def add_par(address_line_1, address_line_2, city, postcode, contact_number, occupation, student, university, course_name, year, matric, gender, ethnicity, religion, max_distance, uni_only, online_only, paid_only, email_notifications):
-    p = Participant.objects.get_or_create(address_line_1=address_line_1, address_line_2=address_line_2, city=city, postcode=postcode, contact_number=contact_number, occupation=occupation, student=student, university=university, course_name=course_name, year=year, matric=matric, gender=gender, ethnicity=ethnicity, religion=religion, max_distance=max_distance, uni_only=uni_only, online_only=online_only, paid_only=paid_only, email_notifications=email_notifications)[0]
+def add_par(dob, country, region, city, contact_number, occupation, lang, education, student, university, course_name, year, height, weight, matric, gender, max_distance, uni_only, online_only, paid_only, email_notifications):
+    p = Participant.objects.get_or_create(dob=dob, country=country, region=region, city=city, contact_number=contact_number, occupation=occupation, lang=lang, education=education, student=student, university=university, course_name=course_name, year=year, height=height, weight=weight, matric=matric, gender=gender, max_distance=max_distance, uni_only=uni_only, online_only=online_only, paid_only=paid_only, email_notifications=email_notifications)[0]
 
     p.save()
     return p
@@ -121,6 +124,38 @@ def add_up(user, typex, participant,  researcher):
     up = UserProfile.objects.get_or_create(user=user, typex=typex, participant=participant, researcher=researcher)[0]
     up.save()
     return up
+
+def add_exp_to_par(experiment, par):
+    # p = Participant.experiments.add(experiment)[0]
+    par.experiments.add(experiment)
+    # p.experiments.add(experiment)[0]
+    # p.save()
+    # return p
+
+def is_paid(is_paid):
+    ip = Is_paid.objects.get_or_create(is_paid=is_paid)[0]
+    ip.save()
+    return ip
+
+def add_currency(currency, is_paid):
+    c = Currency.objects.get_or_create(currency=currency, is_paid=is_paid)[0]
+    c.save()
+    return c
+
+def add_payment_type(payment_type, currency):
+    pt = Payment_type.objects.get_or_create(payment_type=payment_type, currency=currency)[0]
+    pt.save()
+    return pt
+
+def add_payment(is_paid, currency, payment_type, amount, experiment):
+    ap = Payment.objects.get_or_create(is_paid=is_paid, currency=currency, payment_type=payment_type, amount=amount, experiment=experiment)[0]
+    ap.save()
+    return ap
+
+
+
+# def setup_payment():
+#     ip = I
 
 if __name__== '__main__':
     print"Starting Participants Finder Population Script..."

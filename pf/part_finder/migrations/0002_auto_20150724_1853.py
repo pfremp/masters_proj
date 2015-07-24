@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterField(
             model_name='participant',
-            name='education',
-            field=models.CharField(blank=True, max_length=1000, choices=[(b'School', b'School'), (b'SQ1', b'School Qualification1'), (b'College', b'College'), (b'University', b'University')]),
+            name='country',
+            field=models.CharField(max_length=128, null=True),
         ),
     ]

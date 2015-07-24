@@ -58,6 +58,7 @@ class Migration(migrations.Migration):
                 ('address', models.CharField(max_length=128, blank=True)),
                 ('language_req', models.CharField(max_length=128, blank=True)),
                 ('url', models.URLField(blank=True)),
+                ('researcher_slug', models.SlugField(null=True, blank=True)),
                 ('slug', models.SlugField(unique=True, null=True, blank=True)),
                 ('city', models.ForeignKey(to='cities_light.City', null=True)),
             ],
@@ -77,7 +78,7 @@ class Migration(migrations.Migration):
                 ('contact_number', models.IntegerField(max_length=128, null=True, blank=True)),
                 ('occupation', models.CharField(max_length=128, blank=True)),
                 ('lang', models.CharField(max_length=128, blank=True)),
-                ('education', models.CharField(blank=True, max_length=1000, choices=[(b'School', b'School'), (b'College', b'College'), (b'University', b'University')])),
+                ('education', models.CharField(blank=True, max_length=1000, choices=[(b'School', b'School'), (b'SQ1', b'School Qualification1'), (b'College', b'College'), (b'University', b'University')])),
                 ('student', models.BooleanField(default=False)),
                 ('course_name', models.CharField(max_length=100)),
                 ('year', models.IntegerField(null=True)),
@@ -181,7 +182,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='currency',
             name='is_paid',
-            field=models.ForeignKey(to='part_finder.Is_paid'),
+            field=models.ForeignKey(to='part_finder.Is_paid', null=True),
         ),
         migrations.AddField(
             model_name='application',

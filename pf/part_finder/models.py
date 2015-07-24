@@ -52,11 +52,18 @@ class Experiment(models.Model):
     language_req = models.CharField(max_length=128, blank=True)
     researcher = models.ForeignKey(Researcher, related_name="experiment")
     url = models.URLField(blank=True)
+    researcher_slug = models.SlugField(unique=False, null=True, blank=True)
     slug = models.SlugField(unique=True, null=True, blank=True)
+
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
+        self.researcher_slug = slugify(self.researcher)
         super(Experiment, self).save(*args, **kwargs)
+
+    # def save(self, *args, **kwargs):
+    #     self.researcher_slug = slugify(self.researcher)
+    #     super(Experiment, self).save(*args, **kwargs)
 
     def __unicode__(self):  #For Python 2, use __str__ on Python 3
         return self.name
@@ -163,7 +170,7 @@ class Is_paid(models.Model):
 
 class Currency(models.Model):
     currency = models.CharField(max_length=128, null=True)
-    is_paid = models.ForeignKey(Is_paid)
+    is_paid = models.ForeignKey(Is_paid, null=True)
 
     def __unicode__(self):
         return self.currency
