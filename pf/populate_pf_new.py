@@ -36,8 +36,8 @@ def populate():
 
 
     #participant
-    par1 = add_par(dob='1960-04-15', country=None, region=None, city=None, contact_number='02154785985', occupation='Student', lang='', education='School', student=True, university=gla, course_name='Information Technology', year='3', height=150, weight=80, matric='325414785', gender='Male', max_distance=10, uni_only=True, online_only=False, paid_only=False, email_notifications=False)
-    par2 = add_par(dob='1970-02-13', country=None, region=None, city=None, contact_number='08965785985', occupation='Student', lang='', education='School', student=True, university=edin, course_name='Marketing', year='1', height=185, weight=50, matric='1478514525', gender='Female', max_distance=23, uni_only=True, online_only=False, paid_only=False, email_notifications=False)
+    par1 = add_par(dob='1960-04-15', country=None, region=None, city=None, contact_number='02154785985', occupation='Student', lang="[u'English', u'French, u'German']", education='School', student=True, university=gla, course_name='Information Technology', year='3', height=150, weight=80, matric='325414785', gender='Male', max_distance=10, uni_only=True, online_only=False, paid_only=False, email_notifications=False)
+    par2 = add_par(dob='1970-02-13', country=None, region=None, city=None, contact_number='08965785985', occupation='Student', lang="[u'English', u'Italian']", education='School', student=True, university=edin, course_name='Marketing', year='1', height=185, weight=50, matric='1478514525', gender='Female', max_distance=23, uni_only=True, online_only=False, paid_only=False, email_notifications=False)
 
 
     #userprofile
@@ -49,7 +49,7 @@ def populate():
 
 
     #Experiment
-    exp1 = add_exp(name='Marketing Experiment', short_description='Participate in a branding experiment for new soft drink', long_description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.", duration=3, researcher=res1, address="65 Montrose Street, Glasgow, G23 XX3", url='http://expeiment.url', language_req='', city=None)
+    exp1 = add_exp(name='Marketing Experiment', short_description='Participate in a branding experiment for new soft drink', long_description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.", duration=3, researcher=res1, address="65 Montrose Street, Glasgow, G23 XX3", url='http://expeiment.url', language_req="[u'English', u'French, u'German']", city=None)
 
     #Add experiment to participant
     add_exp_to_par(exp1, par1)
@@ -58,12 +58,39 @@ def populate():
     ip1 = is_paid(is_paid='Yes')
     ip2 = is_paid(is_paid='No')
 
+
     cur_cash = add_currency(currency='Cash', is_paid=ip1)
+    cur_credits = add_currency(currency='Credits', is_paid=ip1)
+    cur_voucher = add_currency(currency='Voucher', is_paid=ip1)
+    cur_na = add_currency(currency='N/A', is_paid=ip2)
 
-    # pay_type = add_payment_type(payment_type='Hourly', currrency=cur_cash)
+    pay_type_cash_hourly = add_payment_type(payment_type='Hourly', currency=cur_cash)
+    pay_type_cash_total = add_payment_type(payment_type='Total', currency=cur_cash)
+    pay_type_na_total = add_payment_type(payment_type='N/A', currency=cur_na)
 
-    # payment = add_payment(is_paid=ip1, currency=cur_cash, payment_type=pay_type,)
+    pay_type_credits_hourly = add_payment_type(payment_type='Hourly', currency=cur_credits)
+    pay_type_credits_total = add_payment_type(payment_type='Total', currency=cur_credits)
 
+    pay_type_voucher_hourly = add_payment_type(payment_type='Hourly', currency=cur_voucher)
+    pay_type_voucher_total = add_payment_type(payment_type='Total', currency=cur_voucher)
+
+    payment_na = add_payment(is_paid=ip1, currency=cur_na, payment_type=pay_type_na_total, amount=0, experiment=None)
+    payment1 = add_payment(is_paid=ip1, currency=cur_cash, payment_type=pay_type_cash_hourly, amount=5, experiment=exp1)
+    payment2 = add_payment(is_paid=ip1, currency=cur_cash, payment_type=pay_type_cash_total, amount=25, experiment=None)
+    payment3 = add_payment(is_paid=ip1, currency=cur_credits, payment_type=pay_type_credits_total, amount=10, experiment=None)
+    payment3 = add_payment(is_paid=ip1, currency=cur_voucher, payment_type=pay_type_voucher_total, amount=30, experiment=None)
+
+    ts1 = add_timeslot(date='2015-10-10', start_time='17:00:00', end_time='19:00:00',no_of_parts=5, experiment=exp1)
+    ts2 = add_timeslot(date='2015-10-10', start_time='17:00:00', end_time='19:00:00',no_of_parts=5, experiment=exp1)
+    ts3 = add_timeslot(date='2015-10-10', start_time='17:00:00', end_time='19:00:00',no_of_parts=5, experiment=exp1)
+    ts4 = add_timeslot(date='2015-10-10', start_time='17:00:00', end_time='19:00:00',no_of_parts=5, experiment=exp1)
+    ts5 = add_timeslot(date='2015-10-10', start_time='17:00:00', end_time='19:00:00',no_of_parts=5, experiment=exp1)
+
+
+
+    # assign_timeslot(exp1,ts1)
+    #
+    # assign_payment(exp1,payment1)
     # par1.experiments.add(exp1)
     # update_par1 = add_exp_to_par(exp1, par1)
 
@@ -152,6 +179,16 @@ def add_payment(is_paid, currency, payment_type, amount, experiment):
     ap.save()
     return ap
 
+def add_timeslot(date, start_time, end_time, no_of_parts, experiment):
+    t = TimeSlot.objects.get_or_create(date=date, start_time=start_time, end_time=end_time, no_of_parts=no_of_parts, experiment=experiment)[0]
+    t.save()
+    return t
+
+# def assign_timeslot(experiment, timeslot):
+#     timeslot.experiment.add(experiment)
+#
+# def assign_payment(experiment, payment):
+#     payment.experiment.add(experiment)
 
 
 # def setup_payment():

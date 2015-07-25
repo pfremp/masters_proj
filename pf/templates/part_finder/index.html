@@ -64,7 +64,7 @@
       <tbody>
     {% for experiment in experiments|slice:"10" %}
         <tr>
-          <th scope="row"><a href="/part_finder/experiments/{{ experiment.slug }}">{{ experiment.name }}</a></th>
+          <th scope="row"><a href="/part_finder/experiments/{{ experiment.researcher_slug }}/{{ experiment.slug }}">{{ experiment.name }}</a></th>
           <td>{{ experiment.short_description }}</td>
           <td>{{ experiment.location }}</td>
 {#          <td>{{ experiment.date|date:"M d" }}</td>#}
