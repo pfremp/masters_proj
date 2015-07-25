@@ -154,6 +154,7 @@ class TimeSlot(models.Model):
     start_time = models.TimeField(blank=True, null=True)
     end_time = models.TimeField(blank=True, null=True)
     no_of_parts = models.IntegerField(blank=True, null=True)
+    current_parts = models.IntegerField(blank=True, null=True, default=0)
     experiment = models.ForeignKey(Experiment, null=True)
 
     def __unicode__(self):
