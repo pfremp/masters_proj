@@ -1,7 +1,7 @@
 __author__ = 'patrickfrempong'
 
 from django import forms
-from part_finder.models import Researcher,Experiment,Participant,  UserProfile, University, TimeSlot, TodoList, Payment_type,Payment, Is_paid, Currency
+from part_finder.models import Researcher,Experiment,Participant,  UserProfile, University, TimeSlot, TodoList, Payment_type,Payment, Is_paid, Currency, Application
 from django.contrib.auth.models import User
 from datetime import date
 from django.contrib.auth import get_user_model
@@ -225,6 +225,22 @@ class PaymentForm(forms.ModelForm):
         model = Payment
         fields = ('is_paid','currency', 'payment_type', 'amount')
         exclude = ('experiment',)
+
+class ApplicationForm(forms.ModelForm):
+    # timeslot = forms.ModelChoiceField(queryset=TimeSlot.objects.all(), label="Select Timeslot", required=False)
+    terms = forms.BooleanField(label="Terms Accepted", required=False)
+
+    def __init__(self, experiment, *args, **kwargs):
+        super(ApplicationForm, self).__init__(*args, **kwargs)
+        self.fields['timeslot'].queryset = TimeSlot.objects.filter(experiment=experiment)
+        # self.fields['terms'].required=True
+
+    class Meta:
+        model = Application
+        fields = ('timeslot' , 'terms')
+        # exclude = ('researcher', 'participant', 'experiment', 'status')
+        # exclude = ()
+# class ApplicationForm(forms.ModelForm):
 
 # application class.
 # foreign keys: participant, experiment

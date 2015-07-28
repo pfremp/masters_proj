@@ -126,20 +126,6 @@ class UserProfile(models.Model):
         return self.user.username
 
 
-
-
-class Application(models.Model):
-    STATUS = (('Pending','Pending'),('Accepted','Accepted'),('Standby','Standby'))
-    Researcher = models.OneToOneField(Researcher, null=True, related_name="application")
-    Participant = models.OneToOneField(Participant, null=True, related_name="application")
-    Experiment = models.OneToOneField(Experiment, null=True, related_name="application")
-    status = models.CharField(max_length=100, choices=STATUS)
-
-    def __unicode__(self):
-        return self.Experiment.name
-
-
-
 class TodoList(models.Model):
     name = models.CharField(max_length=100)
 
@@ -155,10 +141,10 @@ class TimeSlot(models.Model):
     end_time = models.TimeField(blank=True, null=True)
     no_of_parts = models.IntegerField(blank=True, null=True)
     current_parts = models.IntegerField(blank=True, null=True, default=0)
-    experiment = models.ForeignKey(Experiment, null=True)
+    experiment = models.ForeignKey(Experiment, null=True, related_name='timeslot')
 
     def __unicode__(self):
-        return self.experiment.name
+        return str(self.date) + " " + str(self.start_time) + " - " + str(self.end_time)
 
 
 
@@ -199,7 +185,17 @@ class Payment(models.Model):
 
 
 
+class Application(models.Model):
+    STATUS = (('Pending','Pending'),('Accepted','Accepted'),('Standby','Standby'))
+    researcher = models.ForeignKey(Researcher, null=True, related_name="application")
+    participant = models.ForeignKey(Participant, null=True, related_name="application")
+    experiment = models.ForeignKey(Experiment, null=True, related_name="application")
+    timeslot = models.ForeignKey(TimeSlot, null=True, related_name="application")
+    terms = models.BooleanField(default=False, null=False)
+    status = models.CharField(max_length=100, choices=STATUS)
 
+    def __unicode__(self):
+        return self.experiment.name
 
 class Contact(models.Model):
     subject = models.CharField(max_length=100)

@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponse, request
 from part_finder.models import Researcher, Experiment, Participant, UserProfile, Contact, User,Dummy, Payment
-from part_finder.forms import ExperimentForm, ResearcherForm, PartDetailsForm, ParticipantForm, SignupForm, TodoList, TimeSlotForm, TimeSlotFrom, PaymentForm
+from part_finder.forms import ExperimentForm, ResearcherForm, PartDetailsForm, ParticipantForm, SignupForm, TodoList, TimeSlotForm, TimeSlotFrom, PaymentForm, ApplicationForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 # from django.contrib.formtools.wizard.views import SessionWizardView
@@ -111,7 +111,7 @@ def process_form_data(form_list, request):
 
     return form_data
 
-
+# def
 #
 # #experiment page
 # def experiment (request, experiment_name_slug):
@@ -131,15 +131,51 @@ def process_form_data(form_list, request):
 def experiment (request, experiment_name_slug, r_slug):
 
     context_dict = {}
+
+
     try:
         experiment = Experiment.objects.get(slug=experiment_name_slug, researcher_slug=r_slug)
-        context_dict['experiment_name'] = experiment.name
         experiment_list = Experiment.objects.filter(slug=experiment_name_slug)
-        context_dict['single_experiment'] = experiment_list
-        context_dict['experiment'] = experiment
+        appform = ApplicationForm(experiment)
+        context_dict= {'appform': appform, 'experiment_name': experiment.name, 'single_experiment': experiment_list, 'experiment': experiment}
+
+
+
+
+        #application
+        if request.method == 'POST':
+
+             appform = ApplicationForm(experiment, request.POST)
+
+             if appform.is_valid():
+                application = appform.save(commit=False)
+                application.researcher = experiment.researcher
+                application.participant = request.user.profile.participant
+                application.experiment = experiment
+                application.status = 'Pending'
+                application.save()
+
+             else:
+                print appform.errors
+        else:
+             appform = ApplicationForm(experiment)
+
     except Experiment.DoesNotExist:
         pass
-    return render(request, 'part_finder/experiments.html', context_dict)
+
+
+    return render(request, 'part_finder/experiments.html', context_dict )
+
+
+#
+# def application(request, experiment, timeslot):
+#
+#     context_dict = {}
+
+
+
+
+
 
 # #add experiment form
 # @login_required
@@ -193,6 +229,7 @@ def add_experiment(request):
                 # todo_item.list = todo_list
                 time_slot.experiment = experiment
                 time_slot.save()
+
 
 
 
