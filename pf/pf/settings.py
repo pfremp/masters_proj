@@ -256,6 +256,8 @@ STATICFILES_DIRS = (
     STATIC_PATH,
 )
 
+# STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
+
 
 #Not safe for deployment- chapter 5.5
 MEDIA_URL = '/media/'

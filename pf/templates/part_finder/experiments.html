@@ -16,8 +16,11 @@
                 <p>{{ experiment.long_description }}</p>
 
                 <h2>Apply</h2>
-{#                {% if User. %}#}
-                <p>Pick a time slot and accept the terms</p>
+                {%  if user.is_authenticated and user.profile.typex == 'Participant' %}
+{#                    {% if user.profile.participant.application.experiment.name == experiment.experiment.name and user.profile.participant.application.experiment.researcher == experiment.experiment.researcher %}#}
+                    <p>You have already applied to this experiment. VIEW MY EXPERIMENTS</p>
+{#                    {% else %}#}
+                        <p>Pick a time slot and accept the terms</p>
 {#                if terms are accepted, do something  #}
                 <form id="appform" method="post" action="">
                     {% csrf_token %}
@@ -26,6 +29,14 @@
                     <input class="btn btn-default" type="submit" name="submit" value="submit" />
 
                 </form>
+{#                    {% endif %}#}
+
+
+                {% elif user.profile.typex == 'Researcher'%}
+                    <p>You must be a registered particiapnt to apply.</p>
+                {% else %}
+                    <p>Please <a href="/accounts/login">login</a> to apply.</p>
+                {% endif %}
 
 
             </div>
