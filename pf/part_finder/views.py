@@ -12,6 +12,7 @@ from django.views.generic.edit import UpdateView
 from django.forms.formsets import formset_factory, BaseFormSet
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.context_processors import csrf
+
 from django.template import RequestContext # For CSRF
 # Create your views here.
 
@@ -141,9 +142,23 @@ def experiment (request, experiment_name_slug, r_slug):
         experiment = Experiment.objects.get(slug=experiment_name_slug, researcher_slug=r_slug)
         experiment_list = Experiment.objects.filter(slug=experiment_name_slug)
         appform = ApplicationForm(experiment)
-        context_dict= {'appform': appform, 'experiment_name': experiment.name, 'single_experiment': experiment_list, 'experiment': experiment}
-        # userprofile = UserProfile.
-        # context_dict
+
+        def get_user_apps():
+            if request.user.is_anonymous():
+                user_apps = None
+
+                return user_apps
+            else:
+                user_apps = Application.objects.filter(participant=request.user.profile.participant)
+                # context_dict = {'apps': user_apps}
+                return user_apps
+
+
+        user_apps = get_user_apps()
+        context_dict= {'appform': appform, 'experiment_name': experiment.name, 'single_experiment': experiment_list, 'experiment': experiment, 'apps': user_apps}
+
+
+
 
 
 

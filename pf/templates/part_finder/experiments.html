@@ -17,11 +17,11 @@
 
                 <h2>Apply</h2>
                 {%  if user.is_authenticated and user.profile.typex == 'Participant' %}
-{#                    {% if user.profile.participant.application.experiment.name == experiment.experiment.name and user.profile.participant.application.experiment.researcher == experiment.experiment.researcher %}#}
-                    <p>You have already applied to this experiment. VIEW MY EXPERIMENTS</p>
-{#                    {% else %}#}
+                    {% for Application in apps %}
+                    {% if Application.experiment.id == experiment.id %}
+                    <p>{{ Application.experiment.id }}You have already applied to this experiment. VIEW MY EXPERIMENTS {{ experiment.id }} </p>
+                    {% else %}
                         <p>Pick a time slot and accept the terms</p>
-{#                if terms are accepted, do something  #}
                 <form id="appform" method="post" action="">
                     {% csrf_token %}
 
@@ -29,6 +29,8 @@
                     <input class="btn btn-default" type="submit" name="submit" value="submit" />
 
                 </form>
+                    {% endif %}
+                    {% endfor %}
 {#                    {% endif %}#}
 
 
