@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponse, request
-from part_finder.models import Researcher, Experiment, Participant, UserProfile, Contact, User,Dummy, Payment, Application
+from part_finder.models import Researcher, Experiment, Participant, UserProfile, Contact, User,Dummy, Payment, Application, TimeSlot
 from part_finder.forms import ExperimentForm, ResearcherForm, PartDetailsForm, ParticipantForm, SignupForm, TodoList, TimeSlotForm, TimeSlotFrom, PaymentForm, ApplicationForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
@@ -133,34 +133,63 @@ def process_form_data(form_list, request):
 #     return render(request, 'part_finder/experiments.html', context_dict)
 
     #experiment page
-def experiment (request, experiment_name_slug, r_slug):
 
+#Displays list of experiments belonging to a researcher
+@login_required
+def researcher_experiments(request):
     context_dict = {}
 
+    # experiments = Experiment.objects.filter(researcher=request.user.profile.researcher)
+    experiments = Experiment.objects.filter(researcher=request.user.profile.researcher)
 
+    context_dict = {'experiments': experiments}
+
+    return render(request, 'part_finder/myexperiments.html', context_dict)
+
+
+
+@login_required
+def process_application(request, experiment_name_slug, r_slug):
+    context_dict = {}
+    experiment = Experiment.objects.filter(slug=experiment_name_slug, researcher_slug=r_slug)
+
+    application = Application.objects.filter(researcher=request.user.profile.researcher, experiment=experiment)
+    timeslots = TimeSlot.objects.filter(experiment=experiment).order_by('date')
+    appform = ApplicationForm(experiment)
+    # a = application.sta
+
+    context_dict = {'app': application, 'time': timeslots, 'appform': appform}
+
+    return render(request, 'part_finder/process_applications.html', context_dict )
+
+def experiment (request, experiment_name_slug, r_slug):
+    context_dict = {}
     try:
         experiment = Experiment.objects.get(slug=experiment_name_slug, researcher_slug=r_slug)
         experiment_list = Experiment.objects.filter(slug=experiment_name_slug)
         appform = ApplicationForm(experiment)
-
         def get_user_apps():
             if request.user.is_anonymous():
-                user_apps = None
-
-                return user_apps
+                a = Application.objects.all()
+                return a
             else:
-                user_apps = Application.objects.filter(participant=request.user.profile.participant)
+                a = Application.objects.filter(participant=request.user.profile.participant)
                 # context_dict = {'apps': user_apps}
-                return user_apps
+                return a
+        a = get_user_apps()
 
+        def check_already_applied():
+            applied = False
 
-        user_apps = get_user_apps()
-        context_dict= {'appform': appform, 'experiment_name': experiment.name, 'single_experiment': experiment_list, 'experiment': experiment, 'apps': user_apps}
+            for Application in a:
+                if Application.experiment.id == experiment.id:
+                    applied = True
 
+            return applied
 
-
-
-
+        userapplied = check_already_applied()
+        # user_apps = get_user_apps()
+        context_dict= {'appform': appform, 'experiment_name': experiment.name, 'single_experiment': experiment_list, 'experiment': experiment, 'user_applied': userapplied}
 
         #application
         if request.method == 'POST':
@@ -181,8 +210,8 @@ def experiment (request, experiment_name_slug, r_slug):
 
              else:
                 print appform.errors
-        else:
-             appform = ApplicationForm(experiment)
+        # else:
+        #      appform = ApplicationForm(experiment)
 
     except Experiment.DoesNotExist:
         pass

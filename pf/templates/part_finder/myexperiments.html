@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+{% extends 'site_base_toggle.html' %}
+
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block title %}My Experiments{% endblock %}
+
+{% block body_block %}
+
+    <h1>My Experiments</h1>
+
+    <p>You currently have __ active experiments</p>
+    <div class="table table-striped" data-example-id="simple-table" >
+    <table class="table">
+      <caption></caption>
+      <thead>
+        <tr>
+          <th>Name</th>
+{#          <th>Edit</th>#}
+{#          <th>Applications</th>#}
+        </tr>
+      </thead>
+      <tbody>
+    {% for experiment in experiments %}
+        <tr>
+          <td><a href="/part_finder/experiments/{{ experiment.researcher_slug }}/{{ experiment.slug }}">{{ experiment.name }}</a></td>
+          <td><a href="/part_finder/process_applications/{{ experiment.researcher_slug }}/{{ experiment.slug }}"><button type="button" class="btn btn-default btn-xs">Applications</button></a></td>
+
+        </tr>
+    {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+
+
+{% endblock %}
+
+

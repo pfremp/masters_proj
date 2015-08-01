@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+{% extends 'site_base_toggle.html' %}
+
+{% load staticfiles %}
+{% load bootstrap3 %}
+{% block title %}Process Applications{% endblock %}
+
+{% block body_block %}
+    {% for Application in app %}
+        <h1>{{ Application.experiment.name }} Applications</h1>
+        {% for Timeslot in time %}
+            <h3>{{ Timeslot.date }}: {{ Timeslot.start_time }} - {{ Timeslot.end_time }}</h3>
+            <h4>Confirmed: {{ Timeslot.current_parts }}/{{ Timeslot.no_of_parts }}</h4>
+            <div class="table table-striped" data-example-id="simple-table" >
+            <table class="table">
+              <caption></caption>
+              <thead>
+                <tr>
+                  <th>Participant Name</th>
+                  <th>Current Status</th>
+                  <th>Update Status</th>
+                  <th></th>
+                </tr>
+              </thead>
+            </table>
+            </div>
+
+
+    {% for Application in app %}
+        {% if Application.timeslot == Timeslot %}
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td>{{ Application.participant.userprofile }}</td>
+                        <td>{{ Application.status }}</td>
+                        <td>{{ Application.participant.userprofile }}</td>
+                        <td>{{ Application.participant.userprofile }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        {% endif %}
+    {% endfor %}
+    <br>
+    <br>
+    <br>
+    {% endfor %}
+    {% endfor %}
+{% endblock %}
+
+

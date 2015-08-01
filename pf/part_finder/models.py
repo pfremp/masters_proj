@@ -192,6 +192,7 @@ class Application(models.Model):
     experiment = models.ForeignKey(Experiment, null=True, related_name="application")
     timeslot = models.ForeignKey(TimeSlot, null=True, related_name="application")
     terms = models.BooleanField(default=False, null=False)
+    # terms = models.CharField(default=False, max_length=128)
     status = models.CharField(max_length=100, choices=STATUS)
 
     def __unicode__(self):

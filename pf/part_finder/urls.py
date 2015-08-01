@@ -5,7 +5,7 @@ from part_finder import views
 from django.contrib import admin
 from registration.backends.simple.views import RegistrationView
 from part_finder.forms import PartDemoForm,PartDetailsForm,PartStudentForm,PartPrefForm
-from part_finder.views import  ParticipantRegistration, show_message_form_condition, ParticipantUpdate, ResearcherUpdate
+from part_finder.views import  ParticipantRegistration, show_message_form_condition, ParticipantUpdate, ResearcherUpdate, process_application
 from django.views.generic.edit import UpdateView
 from part_finder.models import Participant
 from django.contrib.auth.decorators import login_required
@@ -36,6 +36,8 @@ urlpatterns = patterns('',
     # url(r'^profile/update/$', login_required(ProfileUpdate.as_view()), name='update_profile'),
     url(r'^researcher/update/$', login_required(ResearcherUpdate.as_view()), name='update_researcher_details'),
     url(r'^autocomplete/', include('autocomplete_light.urls')),
+    url(r'^process_applications/(?P<r_slug>[\w\-]+)/(?P<experiment_name_slug>[\w\-]+)/$', views.process_application, name='process_applications'),
+    url(r'^my_experiments/$', views.researcher_experiments, name='researcher_experiments'),
 
 
     #test urls

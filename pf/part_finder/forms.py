@@ -227,8 +227,10 @@ class PaymentForm(forms.ModelForm):
         exclude = ('experiment',)
 
 class ApplicationForm(forms.ModelForm):
+    YES = (('Yes','Yes'), (' ',' '))
     # timeslot = forms.ModelChoiceField(queryset=TimeSlot.objects.all(), label="Select Timeslot", required=False)
     terms = forms.BooleanField(label="Terms Accepted", required=True, help_text='You must accept the T&Cs to proceed.')
+
 
     def __init__(self, experiment, *args, **kwargs):
         super(ApplicationForm, self).__init__(*args, **kwargs)
