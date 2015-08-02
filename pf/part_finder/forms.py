@@ -242,6 +242,16 @@ class ApplicationForm(forms.ModelForm):
         fields = ('timeslot' , 'terms')
         # exclude = ('researcher', 'participant', 'experiment', 'status')
         # exclude = ()
+
+class UpdateStatusForm(forms.ModelForm):
+    STATUS = (('Pending','Pending'),('Accepted','Accepted'),('Standby','Standby'))
+    status = forms.ChoiceField(label="Update Status", required=True, choices=STATUS, help_text="Select a status and click update")
+
+    class Meta:
+        model = Application
+        fields = ('status',)
+
+
 # class ApplicationForm(forms.ModelForm):
 
 # application class.

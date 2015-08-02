@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponse, request
 from part_finder.models import Researcher, Experiment, Participant, UserProfile, Contact, User,Dummy, Payment, Application, TimeSlot
-from part_finder.forms import ExperimentForm, ResearcherForm, PartDetailsForm, ParticipantForm, SignupForm, TodoList, TimeSlotForm, TimeSlotFrom, PaymentForm, ApplicationForm
+from part_finder.forms import ExperimentForm, ResearcherForm, PartDetailsForm, ParticipantForm, SignupForm, TodoList, TimeSlotForm, TimeSlotFrom, PaymentForm, ApplicationForm, UpdateStatusForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 # from django.contrib.formtools.wizard.views import SessionWizardView
@@ -151,16 +151,42 @@ def researcher_experiments(request):
 @login_required
 def process_application(request, experiment_name_slug, r_slug):
     context_dict = {}
-    experiment = Experiment.objects.filter(slug=experiment_name_slug, researcher_slug=r_slug)
-
+    # experiment = Experiment.objects.filter(slug=experiment_name_slug, researcher_slug=r_slug)
+    experiment = Experiment.objects.get(slug=experiment_name_slug, researcher_slug=r_slug)
     application = Application.objects.filter(researcher=request.user.profile.researcher, experiment=experiment)
     timeslots = TimeSlot.objects.filter(experiment=experiment).order_by('date')
-    appform = ApplicationForm(experiment)
-    # a = application.sta
 
-    context_dict = {'app': application, 'time': timeslots, 'appform': appform}
+
+    context_dict = {'app': application, 'time': timeslots, 'experiment': experiment}
 
     return render(request, 'part_finder/process_applications.html', context_dict )
+
+@login_required
+def update_application_status(request, exp_id, app_id):
+    context_dict = {}
+
+    researcher = request.user.profile.researcher
+    experiment = Experiment.objects.get(id=exp_id)
+    application = Application.objects.get(researcher=researcher, experiment=experiment, id=app_id)
+
+    if request.method == 'POST':
+
+        temp_app_form = UpdateStatusForm(request.POST)
+
+        if temp_app_form.is_valid():
+            temp_app = temp_app_form.save(commit=False)
+            application.status = temp_app.status
+            application.save()
+
+        else:
+            print temp_app_form.errors
+    else:
+        temp_app_form = UpdateStatusForm()
+
+
+    context_dict = {'update_form': temp_app_form, 'researcher': researcher, 'experiment': experiment, 'application':application}
+
+    return render(request, 'part_finder/process_application_status.html', context_dict)
 
 def experiment (request, experiment_name_slug, r_slug):
     context_dict = {}
@@ -206,6 +232,7 @@ def experiment (request, experiment_name_slug, r_slug):
                 timeslot.current_parts += 1
                 timeslot.save()
                 application.save()
+                return HttpResponseRedirect("/part_finder/")
 
 
              else:

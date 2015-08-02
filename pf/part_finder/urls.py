@@ -37,6 +37,7 @@ urlpatterns = patterns('',
     url(r'^researcher/update/$', login_required(ResearcherUpdate.as_view()), name='update_researcher_details'),
     url(r'^autocomplete/', include('autocomplete_light.urls')),
     url(r'^process_applications/(?P<r_slug>[\w\-]+)/(?P<experiment_name_slug>[\w\-]+)/$', views.process_application, name='process_applications'),
+    url(r'^update_status/(?P<exp_id>[\w\-]+)/(?P<app_id>[\w\-]+)/$', views.update_application_status, name='update_application_status'),
     url(r'^my_experiments/$', views.researcher_experiments, name='researcher_experiments'),
 
 

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+{% extends 'site_base_toggle.html' %}
+
+{% load staticfiles %}
+{% load bootstrap3 %}
+{% block title %}Process Applications{% endblock %}
+
+{% block body_block %}
+        <h2>{{ experiment.name }} Application: {{ application.participant.userprofile.user.first_name }} {{ application.participant.userprofile.user.last_name }}</h2>
+        <form id="appform" method="post" action="">
+        {% csrf_token %}
+        {% bootstrap_form update_form %}
+        <input class="btn btn-default" type="submit" name="submit" value="submit" />
+        </form>
+        <br>
+        <a href="/part_finder/process_applications/{{ experiment.researcher_slug }}/{{ experiment.slug }}/"><button type="button" class="btn btn-default">Back</button></a>
+
+{% endblock %}
+
+
