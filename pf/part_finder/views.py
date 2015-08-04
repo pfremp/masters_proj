@@ -524,9 +524,9 @@ class ParticipantUpdate(UpdateView):
 class ResearcherUpdate(UpdateView):
     model = Researcher
     form_class = ResearcherForm
-    fields = ['dob', 'matric', 'institution', 'contact_no', 'department']
+    # fields = ['dob', 'matric', 'institution', 'contact_no', 'department']
     template_name_suffix = '_update_form'
-    success_url='/part_finder/participant/update'
+    success_url='/part_finder/researcher/update'
 
     def get_object(self, queryset=None):
         return self.request.user.profile.researcher

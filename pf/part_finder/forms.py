@@ -244,7 +244,7 @@ class ApplicationForm(forms.ModelForm):
         # exclude = ()
 
 class UpdateStatusForm(forms.ModelForm):
-    STATUS = (('Pending','Pending'),('Accepted','Accepted'),('Standby','Standby'))
+    STATUS = (('Pending','Pending'),('Accepted','Accepted'),('Standby','Standby'),('Cancelled','Cancelled'))
     status = forms.ChoiceField(label="Update Status", required=True, choices=STATUS, help_text="Select a status and click update")
 
     class Meta:
