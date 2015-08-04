@@ -595,6 +595,21 @@ def delete_experiment(request, experiment_id):
     return render(request, 'part_finder/delete_experiment.html', context_dict)
 
 
+@login_required
+#Researcher page
+def researcher_profile(request, username):
+    user = User.objects.get(username=username)
+    user_profile = UserProfile.objects.get(user=user)
+    researcher = user_profile.researcher
+    experiments = Experiment.objects.filter(researcher=researcher)
+
+
+    context_dict = {'researcher': researcher, 'experiments': experiments}
+
+    return render(request, 'part_finder/researcher_profile.html/', context_dict)
+
+
+
 
 #TEST TO DO FORM
 def todo(request):
