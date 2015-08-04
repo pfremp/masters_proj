@@ -19,7 +19,10 @@
                 {%  if user.is_authenticated and user.profile.typex == 'Participant' %}
 {#                    {% for Application in apps %}#}
 {#                    {% if Application.experiment.id == experiment.id %}#}
-                    {% if user_applied == True %}
+
+                    {% if experiment.is_full == True %}
+                        <p>Sorry, this experiment is now full</p>
+                    {% elif user_applied == True %}
                     <p>{{ Application.experiment.id }}You have already applied to this experiment. VIEW MY EXPERIMENTS {{ experiment.id }} </p>
                     {% else %}
                         <p>Pick a time slot and accept the terms</p>

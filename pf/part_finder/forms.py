@@ -234,7 +234,7 @@ class ApplicationForm(forms.ModelForm):
 
     def __init__(self, experiment, *args, **kwargs):
         super(ApplicationForm, self).__init__(*args, **kwargs)
-        self.fields['timeslot'].queryset = TimeSlot.objects.filter(experiment=experiment)
+        self.fields['timeslot'].queryset = TimeSlot.objects.filter(experiment=experiment, is_full=False)
         # self.fields['terms'].required=True
 
     class Meta:

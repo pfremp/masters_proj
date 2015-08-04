@@ -219,7 +219,7 @@ def update_application_status(request, exp_id, app_id):
 
     #testing
 
-    print sys.stdout.write('Update Application counter called in method')
+
 
 
     # # for app in application:
@@ -235,10 +235,22 @@ def update_application_status(request, exp_id, app_id):
     return render(request, 'part_finder/process_application_status.html', context_dict)
 
 
-# # Check if an experiment is full
-# def check_if_full (ti):
-#     Experiment.
+#Check if all timeslots for an experiment are full
+def experiment_full(experiment):
+    timeslots = TimeSlot.objects.filter(experiment=experiment)
+    counter =0
+    ts = 0
 
+    for timeslot in timeslots:
+        counter+= 1
+        ts += timeslot.is_full
+
+    if ts == counter:
+        experiment.is_full = True
+        experiment.save()
+    else:
+        experiment.is_full = False
+        experiment.save()
 
 
 def experiment (request, experiment_name_slug, r_slug):
@@ -247,6 +259,10 @@ def experiment (request, experiment_name_slug, r_slug):
         experiment = Experiment.objects.get(slug=experiment_name_slug, researcher_slug=r_slug)
         experiment_list = Experiment.objects.filter(slug=experiment_name_slug)
         appform = ApplicationForm(experiment)
+
+        #check if all experiments are full
+        experiment_full(experiment)
+
         def get_user_apps():
             if request.user.is_anonymous():
                 a = Application.objects.all()

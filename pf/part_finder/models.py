@@ -54,6 +54,7 @@ class Experiment(models.Model):
     url = models.URLField(blank=True)
     researcher_slug = models.SlugField(unique=False, null=True, blank=True)
     slug = models.SlugField(unique=True, null=True, blank=True)
+    is_full = models.BooleanField(default=False)
 
 
     def save(self, *args, **kwargs):
