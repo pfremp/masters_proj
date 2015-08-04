@@ -142,7 +142,7 @@ class TimeSlot(models.Model):
     no_of_parts = models.IntegerField(blank=True, null=True)
     current_parts = models.IntegerField(blank=True, null=True)
     experiment = models.ForeignKey(Experiment, null=True, related_name='timeslot')
-    is_full = models.BooleanField()
+    is_full = models.BooleanField(default=False)
 
     def __unicode__(self):
         return str(self.date) + " " + str(self.start_time) + " - " + str(self.end_time)
@@ -184,6 +184,8 @@ class Payment(models.Model):
     experiment = models.ForeignKey(Experiment, null=True, related_name='experiment')
     # street = models.CharField(max_length=100)
 
+    def __unicode__(self):
+        return self.experiment.name
 
 
 class Application(models.Model):

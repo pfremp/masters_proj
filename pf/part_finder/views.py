@@ -2,12 +2,12 @@ from django.shortcuts import render
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponse, request
 from part_finder.models import Researcher, Experiment, Participant, UserProfile, Contact, User,Dummy, Payment, Application, TimeSlot
-from part_finder.forms import ExperimentForm, ResearcherForm, PartDetailsForm, ParticipantForm, SignupForm, TodoList, TimeSlotForm, TimeSlotFrom, PaymentForm, ApplicationForm, UpdateStatusForm
+from part_finder.forms import ExperimentForm, ResearcherForm, PartDetailsForm, ParticipantForm, SignupForm, TodoList, TimeSlotForm, TimeSlotFrom, PaymentForm, ApplicationForm, UpdateStatusForm, UpdateStatusFormFull
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 # from django.contrib.formtools.wizard.views import SessionWizardView
 from formtools.wizard.views import WizardView, SessionWizardView
-from django.views.generic.edit import UpdateView
+from django.views.generic.edit import UpdateView, DeleteView
 
 from django.forms.formsets import formset_factory, BaseFormSet
 from django.http import HttpResponse, HttpResponseRedirect
@@ -20,8 +20,12 @@ from django.template import RequestContext # For CSRF
 #Homepage
 def index(request):
     experiments_list = Experiment.objects.all()[:10]
+    payment_list = Payment.objects.all()
     # experiments_list = Experiment.objects.order_by('date')[:10]
-    context_dict = {'experiments' : experiments_list}
+
+
+
+    context_dict = {'experiments' : experiments_list, 'payment_list': payment_list}
     return render(request, 'part_finder/index.html', context_dict)
 
 # def current_user(request):
@@ -194,11 +198,18 @@ def update_application_status(request, exp_id, app_id):
     researcher = request.user.profile.researcher
     experiment = Experiment.objects.get(id=exp_id)
     application = Application.objects.get(researcher=researcher, experiment=experiment, id=app_id)
-    timeslots = TimeSlot.objects.filter(application=application)
+    # timeslots = TimeSlot.objects.filter(application=application)
+    timeslot = TimeSlot.objects.get(application=application)
 
     if request.method == 'POST':
+        #if timeslot is full, dont allow applicant to be marked as accepted
+        def get_app_form_post():
+            if application.timeslot.is_full == True:
+                return UpdateStatusFormFull(request.POST)
+            else:
+                return UpdateStatusForm(request.POST)
 
-        temp_app_form = UpdateStatusForm(request.POST)
+        temp_app_form = get_app_form_post()
 
         if temp_app_form.is_valid():
             temp_app = temp_app_form.save(commit=False)
@@ -209,12 +220,16 @@ def update_application_status(request, exp_id, app_id):
             application.timeslot.save()
             application_counter(experiment)
 
-
-
         else:
             print temp_app_form.errors
     else:
-        temp_app_form = UpdateStatusForm()
+        def get_app_form():
+            if application.timeslot.is_full == True:
+                return UpdateStatusFormFull()
+            else:
+                return UpdateStatusForm()
+
+        temp_app_form = get_app_form()
 
 
     #testing
@@ -552,19 +567,32 @@ class ResearcherUpdate(UpdateView):
     #     return Participant.objects.get(Participant.userprofile.user=self.request.user)
         # return Participant.objects.get(id=self.request.id)
 
-
-
-
-# def update_location(request, pk=None):
-#     obj = get_object_or_404(Participant, pk=pk)
-#     form = LocationForm(request.POST or None,
-#                         request.FILES or None, instance=obj)
-#     if request.method == 'POST':
-#         if form.is_valid():
-#            form.save()
-#            return redirect('/accounts/loggedin/locations/all/')
-#     return render(request, 'locations/location_update.html', {'form': form})
+# @login_required
+# # Delete view
+# def delete_experiment(request, experiment):
 #
+#     if request.method == 'POST':
+#         r = request.user.profile.researcher
+#         e = Experiment.objects.filter(experiment, researcher=r)
+#         e.delete()
+#         return HttpResponseRedirect("/part_finder/")
+#
+#
+#     return render(request, 'part_finder/delete_experiment.html')
+
+
+@login_required
+#Delete experiment
+def delete_experiment(request, experiment_id):
+    r = request.user.profile.researcher
+    e = Experiment.objects.get(id=experiment_id, researcher=r)
+
+    if request.method == 'POST':
+        e.delete()
+        return HttpResponseRedirect("/part_finder/current_experiments/")
+
+    context_dict = {'experiment': e}
+    return render(request, 'part_finder/delete_experiment.html', context_dict)
 
 
 

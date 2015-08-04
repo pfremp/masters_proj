@@ -8,9 +8,9 @@
 
 {% block body_block %}
 
-    <h1>My Experiments</h1>
+    <h1>Current Experiments</h1>
 
-    <p>You currently have __ active experiments</p>
+    <p>You currently have {{ experiments.count }} experiments.</p>
     <div class="table table-striped" data-example-id="simple-table" >
     <table class="table">
       <caption></caption>
@@ -26,6 +26,8 @@
         <tr>
           <td><a href="/part_finder/experiments/{{ experiment.researcher_slug }}/{{ experiment.slug }}">{{ experiment.name }}</a></td>
           <td><a href="/part_finder/process_applications/{{ experiment.researcher_slug }}/{{ experiment.slug }}"><button type="button" class="btn btn-default btn-xs">Applications</button></a></td>
+          <td>
+          <td><a href="/part_finder/delete/experiment/{{ experiment.id }}"><button type="button" class="btn btn-default btn-xs">Delete</button></a></td>
 
         </tr>
     {% endfor %}

@@ -1,103 +1,71 @@
 <!DOCTYPE html>
 
 {% extends 'site_home.html' %}
-
 {% load staticfiles %}
-
 {% block title %}Participant Finder{% endblock %}
-
 
 {% block body_block %}
     <img src="{% static "images/home_banner.jpg" %}" class="img-responsive" style="padding: 0;" alt="Responsive image">
     <hr style="margin-top: 0px;">
-
-
-
-
     <hr style="margin-top: 0px;">
-{#    <div>#}
-{#      <strong>Menu:</strong>#}
-{#      <ul>#}
-{#	{% if user.is_authenticated %}#}
-{#	<li><a href="{% url 'account_email' %}">Change E-mail</a></li>#}
-{#	<li><a href="{% url 'account_logout' %}?next=/part_finder/">Sign Out</a></li>#}
-{#	{% else %}#}
-{#	<li><a href="{% url 'account_login' %}">Sign In</a></li>#}
-{#	<li><a href="{% url 'account_signup' %}">Sign Up</a></li>#}
-{#	{% endif %}#}
-{#      </ul>#}
-{#    </div>#}
-{#        {% block content %}#}
-{#    {% endblock %}#}
 
 <h1 style=" margin-left: auto; margin-right: auto; width: 10em;">Latest Experiments</h1>
 
 <div style="padding-left: 20px; padding-right: 20px;">
-
   <!-- Nav tabs -->
   <ul class="nav nav-tabs" role="tablist">
     <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">All</a></li>
     <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Matched</a></li>
-{#    <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Messages</a></li>#}
-{#    <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>#}
   </ul>
 
   <!-- Tab panes -->
   <div class="tab-content">
     <div role="tabpanel" class="tab-pane active" id="home">
-
-
         {% if experiments %}
-    <div class="table table-striped" data-example-id="simple-table" >
-    <table class="table">
-      <caption></caption>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Dept.</th>
-          <th>Location</th>
-          <th>Date</th>
-          <th>Paid</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-    {% for experiment in experiments|slice:"10" %}
-        <tr>
-          <th scope="row"><a href="/part_finder/experiments/{{ experiment.researcher_slug }}/{{ experiment.slug }}">{{ experiment.name }}</a></th>
-          <td>{{ experiment.short_description }}</td>
-          <td>{{ experiment.location }}</td>
-{#          <td>{{ experiment.date|date:"M d" }}</td>#}
-          <td>
+            <div class="table table-striped" data-example-id="simple-table" >
+                <table class="table">
+                  <caption></caption>
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Description</th>
+                      <th>Location</th>
+                      <th>Paid</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
 
-              {% if experiment.paid_event == True %}
-              <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-              {% else %}
-              <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-              {% endif %}
+                  {% for experiment in experiments|slice:"10" %}
+                    <tr>
+                      <th scope="row"><a href="/part_finder/experiments/{{ experiment.researcher_slug }}/{{ experiment.slug }}">{{ experiment.name }}</a></th>
+                      <td>{{ experiment.short_description }}</td>
+                      <td>{{ experiment.city }}</td>
+                      <td>
+                          {% for p in payment_list %}
+                              {% if p.experiment == experiment %}
+                                  {% if p.is_paid.is_paid == 'Yes' %}
+                                      <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                                  {% else %}
+                                      <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                  {% endif %}
+                              {% endif %}
+                              {% endfor %}
+                      </td>
+                      <td>
+                          <a href="/part_finder/experiments/{{ experiment.researcher_slug }}/{{ experiment.slug }}"><button type="button" class="btn btn-default btn-xs">Info / Sign up</button></a>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+            </div>
 
-
-          </td>
-          <td>
-
-              <a href="/part_finder/experiments/{{ experiment.researcher_slug }}/{{ experiment.slug }}"><button type="button" class="btn btn-default btn-xs">Info / Sign up</button></a>
-
-          </td>
-        </tr>
-    {% endfor %}
-      </tbody>
-    </table>
-  </div>
-
-{% else %}
-            <strong>There are no experiments present.</strong><!-- /example -->
-{% endif %}
-
-
-
-
-
+        {% else %}
+            <strong>There are no experiments present.</strong>
+        {% endif %}
     </div>
+
     <div role="tabpanel" class="tab-pane" id="profile">
 
 

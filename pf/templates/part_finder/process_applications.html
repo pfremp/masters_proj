@@ -7,6 +7,15 @@
 
 {% block body_block %}
         <h1>{{ experiment.name }} Applications</h1>
+        {% for t in time %}
+            <p><b>Timeslot: </b>{{ t.date }}, {{ t.start_time }} - {{ t.end_time }}</p>
+            {% if t.is_full %}
+                <p><b>{{ t.current_parts }} / {{ t.no_of_parts }} <span style="color: #ff0000">FULL</span></b>
+            {% else %}
+                <p><b>{{ t.current_parts }} / {{ t.no_of_parts }} </b>
+            {% endif %}
+            </p>
+        {% endfor %}
         <div class="table table-striped" data-example-id="simple-table" >
             <table class="table">
               <caption></caption>

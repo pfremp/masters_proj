@@ -45,12 +45,11 @@
 
                 {% elif user.profile.typex == 'Researcher' %}
 
-                    <li><a href="#">Current Experiments</a></li>
-                    <li><a href="#">Applications</a></li>
+                    <li><a href="{% url 'add_experiment' %}">Create New Experiment</a></li>
+                    <li><a href="{% url 'researcher_experiments' %}">Current Experiments</a></li>
                     <li><a href="#">Experiment History</a></li>
-                    <li><a href="/part_finder/add_experiment">Create New Experiment</a></li>
-{#                    <li><a href="/part_finder/profile/update">Profile</a></li>#}
-                    <li><a href="/part_finder/researcher/update/">Researcher Details</a></li>
+                    <li><a href="{% url 'update_researcher_details' %}">Update Profile</a></li>
+                    <li><a href="">Settings</a></li>
 
                 {% else %}
 
