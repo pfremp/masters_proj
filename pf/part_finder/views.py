@@ -12,6 +12,7 @@ from django.views.generic.edit import UpdateView
 from django.forms.formsets import formset_factory, BaseFormSet
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.context_processors import csrf
+import sys
 
 from django.template import RequestContext # For CSRF
 # Create your views here.
@@ -147,6 +148,31 @@ def researcher_experiments(request):
     return render(request, 'part_finder/myexperiments.html', context_dict)
 
 
+def application_counter(exp):
+
+    applications = Application.objects.filter(experiment=exp)
+
+    #increment the current parts counter
+    for app in applications:
+
+        #increment if status is updated to accepted
+        if app.status == 'Accepted':
+            app.timeslot.current_parts += 1
+            app.timeslot.save()
+            print sys.stdout.write('Increment')
+
+        #check to see if experiments are full
+        if app.timeslot.current_parts >= app.timeslot.no_of_parts:
+            app.timeslot.is_full = True
+            app.timeslot.save()
+        elif app.timeslot.current_parts <= app.timeslot.no_of_parts:
+            app.timeslot.is_full = False
+            app.timeslot.save()
+
+
+
+
+
 
 @login_required
 def process_application(request, experiment_name_slug, r_slug):
@@ -168,6 +194,7 @@ def update_application_status(request, exp_id, app_id):
     researcher = request.user.profile.researcher
     experiment = Experiment.objects.get(id=exp_id)
     application = Application.objects.get(researcher=researcher, experiment=experiment, id=app_id)
+    timeslots = TimeSlot.objects.filter(application=application)
 
     if request.method == 'POST':
 
@@ -177,6 +204,12 @@ def update_application_status(request, exp_id, app_id):
             temp_app = temp_app_form.save(commit=False)
             application.status = temp_app.status
             application.save()
+            #set counter to zero
+            application.timeslot.current_parts = 0
+            application.timeslot.save()
+            application_counter(experiment)
+
+
 
         else:
             print temp_app_form.errors
@@ -184,9 +217,29 @@ def update_application_status(request, exp_id, app_id):
         temp_app_form = UpdateStatusForm()
 
 
+    #testing
+
+    print sys.stdout.write('Update Application counter called in method')
+
+
+    # # for app in application:
+    # for timeslot in timeslots:
+    #     if timeslot.application == application:
+    #          # if app.status == 'Accepted':
+    #         timeslot.current_parts = 20
+    #         timeslot.save()
+
+
     context_dict = {'update_form': temp_app_form, 'researcher': researcher, 'experiment': experiment, 'application':application}
 
     return render(request, 'part_finder/process_application_status.html', context_dict)
+
+
+# # Check if an experiment is full
+# def check_if_full (ti):
+#     Experiment.
+
+
 
 def experiment (request, experiment_name_slug, r_slug):
     context_dict = {}
@@ -229,8 +282,8 @@ def experiment (request, experiment_name_slug, r_slug):
                 application.experiment = experiment
                 application.status = 'Pending'
                 timeslot =  application.timeslot
-                timeslot.current_parts += 1
-                timeslot.save()
+                # timeslot.current_parts += 1
+                # timeslot.save()
                 application.save()
                 return HttpResponseRedirect("/part_finder/")
 

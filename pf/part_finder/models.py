@@ -135,13 +135,13 @@ class TodoList(models.Model):
 
 #Renames to time slot below
 class TimeSlot(models.Model):
-
     date = models.DateField(("Date"), default=date.today, null=True)
     start_time = models.TimeField(blank=True, null=True)
     end_time = models.TimeField(blank=True, null=True)
     no_of_parts = models.IntegerField(blank=True, null=True)
-    current_parts = models.IntegerField(blank=True, null=True, default=0)
+    current_parts = models.IntegerField(blank=True, null=True)
     experiment = models.ForeignKey(Experiment, null=True, related_name='timeslot')
+    is_full = models.BooleanField()
 
     def __unicode__(self):
         return str(self.date) + " " + str(self.start_time) + " - " + str(self.end_time)
@@ -193,7 +193,7 @@ class Application(models.Model):
     timeslot = models.ForeignKey(TimeSlot, null=True, related_name="application")
     terms = models.BooleanField(default=False, null=False)
     # terms = models.CharField(default=False, max_length=128)
-    status = models.CharField(max_length=100, choices=STATUS)
+    status = models.CharField(max_length=100)
 
     def __unicode__(self):
         return self.experiment.name
