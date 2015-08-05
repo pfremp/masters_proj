@@ -23,13 +23,15 @@
       </thead>
       <tbody>
     {% for experiment in experiments %}
+        {% if experiment.has_ended == False %}
         <tr>
           <td><a href="/part_finder/experiments/{{ experiment.researcher_slug }}/{{ experiment.slug }}">{{ experiment.name }}</a></td>
           <td><a href="/part_finder/process_applications/{{ experiment.researcher_slug }}/{{ experiment.slug }}"><button type="button" class="btn btn-default btn-xs">Applications</button></a></td>
-          <td>
+          <td><a href="{% url 'end_experiment' experiment.id %}"><button type="button" class="btn btn-default btn-xs">End</button></a></td>
           <td><a href="/part_finder/delete/experiment/{{ experiment.id }}"><button type="button" class="btn btn-default btn-xs">Delete</button></a></td>
 
         </tr>
+        {% endif %}
     {% endfor %}
       </tbody>
     </table>

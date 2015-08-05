@@ -260,6 +260,7 @@ class UpdateStatusFormFull(forms.ModelForm):
         fields = ('status',)
 
 
+
 # class ApplicationForm(forms.ModelForm):
 
 # application class.

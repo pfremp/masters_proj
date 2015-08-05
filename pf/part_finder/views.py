@@ -147,9 +147,23 @@ def researcher_experiments(request):
     # experiments = Experiment.objects.filter(researcher=request.user.profile.researcher)
     experiments = Experiment.objects.filter(researcher=request.user.profile.researcher)
 
+
     context_dict = {'experiments': experiments}
 
     return render(request, 'part_finder/myexperiments.html', context_dict)
+
+#Displays list of ended experiments belonging to a researcher
+@login_required
+def experiment_history(request):
+    context_dict = {}
+
+    # experiments = Experiment.objects.filter(researcher=request.user.profile.researcher)
+    experiments = Experiment.objects.filter(researcher=request.user.profile.researcher)
+
+
+    context_dict = {'experiments': experiments}
+
+    return render(request, 'part_finder/experiment_history.html', context_dict)
 
 
 def application_counter(exp):
@@ -612,6 +626,41 @@ def delete_experiment(request, experiment_id):
 
     context_dict = {'experiment': e}
     return render(request, 'part_finder/delete_experiment.html', context_dict)
+
+
+@login_required
+#Mark experiment as ended
+def end_experiment(request, experiment_id):
+    r = request.user.profile.researcher
+    e = Experiment.objects.get(id=experiment_id, researcher=r)
+
+
+    if request.method == 'POST':
+        e.has_ended = True
+        e.save()
+        return HttpResponseRedirect("/part_finder/current_experiments/")
+
+    context_dict = {'experiment': e}
+
+    return render(request, 'part_finder/end_experiment.html', context_dict)
+
+@login_required
+#Reactivate experiment as ended
+def reac_experiment(request, experiment_id):
+    r = request.user.profile.researcher
+    e = Experiment.objects.get(id=experiment_id, researcher=r)
+
+
+    if request.method == 'POST':
+        e.has_ended = False
+        e.save()
+        return HttpResponseRedirect("/part_finder/experiment_history/")
+
+    context_dict = {'experiment': e}
+
+    return render(request, 'part_finder/reactivate_experiment.html', context_dict)
+
+
 
 
 @login_required

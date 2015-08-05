@@ -37,6 +37,7 @@
                   <tbody>
 
                   {% for experiment in experiments|slice:"10" %}
+                      {% if experiment.has_ended == False %}
                     <tr>
                       <th scope="row"><a href="/part_finder/experiments/{{ experiment.researcher_slug }}/{{ experiment.slug }}">{{ experiment.name }}</a></th>
                       <td>{{ experiment.short_description }}</td>
@@ -56,6 +57,7 @@
                           <a href="/part_finder/experiments/{{ experiment.researcher_slug }}/{{ experiment.slug }}"><button type="button" class="btn btn-default btn-xs">Info / Sign up</button></a>
                       </td>
                     </tr>
+                      {% endif %}
                   {% endfor %}
                   </tbody>
                 </table>
