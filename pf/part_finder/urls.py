@@ -40,7 +40,7 @@ urlpatterns = patterns('',
     url(r'^update_status/(?P<exp_id>[\w\-]+)/(?P<app_id>[\w\-]+)/$', views.update_application_status, name='update_application_status'),
     url(r'^current_experiments/$', views.researcher_experiments, name='researcher_experiments'),
     url(r'^delete/experiment/(?P<experiment_id>[\w\-]+)/$', views.delete_experiment, name='experiment-delete'),
-    url(r'^profile/(?P<username>[\w\-]+)/$', views.researcher_profile, name='researcher_profile'),
+    url(r'^profile/researcher/(?P<username>[\w\-]+)/$', views.researcher_profile, name='researcher_profile'),
 
 
     #test urls

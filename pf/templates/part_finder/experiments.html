@@ -3,161 +3,119 @@
 
 {% load staticfiles %}
 {% load bootstrap3 %}
-{% block title %}{{ experiment }}{% endblock %}
+{% block title %} {{ experiment }}{% endblock %}
 
 {% block body_block %}
 
     {% if experiment %}
         <div class="container-fluid">
         <div class="row" style="min-height: 300px;">
+            <!-- left column -->
             <div class="col-md-6">
                 <h1>{{ experiment.name }}</h1>
-
+                <p><b>{{ experiment.city }}</b></p>
+                <br>
+                <p>Description:</p>
                 <p>{{ experiment.long_description }}</p>
-
+                <br>
                 <h2>Apply</h2>
                 {%  if user.is_authenticated and user.profile.typex == 'Participant' %}
-{#                    {% for Application in apps %}#}
-{#                    {% if Application.experiment.id == experiment.id %}#}
-
                     {% if experiment.is_full == True %}
                         <p>Sorry, this experiment is now full</p>
                     {% elif user_applied == True %}
-                    <p>{{ Application.experiment.id }}You have already applied to this experiment. VIEW MY EXPERIMENTS {{ experiment.id }} </p>
+                        <p>{{ Application.experiment.id }}You have already applied to this experiment. VIEW MY EXPERIMENTS {{ experiment.id }} </p>
                     {% else %}
                         <p>Pick a time slot and accept the terms</p>
-                <form id="appform" method="post" action="">
-                    {% csrf_token %}
-
-                {% bootstrap_form appform %}
-                    <input class="btn btn-default" type="submit" name="submit" value="submit" />
-
-                </form>
+                        <form id="appform" method="post" action="">
+                            {% csrf_token %}
+                            {% bootstrap_form appform %}
+                            <input class="btn btn-default" type="submit" name="submit" value="Apply" />
+                        </form>
                     {% endif %}
-{#                    {% endfor %}#}
-{#                    {% endif %}#}
 
-
+                    <!-- Check if user is a reaseacher, researchers cannot apply -->
                 {% elif user.profile.typex == 'Researcher'%}
-                    <p>You must be a registered particiapnt to apply.</p>
+                    <p>You must be a registered participant to apply.</p>
                 {% else %}
+                    <!-- Ensure that user is logged in to apply. -->
                     <p>Please <a href="/accounts/login">login</a> to apply.</p>
                 {% endif %}
-
-
             </div>
-            <div class="col-md-6">
-                <div style="margin-top: 20px; padding-bottom: 35px;" class="well">
 
+            <!-- Right column -->
+            <div class="col-md-6">
+                <!-- Well containing exp information -->
+                <div style="margin-top: 20px; padding-bottom: 35px;" class="well">
+                    <!-- payment info -->
                     <div class="col-md-3">
                         {% if experiment.currency == 'Money' %}
-
-
-                            <span class="glyphicon glyphicon-gbp"
-                                  aria-hidden="true"> {{ experiment.payment_amount }} {{ experiment.pmt_type }}</span>
-
+                            <span class="glyphicon glyphicon-gbp" aria-hidden="true"> {{ experiment.payment_amount }} {{ experiment.pmt_type }}</span>
                         {% else %}
-
                             <span>{{ experiment.payment_amount }} Credits</span>
-
                         {% endif %}
-                        {#                       <span class="glyphicon glyphicon-gbp" aria-hidden="true">{{experiment.payment_amount}}{% if experiment.currency == 'Money' %}p/h  {% elif experiment.currency == 'Credits' %}</span>#}
-                        {#                       {% endif %}#}
-
                     </div>
+
+                    <!-- Duration -->
                     <div class="col-md-3">
-
-                        <span class="glyphicon glyphicon-time"
-                              aria-hidden="true"> {{ experiment.duration }} Hours</span>
-
+                        <span class="glyphicon glyphicon-time" aria-hidden="true"> {{ experiment.duration }} Hours</span>
                     </div>
+
+                    <!-- Date info. -->
                     <div class="col-md-3">
-
-                        <span class="glyphicon glyphicon-calendar"
-                              aria-hidden="true"> {{ experiment.date | date:'M-d' }}</span>
-
+                        <span class="glyphicon glyphicon-calendar" aria-hidden="true"> {{ experiment.date | date:'M-d' }}</span>
                     </div>
+
+                    <!-- number of participants -->
                     <div class="col-md-3">
-
-                        <span class="glyphicon glyphicon-user"
-                              aria-hidden="true"> {{ experiment.no_of_participants_wanted }}</span>
-
+                        <span class="glyphicon glyphicon-user" aria-hidden="true"> {{ experiment.no_of_participants_wanted }}</span>
                     </div>
-
-                    {#                   <span class="glyphicon glyphicon-gbp" aria-hidden="true">{{experiment.payment_amount}}{% if experiment.currency == 'Money' %}p/h  {% elif experiment.currency == 'Credits' %}#}
-                    {#                       {% endif %}#}
-                    {##}
-                    {#                   </span>#}
-                    {##}
-                    {#                   <span class="glyphicon glyphicon-time" aria-hidden="true"></span>#}
-                    {#                   <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>#}
-                    {#                   <span class="glyphicon glyphicon-user" aria-hidden="true"></span>#}
-
-
                 </div>
 
+                <!-- right half 2 of page, more info -->
                 <div class="well">
-
                     <img style="width: 100%;" src="/static/images/gmph.png">
-
                 </div>
             </div>
         </div>
+
+        <!-- Bottom half, more details -->
         <div class="row">
+            <div class="well" style="min-height: 300px;">
+                <!-- left col-->
+                <div class="col-md-6">
+                    <h4><b>Requirements:</b></h4>
+                    <p><b>Language(s): </b>{{ lang }}</p>
+                    <br>
+                    <h4><b>More info:</b></h4>
+                    <a href="{{ experiment.url }}">{{ experiment.url }}</a>
+                    <br>
+                    <br>
+                    <h4><b>Address:</b></h4>
+                    {{ experiment.address }}
+                </div>
 
-        <ul class="nav nav-tabs">
-            <li role="presentation" class="active"><a href="#tab" aria-controls="tab" role="tab" data-toggle="tab">Tab
-                1</a></li>
-            <li role="presentation"><a href="#tab2" aria-controls="profile" role="tab" data-toggle="tab">Tab 2</a></li>
-            <li role="presentation"><a href="#tab3" aria-controls="profile" role="tab" data-toggle="tab">Tab 3</a></li>
-        </ul>
-
-        <div class="tab-content">
-        <div role="tabpanel" class="tab-pane active" id="tab">
-            <div class="well" style="min-height: 300px;"></div>
+                <!-- right col-->
+                <div class="col-md-6">
+                    <h4><b>Timeslots:</b></h4>
+                    {% for t in timeslots %}
+                        <p><span class="glyphicon glyphicon-time" aria-hidden="true"></span> <b>{{ t.date }},</b> {{ t.start_time }} - {{ t.end_time }}</p>
+                        {% if t.is_full %}
+                            <span class="glyphicon glyphicon-user" aria-hidden="true"><b style="color: #f00;"> FULL</b></span>
+                            <br>
+                            <br>
+                        {% else %}
+                            <span class="glyphicon glyphicon-user" aria-hidden="true"><b style="color: #f00;"> {{ t.current_parts }} / {{ t.no_of_parts }}</b></span>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
         </div>
-
-
-        <div role="tabpanel" class="tab-pane" id="tab2">
-        <div class="well" style="min-height: 300px;></div>
-
-        </div>
-
-
-        </div>
-        </div>
-        </div>
-
-
-
-        </div>
-
-
-
-
-
+    </div>
 
 
     {% else %}
         <p>Experiment Not Found</p>
     {% endif %}
-
-    </div>
-
-
-    {#        {% if experiment %}#}
-    {#            {% if experiment %}#}
-    {#            <ul>#}
-    {##}
-    {#                <li>{{ experiment.name }}</li>#}
-    {##}
-    {#            </ul>#}
-    {#            {% else %}#}
-    {#                <strong>No pages currently in category.</strong>#}
-    {#            {% endif %}#}
-    {#        {% else %}#}
-    {#            There are currently no experiments!#}
-    {#        {% endif %}#}
 
 {% endblock %}
 

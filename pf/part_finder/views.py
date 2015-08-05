@@ -274,6 +274,7 @@ def experiment (request, experiment_name_slug, r_slug):
         experiment = Experiment.objects.get(slug=experiment_name_slug, researcher_slug=r_slug)
         experiment_list = Experiment.objects.filter(slug=experiment_name_slug)
         appform = ApplicationForm(experiment)
+        timeslots = TimeSlot.objects.filter(experiment=experiment).order_by("date")
 
         #check if all experiments are full
         experiment_full(experiment)
@@ -298,8 +299,13 @@ def experiment (request, experiment_name_slug, r_slug):
             return applied
 
         userapplied = check_already_applied()
+
+        # Remove special characters from language_req string
+        lang = experiment.language_req
+        language_req = lang.replace('[','').replace('u','').replace("'",'').replace(']','')
+
         # user_apps = get_user_apps()
-        context_dict= {'appform': appform, 'experiment_name': experiment.name, 'single_experiment': experiment_list, 'experiment': experiment, 'user_applied': userapplied}
+        context_dict= {'appform': appform, 'experiment_name': experiment.name, 'single_experiment': experiment_list, 'experiment': experiment, 'user_applied': userapplied, 'lang': language_req, 'timeslots': timeslots}
 
         #application
         if request.method == 'POST':
@@ -323,6 +329,9 @@ def experiment (request, experiment_name_slug, r_slug):
                 print appform.errors
         # else:
         #      appform = ApplicationForm(experiment)
+
+
+
 
     except Experiment.DoesNotExist:
         pass
