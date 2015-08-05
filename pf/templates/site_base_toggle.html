@@ -98,16 +98,18 @@
           <ul class="nav navbar-nav navbar-right">
                 <!--<li><a href="{% url 'index' %}">Home</a></li>-->
                     {% if user.is_authenticated %}
-                        <li><a href=" ">Experiments</a></li>
+                         <li><a href=" ">Hello {{ user.first_name }}</a></li>
+                        <li><a href="{% url 'allexperiments' %}">Experiments</a></li>
 {#                        <li><a href=" ">Admin</a></li>#}
                         <li><a href="{% url 'account_logout' %}?next=/part_finder/">Logout</a></li>
 
                     {% else %}
+                        <li><a href="{% url 'allexperiments' %}">Experiments</a></li>
                         <li><a href="{% url 'account_signup' %}">Register</a></li>
                         <li><a href="{% url 'account_login' %}">Login</a></li>
                     {% endif %}
                     {% if user.profile.typex == 'Researcher' %}
-                     <li><a href="{% url 'add_experiment' %}">Add Experiment</a></li>
+{#                     <li><a href="{% url 'add_experiment' %}">Add Experiment</a></li>#}
                     {% endif %}
 
               </ul>

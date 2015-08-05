@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+{% extends 'site_base.html' %}
+
+{% load staticfiles %}
+{% load bootstrap3 %}
+{% load easy_maps_tags %}
+{% block extra_head %}
+{% endblock %}
+{% block title %} All Experiments {% endblock %}
+
+{% block body_block %}
+        <h1>All Experiments</h1>
+        <div class="row">
+            {% for experiment in experiments %}
+          <div class="col-sm-6 col-md-4">
+
+              <div class="thumbnail">
+{#              <img src="..." alt="...">#}
+{#              <div class="caption">#}
+                <h3>{{ experiment.name }}</h3>
+                <p>{{ experiment.long_description|truncatechars:250 }}</p>
+                <p><b>Location: </b>{{ experiment.city }}</p>
+
+                  <p>
+                    {% for p in payment_list %}
+                        {% if p.experiment == experiment %}
+                            {% if p.is_paid.is_paid == 'Yes' %}
+                                <b>Paid: </b><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                            {% else %}
+                                <b>Paid: </b><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </p>
+                <p><a href="{{ experiment.researcher_slug }}/{{ experiment.slug }}" class="btn btn-primary" role="button">View / Apply</a>
+{#              </div>#}
+            </div>
+
+          </div>
+          {% endfor %}
+        </div>
+
+{% endblock %}

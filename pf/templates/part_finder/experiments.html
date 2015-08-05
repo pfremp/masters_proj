@@ -3,6 +3,9 @@
 
 {% load staticfiles %}
 {% load bootstrap3 %}
+{% load easy_maps_tags %}
+{% block extra_head %}
+{% endblock %}
 {% block title %} {{ experiment }}{% endblock %}
 
 {% block body_block %}
@@ -46,16 +49,23 @@
             <div class="col-md-6">
                 <!-- Well containing exp information -->
                 <div style="margin-top: 20px;">
-                    <span class='st_sharethis_large pull-right' displayText='ShareThis'></span>
-                    <span class='st_facebook_large pull-right' displayText='Facebook'></span>
-                    <span class='st_twitter_large pull-right' displayText='Tweet'></span>
-                    <span class='st_email_large pull-right' displayText='Email'></span>
+                    <span class='st_sharethis_large' displayText='ShareThis'></span>
+                    <span class='st_facebook_large' displayText='Facebook'></span>
+                    <span class='st_twitter_large' displayText='Tweet'></span>
+                    <span class='st_email_large' displayText='Email'></span>
                     <span></span>
                 </div>
 
                 <!-- right half 2 of page, more info -->
-                <div class=" ">
-                    <img style="width: 100%;" src="/static/images/gmph.png">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+{#                    <img style="width: 100%;" src="/static/images/gmph.png">#}
+
+
+                    {% easy_map experiment.address 500 350 using 'part_finder/map.html' %}
+
+
+                        </div>
                 </div>
             </div>
         </div>

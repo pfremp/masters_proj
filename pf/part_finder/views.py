@@ -267,6 +267,14 @@ def experiment_full(experiment):
         experiment.is_full = False
         experiment.save()
 
+#view all expriments
+def all_experiments(request):
+    experiments = Experiment.objects.all()
+    payment_list = Payment.objects.all()
+    context_dict = {'experiments': experiments, 'payment_list': payment_list}
+
+    return render (request, 'part_finder/all_experiments.html', context_dict)
+
 
 def experiment (request, experiment_name_slug, r_slug):
     context_dict = {}

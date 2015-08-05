@@ -41,6 +41,7 @@ urlpatterns = patterns('',
     url(r'^current_experiments/$', views.researcher_experiments, name='researcher_experiments'),
     url(r'^delete/experiment/(?P<experiment_id>[\w\-]+)/$', views.delete_experiment, name='experiment-delete'),
     url(r'^profile/researcher/(?P<username>[\w\-]+)/$', views.researcher_profile, name='researcher_profile'),
+    url(r'^experiments/$', views.all_experiments, name='allexperiments'),
 
 
     #test urls

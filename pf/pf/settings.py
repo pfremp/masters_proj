@@ -47,6 +47,7 @@ INSTALLED_APPS = (
     # 'django-formtools',
     'formtools',
     'smart_selects',
+    'easy_maps',
 
 
     #allauth
