@@ -275,6 +275,8 @@ def experiment (request, experiment_name_slug, r_slug):
         experiment_list = Experiment.objects.filter(slug=experiment_name_slug)
         appform = ApplicationForm(experiment)
         timeslots = TimeSlot.objects.filter(experiment=experiment).order_by("date")
+        researcher = experiment.researcher
+        payment = Payment.objects.get(experiment=experiment)
 
         #check if all experiments are full
         experiment_full(experiment)
@@ -305,7 +307,7 @@ def experiment (request, experiment_name_slug, r_slug):
         language_req = lang.replace('[','').replace('u','').replace("'",'').replace(']','')
 
         # user_apps = get_user_apps()
-        context_dict= {'appform': appform, 'experiment_name': experiment.name, 'single_experiment': experiment_list, 'experiment': experiment, 'user_applied': userapplied, 'lang': language_req, 'timeslots': timeslots}
+        context_dict= {'appform': appform, 'experiment_name': experiment.name, 'single_experiment': experiment_list, 'experiment': experiment, 'user_applied': userapplied, 'lang': language_req, 'timeslots': timeslots, 'researcher': researcher, 'payment': payment}
 
         #application
         if request.method == 'POST':

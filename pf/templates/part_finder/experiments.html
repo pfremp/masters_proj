@@ -45,49 +45,33 @@
             <!-- Right column -->
             <div class="col-md-6">
                 <!-- Well containing exp information -->
-                <div style="margin-top: 20px; padding-bottom: 35px;" class="well">
-                    <!-- payment info -->
-                    <div class="col-md-3">
-                        {% if experiment.currency == 'Money' %}
-                            <span class="glyphicon glyphicon-gbp" aria-hidden="true"> {{ experiment.payment_amount }} {{ experiment.pmt_type }}</span>
-                        {% else %}
-                            <span>{{ experiment.payment_amount }} Credits</span>
-                        {% endif %}
-                    </div>
-
-                    <!-- Duration -->
-                    <div class="col-md-3">
-                        <span class="glyphicon glyphicon-time" aria-hidden="true"> {{ experiment.duration }} Hours</span>
-                    </div>
-
-                    <!-- Date info. -->
-                    <div class="col-md-3">
-                        <span class="glyphicon glyphicon-calendar" aria-hidden="true"> {{ experiment.date | date:'M-d' }}</span>
-                    </div>
-
-                    <!-- number of participants -->
-                    <div class="col-md-3">
-                        <span class="glyphicon glyphicon-user" aria-hidden="true"> {{ experiment.no_of_participants_wanted }}</span>
-                    </div>
+                <div style="margin-top: 20px;">
+                    <span class='st_sharethis_large pull-right' displayText='ShareThis'></span>
+                    <span class='st_facebook_large pull-right' displayText='Facebook'></span>
+                    <span class='st_twitter_large pull-right' displayText='Tweet'></span>
+                    <span class='st_email_large pull-right' displayText='Email'></span>
+                    <span></span>
                 </div>
 
                 <!-- right half 2 of page, more info -->
-                <div class="well">
+                <div class=" ">
                     <img style="width: 100%;" src="/static/images/gmph.png">
                 </div>
             </div>
         </div>
 
         <!-- Bottom half, more details -->
-        <div class="row">
-            <div class="well" style="min-height: 300px;">
+{#        <div class="row">#}
+            <div class="panel panel-default">
+                <div class="panel-body">
                 <!-- left col-->
                 <div class="col-md-6">
-                    <h4><b>Requirements:</b></h4>
+                    <h4><b>Requirements</b></h4>
                     <p><b>Language(s): </b>{{ lang }}</p>
                     <br>
-                    <h4><b>More info:</b></h4>
-                    <a href="{{ experiment.url }}">{{ experiment.url }}</a>
+                    <h4><b>More info</b></h4>
+                    <p><b><a href="{% url 'researcher_profile' researcher.userprofile.user.username %}">Researcher Profile</a></b></p>
+                    <b>Experiment URL: </b><a href="{{ experiment.url }}">{{ experiment.url }}</a>
                     <br>
                     <br>
                     <h4><b>Address:</b></h4>
@@ -96,20 +80,71 @@
 
                 <!-- right col-->
                 <div class="col-md-6">
-                    <h4><b>Timeslots:</b></h4>
+                    <h4><b>Payment</b></h4>
+                    <!-- payment info -->
+                    {% if payment.is_paid.is_paid == 'Yes' %}
+{#                        <table class="table table-responsive">#}
+{#                          <caption></caption>#}
+{#                          <thead>#}
+{#                            <tr>#}
+{#                              <th>Type</th>#}
+{#                              <th>Amount (£)</th>#}
+{#                              <th>Frequency</th>#}
+{#                            </tr>#}
+{#                          </thead>#}
+{#                          <tbody>#}
+{#                            <tr>#}
+{#                                <td>{{ payment.currency }}</td>#}
+{#                                <td>{{ payment.amount }}</td>#}
+{#                                <td>{{ payment.payment_type }}</td>#}
+{#                            </tr>#}
+{#                        </table>#}
+                                <p><b>Type:</b> {{ payment.currency }}&nbsp;&nbsp;&nbsp;<b>Amount (£)</b>: {{ payment.amount }}&nbsp;&nbsp;&nbsp;   <b>Frequency</b>: {{ payment.payment_type }}&nbsp;&nbsp;&nbsp;</p>
+                    {% else %}
+                        <p>N/A</p>
+                    {% endif %}
+
+
+{#                    <p><b>Payment </b></p>#}
+{#                    <div class="col-md-3">#}
+{#                        {% if experiment.currency == 'Money' %}#}
+{#                            <span class="glyphicon glyphicon-gbp" aria-hidden="true"> {{ experiment.payment_amount }} {{ experiment.pmt_type }}</span>#}
+{#                        {% else %}#}
+{#                            <span>{{ experiment.payment_amount }} Credits</span>#}
+{#                        {% endif %}#}
+{#                    </div>#}
+{##}
+{#                    <!-- Duration -->#}
+{#                    <div class="col-md-3">#}
+{#                        <span class="glyphicon glyphicon-time" aria-hidden="true"> {{ experiment.duration }} Hours</span>#}
+{#                    </div>#}
+{##}
+{#                    <!-- Date info. -->#}
+{#                    <div class="col-md-3">#}
+{#                        <span class="glyphicon glyphicon-calendar" aria-hidden="true"> {{ experiment.date | date:'M-d' }}</span>#}
+{#                    </div>#}
+{##}
+{#                    <!-- number of participants -->#}
+{#                    <div class="col-md-3">#}
+{#                        <span class="glyphicon glyphicon-user" aria-hidden="true"> {{ experiment.no_of_participants_wanted }}</span>#}
+{#                    </div>#}
+                    <br>
+                    <h4><b>Timeslots</b></h4>
+                    <p><b>Duration:</b> {{ experiment.duration }} hrs</p>
                     {% for t in timeslots %}
-                        <p><span class="glyphicon glyphicon-time" aria-hidden="true"></span> <b>{{ t.date }},</b> {{ t.start_time }} - {{ t.end_time }}</p>
+                        <p><span class="glyphicon glyphicon-time" aria-hidden="true"></span> <b>{{ t.date }},</b> {{ t.start_time }} - {{ t.end_time }} </p>
                         {% if t.is_full %}
                             <span class="glyphicon glyphicon-user" aria-hidden="true"><b style="color: #f00;"> FULL</b></span>
                             <br>
                             <br>
                         {% else %}
-                            <span class="glyphicon glyphicon-user" aria-hidden="true"><b style="color: #f00;"> {{ t.current_parts }} / {{ t.no_of_parts }}</b></span>
+                            <span class="glyphicon glyphicon-user" aria-hidden="true"><b> {{ t.current_parts }} / {{ t.no_of_parts }}</b></span>
                         {% endif %}
                     {% endfor %}
                 </div>
             </div>
-        </div>
+            </div>
+{#        </div>#}
     </div>
 
 
