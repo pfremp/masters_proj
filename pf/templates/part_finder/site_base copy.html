@@ -39,13 +39,13 @@
                 <ul class="nav hidden-xs" id="lg-menu">
                     {% if user.profile.typex == 'Participant' %}
                         <li class="active"><a href="{% url 'participant_experiments' %}"><i class="glyphicon glyphicon-list-alt"></i> My Experiments</a></li>
-                        <li><a href="{% url 'participant_experiment_history' %}"><i class="glyphicon glyphicon-time"></i> Experiment History</a></li>
+                        <li><a href="{% url 'participant_experiment_history' %}"><i class="glyphicon glyphicon-time"></i> History</a></li>
                         <li><a href="{% url 'update_participant_details' %}"><i class="glyphicon glyphicon-user"></i> My Profile</a></li>
                         <li><a href="#"><i class="glyphicon glyphicon-cog"></i> Settings</a></li>
                     {% elif user.profile.typex == 'Researcher' %}
                         <li><a href="{% url 'add_experiment' %}"><i class="glyphicon glyphicon-plus"></i> Create New Experiment</a></li>
                         <li><a href="{% url 'researcher_experiments' %}"><i class="glyphicon glyphicon-list-alt"></i> Current Experiments</a></li>
-                        <li><a href="{% url 'experiment-history' %}"><i class="glyphicon glyphicon-time"></i> Experiment History</a></li>
+                        <li><a href="{% url 'experiment-history' %}"><i class="glyphicon glyphicon-time"></i> History</a></li>
                         <li><a href="{% url 'update_researcher_details' %}"><i class="glyphicon glyphicon-user"></i> My Profile</a></li>
                         <li><a href="#"><i class="glyphicon glyphicon-cog"></i> Settings</a></li>
 
@@ -124,17 +124,26 @@
 {#                        <a href="#"><span class="badge">badge</span></a>#}
 {#                      </li>#}
                     </ul>
+
                     <ul class="nav navbar-nav navbar-right">
-                      <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i> Login</a>
-                        <ul class="dropdown-menu">
-                          <li><a href="">More</a></li>
-                          <li><a href="">More</a></li>
-                          <li><a href="">More</a></li>
-                          <li><a href="">More</a></li>
-                          <li><a href="">More</a></li>
-                        </ul>
-                      </li>
+                        {% if user.is_authenticated %}
+                            <li><a href="#"><i class="glyphicon glyphicon-user"></i> Hello {{ user.first_name }}</a></li>
+                            <li><a href="{% url 'account_logout' %}?next=/part_finder/"><i></i>Logout</a></li>
+
+                        {% else %}
+                            <li><a href="{% url 'account_signup' %}"><i></i>Register</a></li>
+                            <li><a href="{% url 'account_login' %}"><i></i>Login</a></li>
+                        {% endif %}
+{#                        <li class="dropdown">#}
+{#                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i> Login</a>#}
+{#                        <ul class="dropdown-menu">#}
+{#                          <li><a href="">More</a></li>#}
+{#                          <li><a href="">More</a></li>#}
+{#                          <li><a href="">More</a></li>#}
+{#                          <li><a href="">More</a></li>#}
+{#                          <li><a href="">More</a></li>#}
+{#                        </ul>#}
+{#                      </li>#}
                     </ul>
                   	</nav>
                 </div>
@@ -145,23 +154,48 @@
                       
                         <!-- content -->                      
                       	<div class="row">
-                          
+                            <div class="col-md-6">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading"><h1>Participants</h1></div>
+                                    <div class="panel-body">
+                                        <h3 class="lead"><i class="glyphicon glyphicon-ok"></i> View Experiments</h3>
+                                        <h3 class="lead"><i class="glyphicon glyphicon-ok"></i> Attend Experiments</h3>
+                                        <h3 class="lead"><i class="glyphicon glyphicon-ok"></i> Earn Rewards</h3>
+                                        <div class="text-center"><button class="btn btn-lg btn-primary">Free Sign Up</button></div>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                            <div class="col-md-6">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading"><h1>Researchers</h1></div>
+                                    <div class="panel-body">
+                                        <h3 class="lead"><i class="glyphicon glyphicon-ok"></i> Post Experiments</h3>
+                                        <h3 class="lead"><i class="glyphicon glyphicon-ok"></i> Search Participant Pool</h3>
+                                        <h3 class="lead"><i class="glyphicon glyphicon-ok"></i> Manage Applications</h3>
+                                        <div class="text-center"><button class="btn btn-lg btn-primary">Free Sign Up</button></div>
+                                    </div>
+                                </div>
+                            </div>
+
                          <!-- main col left --> 
                          <div class="col-sm-5">
-                           
+
                               <div class="panel panel-default">
                                 <div class="panel-thumbnail"><img src="http://www.bootply.com/assets/example/bg_5.jpg" class="img-responsive"></div>
                                 <div class="panel-body">
                                   <p class="lead">Urbanization</p>
                                   <p>45 Followers, 13 Posts</p>
-                                  
+
                                   <p>
                                     <img src="https://lh3.googleusercontent.com/uFp_tsTJboUY7kue5XAsGA=s28" width="28px" height="28px">
                                   </p>
                                 </div>
                               </div>
 
-                           
+
                               <div class="panel panel-default">
                                 <div class="panel-heading"><a href="#" class="pull-right">View all</a> <h4>Bootstrap Examples</h4></div>
                                   <div class="panel-body">
@@ -172,8 +206,8 @@
                                     </div>
                                   </div>
                               </div>
-                           
-                              <div class="well"> 
+
+                              <div class="well">
                                    <form class="form-horizontal" role="form">
                                     <h4>What's New</h4>
                                      <div class="form-group" style="padding:14px;">
@@ -182,7 +216,7 @@
                                     <button class="btn btn-primary pull-right" type="button">Post</button><ul class="list-inline"><li><a href=""><i class="glyphicon glyphicon-upload"></i></a></li><li><a href=""><i class="glyphicon glyphicon-camera"></i></a></li><li><a href=""><i class="glyphicon glyphicon-map-marker"></i></a></li></ul>
                                   </form>
                               </div>
-                           
+
                               <div class="panel panel-default">
                                  <div class="panel-heading"><a href="#" class="pull-right">View all</a> <h4>More Templates</h4></div>
                                   <div class="panel-body">
@@ -193,15 +227,15 @@
                                     <ul class="list-unstyled"><li><a href="http://www.bootply.com/templates">Dashboard</a></li><li><a href="http://www.bootply.com/templates">Darkside</a></li><li><a href="http://www.bootply.com/templates">Greenfield</a></li></ul>
                                   </div>
                               </div>
-                           
+
                               <div class="panel panel-default">
                                 <div class="panel-heading"><h4>What Is Bootstrap?</h4></div>
                                	<div class="panel-body">
                                 	Bootstrap is front end frameworkto build custom web applications that are fast, responsive &amp; intuitive. It consist of CSS and HTML for typography, forms, buttons, tables, grids, and navigation along with custom-built jQuery plug-ins and support for responsive layouts. With dozens of reusable components for navigation, pagination, labels, alerts etc..                          </div>
                               </div>
 
-                           		
-                           
+
+
                           </div>
                           
                           <!-- main col right -->

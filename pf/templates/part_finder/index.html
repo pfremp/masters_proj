@@ -1,15 +1,80 @@
 <!DOCTYPE html>
 
-{% extends 'site_home.html' %}
+{% extends 'sitebase.html' %}
 {% load staticfiles %}
 {% block title %}Participant Finder{% endblock %}
 
 {% block body_block %}
-    <img src="{% static "images/home_banner.jpg" %}" class="img-responsive" style="padding: 0;" alt="Responsive image">
-    <hr style="margin-top: 0px;">
-    <hr style="margin-top: 0px;">
+{#    <img src="{% static "images/home_banner.jpg" %}" class="img-responsive" style="padding: 0;" alt="Responsive image">#}
+{#    <hr style="margin-top: 0px;">#}
+{#    <hr style="margin-top: 0px;">#}
 
-<h1 style=" margin-left: auto; margin-right: auto; width: 10em;">Latest Experiments</h1>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading"><h1>Participants</h1></div>
+                <div class="panel-body">
+                    <h3 class="lead"><i class="glyphicon glyphicon-ok"></i> View Experiments</h3>
+                    <h3 class="lead"><i class="glyphicon glyphicon-ok"></i> Attend Experiments</h3>
+                    <h3 class="lead"><i class="glyphicon glyphicon-ok"></i> Earn Rewards</h3>
+                    <div class="text-center"><button class="btn btn-lg btn-primary">Free Sign Up</button></div>
+                </div>
+            </div>
+
+
+
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading"><h1>Researchers</h1></div>
+                <div class="panel-body">
+                    <h3 class="lead"><i class="glyphicon glyphicon-ok"></i> Post Experiments</h3>
+                    <h3 class="lead"><i class="glyphicon glyphicon-ok"></i> Search Participant Pool</h3>
+                    <h3 class="lead"><i class="glyphicon glyphicon-ok"></i> Manage Applications</h3>
+                    <div class="text-center"><button class="btn btn-lg btn-primary">Free Sign Up</button></div>
+                </div>
+            </div>
+        </div>
+
+    <h1 class="text-center">Latest Experiments</h1>
+    <div class="row"><p class="text-center pull-right"><a href="#">View Matched</a></p></div>
+
+    <div class="row">
+        <div class="col-sm-6 col-md-4">
+            {% for experiment in experiments|slice:"10" %}
+                {% if experiment.has_ended == False %}
+            <div class="panel panel-default">
+                <div class="panel-heading"><h3>{{ experiment.name }}</h3></div>
+                <div class="panel-body">
+                    <p>{{ experiment.long_description|truncatechars:200 }}</p>
+                    <p><b>Location: </b>{{ experiment.city }}</p>
+                    <p>
+                    {% for p in payment_list %}
+                        {% if p.experiment == experiment %}
+                            {% if p.is_paid.is_paid == 'Yes' %}
+                                <b>Paid: </b><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                            {% else %}
+                                <b>Paid: </b><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    </p>
+                    <p><a href="{{ experiment.researcher_slug }}/{{ experiment.slug }}" class="btn btn-primary" role="button">View / Apply</a>
+
+
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
 
 <div style="padding-left: 20px; padding-right: 20px;">
   <!-- Nav tabs -->

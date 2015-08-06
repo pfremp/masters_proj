@@ -20,7 +20,8 @@ from django.template import RequestContext # For CSRF
 #test facebook template
 def facebook(request):
 
-    return render (request, 'part_finder/facebook.html')
+    return render (request, 'sitebase.html')
+    # return render (request, 'site__base.html')
 
 
 
