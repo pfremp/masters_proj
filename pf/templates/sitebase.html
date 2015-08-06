@@ -9,12 +9,12 @@
 		<title>Participant Finder {% block title %} Find Participants{% endblock %}</title>
 		<meta name="generator" content="Bootply" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<link href="../../static/css/bootstrap.min.css" rel="stylesheet">
+		<link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet">
 		<!--[if lt IE 9]>
 			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
-		<link href="../../static/css/styles-fb.css" rel="stylesheet">
-
+		<link href="{{ STATIC_URL }}css/styles-fb.css" rel="stylesheet">
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
 
         {% include 'autocomplete_light/static.html' %}
         <link href="{{ STATIC_URL }}css/part_finder.css" rel="stylesheet" type="text/css"/>
@@ -59,7 +59,7 @@
 
                 <ul class="list-unstyled hidden-xs" id="sidebar-footer">
                     <li>
-                      <a href="http://www.bootply.com"><h3>Participant Finder</h3> <i class="glyphicon glyphicon-th"></i> Patrick Frempong</a>
+                      <a href="{% url 'index' %}"><h3>Participant Finder</h3> <i class="glyphicon glyphicon-th"></i> Patrick Frempong</a>
                     </li>
                 </ul>
               
@@ -292,7 +292,8 @@
                             </div>
 
 
-
+                            <br>
+                            <br>
                             <div class="row">
                           <div class="col-sm-6">
                             <a href="#">Twitter</a> <small class="text-muted">|</small> <a href="#">Facebook</a> <small class="text-muted">|</small> <a href="#">Google+</a>
@@ -305,15 +306,15 @@
                           </div>
                           <div class="col-sm-6">
                             <p>
-                            <a href="#" class="pull-right">©Copyright 2013</a>
+                            <a href="#" class="pull-right">©Copyright 2015</a>
                             </p>
                           </div>
                         </div>
                       
                       <hr>
-                      
+
                       <h4 class="text-center">
-                      <a href="http://bootply.com/96266" target="ext">Download this Template @Bootply</a>
+                      <a href="http://patrickfrempong.com" target="ext">Website Developed by Patrick Frempong</a>
                       </h4>
                         
                       <hr>
@@ -363,8 +364,9 @@
 
 
 
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
-		<script src="../../static/js/bootstrap.min.js"></script>
-		<script src="../../static/js/scripts-fb.js"></script>
+
+		<script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+		<script src="{{ STATIC_URL }}js/scripts-fb.js"></script>
+
 	</body>
 </html>

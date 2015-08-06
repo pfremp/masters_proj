@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{% extends 'site_base_toggle.html' %}
+{% extends 'sitebase.html' %}
 
 {% load staticfiles %}
 {% load bootstrap3 %}
@@ -11,7 +11,7 @@
 
     <h1>My Experiments</h1>
     <p>You currently have <b>{{ pen_count }}</b> pending application(s) and <b>{{ con_count }}</b> confirmed experiment(s).</p>
-    <div class="table table-striped" data-example-id="simple-table" >
+    <div class="table table-responsive" data-example-id="simple-table" >
     <table class="table">
       <caption></caption>
       <thead>

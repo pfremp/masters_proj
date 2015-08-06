@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-{% extends 'site_base_toggle.html' %}
+{% extends 'sitebase.html' %}
 {% load staticfiles %}
 {##}
 {% load bootstrap3 %}
@@ -188,10 +188,11 @@ $(document).ready(function() {
     {{ time_slot_formset.management_form }}
 {#    {% bootstrap_formset time_slot_formset %}#}
     {% for form in time_slot_formset.forms %}
-    <div class="item">
+    <div class=" item">
 {#      {{ form.as_p }}#}
 {#      {% bootstrap_form form layout='inline'%}#}
-      {% bootstrap_form form layout='horizontal' %}
+      {% bootstrap_form form  %}
+        <hr>
 {#        {{ form.date }}#}
 
 {#                    <table>#}

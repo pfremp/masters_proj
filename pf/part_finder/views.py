@@ -296,6 +296,7 @@ def update_application_status(request, exp_id, app_id):
             application.timeslot.current_parts = 0
             application.timeslot.save()
             application_counter(experiment)
+            return process_application(request, experiment.slug, experiment.researcher_slug)
 
         else:
             print temp_app_form.errors
@@ -502,7 +503,7 @@ def add_experiment(request):
         #         todo_item.save()
 
 
-            return index(request)
+            return researcher_experiments(request)
         else:
             print form.errors
     else:

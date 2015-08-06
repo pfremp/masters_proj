@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{% extends 'site_base.html' %}
+{% extends 'sitebase.html' %}
 
 {% load staticfiles %}
 {% load bootstrap3 %}
@@ -18,7 +18,7 @@
                 <h1>{{ experiment.name }}</h1>
                 <p><b>{{ experiment.city }}</b></p>
                 <br>
-                <p>Description:</p>
+                <p><b>Description</b></p>
                 <p>{{ experiment.long_description }}</p>
                 <br>
                 <h2>Apply</h2>
@@ -26,7 +26,7 @@
                     {% if experiment.is_full == True %}
                         <p>Sorry, this experiment is now full</p>
                     {% elif user_applied == True %}
-                        <p>{{ Application.experiment.id }}You have already applied to this experiment. VIEW MY EXPERIMENTS {{ experiment.id }} </p>
+                        <p>You have already applied for this experiment. <a href="{% url 'participant_experiments' %}">View here.</a> </p>
                     {% else %}
                         <p>Pick a time slot and accept the terms</p>
                         <form id="appform" method="post" action="">
