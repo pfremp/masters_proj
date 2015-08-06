@@ -49,6 +49,7 @@ urlpatterns = patterns('',
     url(r'^reactivate_experiment/(?P<experiment_id>[\w\-]+)/$', views.reac_experiment, name='reac_experiment'),
     url(r'^profile/researcher/(?P<username>[\w\-]+)/$', views.researcher_profile, name='researcher_profile'),
     url(r'^experiments/$', views.all_experiments, name='allexperiments'),
+    url(r'^template/$', views.facebook, name='fbtemplate'),
 
 
     #test urls

@@ -17,6 +17,14 @@ import sys
 from django.template import RequestContext # For CSRF
 # Create your views here.
 
+#test facebook template
+def facebook(request):
+
+    return render (request, 'part_finder/facebook.html')
+
+
+
+
 #Homepage
 def index(request):
     experiments_list = Experiment.objects.all()[:10]
