@@ -148,9 +148,53 @@ def researcher_experiments(request):
     experiments = Experiment.objects.filter(researcher=request.user.profile.researcher)
 
 
-    context_dict = {'experiments': experiments}
+    def get_exp_count():
+        count = 0
+        for e in experiments:
+            if e.has_ended == False:
+                count += 1
+        return count
+
+    exp_count = get_exp_count()
+
+    context_dict = {'experiments': experiments, 'exp_count': exp_count}
 
     return render(request, 'part_finder/myexperiments.html', context_dict)
+
+
+@login_required
+def participant_experiments(request):
+    context_dict = {}
+
+    if request.user.profile.typex != 'Participant':
+        return HttpResponseRedirect("/part_finder/")
+    else:
+
+        applications = Application.objects.filter(participant=request.user.profile.participant)
+
+
+        def get_confirmed_experiments():
+            count = 0
+            for a in applications:
+                if a.status == 'Accepted' and a.experiment.has_ended == False:
+                    count += 1
+            return  count
+
+        def get_pen_experiments():
+            count = 0
+            for a in applications:
+                if a.status == 'Pending' and a.experiment.has_ended == False:
+                    count += 1
+            return  count
+
+        con_count = get_confirmed_experiments()
+        pen_count = get_pen_experiments()
+
+
+
+        context_dict = {'applications': applications, 'con_count': con_count, 'pen_count': pen_count}
+
+        return render(request, 'part_finder/participant_experiments.html', context_dict)
 
 #Displays list of ended experiments belonging to a researcher
 @login_required
@@ -164,6 +208,16 @@ def experiment_history(request):
     context_dict = {'experiments': experiments}
 
     return render(request, 'part_finder/experiment_history.html', context_dict)
+
+
+#Displays list of ended experiments belonging to a researcher
+@login_required
+def participant_experiment_history(request):
+    context_dict = {}
+    p = request.user.profile.participant
+    a = Application.objects.filter(participant=p)
+    context_dict = {'applications': a}
+    return render(request, 'part_finder/participant_experiment_history.html', context_dict)
 
 
 def application_counter(exp):
@@ -565,6 +619,20 @@ class ParticipantUpdate(UpdateView):
 #         return self.request.user.profile
 
 
+# #Experiment details update
+class ExperimentUpdate(UpdateView):
+    model = Experiment
+    form_class = ExperimentForm
+    template_name_suffix = '_update_form'
+    success_url='/part_finder/experiment/update'
+    # pk = pk
+
+
+    def get_object(self, queryset=None):
+        researcher = self.request.user.profile.researcher
+        experiment_id = 1
+        exp = Experiment.objects.filter(researcher=researcher, id=experiment_id)
+        return exp
 
 
 
@@ -620,12 +688,29 @@ def delete_experiment(request, experiment_id):
     r = request.user.profile.researcher
     e = Experiment.objects.get(id=experiment_id, researcher=r)
 
+
     if request.method == 'POST':
         e.delete()
         return HttpResponseRedirect("/part_finder/current_experiments/")
 
     context_dict = {'experiment': e}
     return render(request, 'part_finder/delete_experiment.html', context_dict)
+
+
+@login_required
+#Delete participant experiment
+def delete_participant_experiment(request, experiment_id):
+    p = request.user.profile.participant
+
+    e = Experiment.objects.get(id=experiment_id)
+    a = Application.objects.get(experiment=e, participant=p)
+
+    if request.method == 'POST':
+        a.delete()
+        return HttpResponseRedirect("/part_finder/my_experiments/")
+
+    context_dict = {'experiment': e}
+    return render(request, 'part_finder/delete_participant_experiment.html', context_dict)
 
 
 @login_required

@@ -12,6 +12,7 @@
         <h1>All Experiments</h1>
         <div class="row">
             {% for experiment in experiments %}
+                {% if experiment.has_ended == False %}
           <div class="col-sm-6 col-md-4">
 
               <div class="thumbnail">
@@ -37,6 +38,7 @@
             </div>
 
           </div>
+                {% endif %}
           {% endfor %}
         </div>
 

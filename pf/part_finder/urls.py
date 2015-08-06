@@ -5,7 +5,7 @@ from part_finder import views
 from django.contrib import admin
 from registration.backends.simple.views import RegistrationView
 from part_finder.forms import PartDemoForm,PartDetailsForm,PartStudentForm,PartPrefForm
-from part_finder.views import  ParticipantRegistration, show_message_form_condition, ParticipantUpdate, ResearcherUpdate, process_application
+from part_finder.views import  ParticipantRegistration, show_message_form_condition, ParticipantUpdate, ResearcherUpdate, process_application, ExperimentUpdate
 from django.views.generic.edit import UpdateView
 from part_finder.models import Participant
 from django.contrib.auth.decorators import login_required
@@ -35,12 +35,16 @@ urlpatterns = patterns('',
     url(r'^participant/update/$', login_required(ParticipantUpdate.as_view()), name='update_participant_details'),
     # url(r'^profile/update/$', login_required(ProfileUpdate.as_view()), name='update_profile'),
     url(r'^researcher/update/$', login_required(ResearcherUpdate.as_view()), name='update_researcher_details'),
+    url(r'^experiment/update/(?P<pk>[\w\-]+)/$', login_required(ExperimentUpdate.as_view()), name='update_researcher_details'),
     url(r'^autocomplete/', include('autocomplete_light.urls')),
     url(r'^process_applications/(?P<r_slug>[\w\-]+)/(?P<experiment_name_slug>[\w\-]+)/$', views.process_application, name='process_applications'),
     url(r'^update_status/(?P<exp_id>[\w\-]+)/(?P<app_id>[\w\-]+)/$', views.update_application_status, name='update_application_status'),
     url(r'^current_experiments/$', views.researcher_experiments, name='researcher_experiments'),
+    url(r'^my_experiments/$', views.participant_experiments, name='participant_experiments'),
     url(r'^experiment_history/$', views.experiment_history, name='experiment-history'),
-    url(r'^delete/experiment/(?P<experiment_id>[\w\-]+)/$', views.delete_experiment, name='experiment-delete'),
+    url(r'^participant/experiment_history/$', views.participant_experiment_history, name='participant_experiment_history'),
+    url(r'^researcher/delete/experiment/(?P<experiment_id>[\w\-]+)/$', views.delete_experiment, name='experiment-delete'),
+    url(r'^participant/delete/experiment/(?P<experiment_id>[\w\-]+)/$', views.delete_participant_experiment, name='delete_participant_experiment'),
     url(r'^end_experiment/(?P<experiment_id>[\w\-]+)/$', views.end_experiment, name='end_experiment'),
     url(r'^reactivate_experiment/(?P<experiment_id>[\w\-]+)/$', views.reac_experiment, name='reac_experiment'),
     url(r'^profile/researcher/(?P<username>[\w\-]+)/$', views.researcher_profile, name='researcher_profile'),

@@ -120,6 +120,7 @@ class PartDetailsForm (autocomplete_light.ModelForm):
     occupation = forms.CharField(required=False, label="Occupation", max_length=128)
     education = forms.ChoiceField(choices=EDUCATION, label="Level of Education", required=True)
     student = forms.BooleanField(label="Student", required=False)
+    # lang = autocomplete_light.MultipleChoiceField('OsAutocomplete', required=False, label='Languages')
     lang = autocomplete_light.MultipleChoiceField('OsAutocomplete', required=False, label='Languages')
 
     class Media:

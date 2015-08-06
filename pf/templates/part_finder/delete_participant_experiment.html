@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+{% extends 'site_base_toggle.html' %}
+
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block title %}My Experiments{% endblock %}
+
+{% block body_block %}
+
+    <h1>Cancel Application</h1>
+
+    <p>Are you sure you want to cancel the application for the "{{ experiment.name }}" experiment?</p>
+
+    <form action="" method="POST">
+      {% csrf_token %}
+
+      <input class="btn-danger btn" type="submit" value="Yes, cancel." />
+      <a class="btn btn-default" href="{% url 'participant_experiments' %}">No, go back.</a>
+    </form>
+
+
+
+{% endblock %}
+
+

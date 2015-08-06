@@ -4,13 +4,13 @@
 {% load staticfiles %}
 {% load bootstrap3 %}
 
-{% block title %}My Experiments{% endblock %}
+{% block title %} My Experiments{% endblock %}
 
 {% block body_block %}
 
     <h1>Current Experiments</h1>
 
-    <p>You currently have {{ experiments.count }} experiments.</p>
+    <p>You currently have {{ exp_count }} experiments.</p>
     <div class="table table-striped" data-example-id="simple-table" >
     <table class="table">
       <caption></caption>

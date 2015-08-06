@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+{% extends 'site_base_toggle.html' %}
+
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block title %} My Experiments{% endblock %}
+
+{% block body_block %}
+
+
+    <h1>My Experiments</h1>
+    <p>You currently have <b>{{ pen_count }}</b> pending application(s) and <b>{{ con_count }}</b> confirmed experiment(s).</p>
+    <div class="table table-striped" data-example-id="simple-table" >
+    <table class="table">
+      <caption></caption>
+      <thead>
+        <tr>
+          <th>Experiment</th>
+          <th>Researcher</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Status</th>
+          <th>Cancel</th>
+        </tr>
+      </thead>
+      <tbody>
+    {% for a in applications %}
+        {% if a.experiment.has_ended == False %}
+        <tr>
+          <td><a href="/part_finder/experiments/{{ a.experiment.researcher_slug }}/{{ a.experiment.slug }}">{{ a.experiment.name }}</a></td>
+          <td><a href="{% url 'researcher_profile' a.experiment.researcher_slug %}">{{ a.experiment.researcher.userprofile.user.first_name }} {{ a.experiment.researcher.userprofile.user.last_name }}</a></td>
+          <td>{{ a.timeslot.date }}</td>
+          <td>{{ a.timeslot.start_time }} - {{ a.timeslot.end_time }}</td>
+          <td>{{ a.status }}</td>
+          {% if a.status == 'Pending' %}
+          <td><a href="{% url 'delete_participant_experiment' a.experiment.id %}"><button type="button" class="btn btn-default btn-xs">Cancel</button></a><td>
+          {% else %}
+          <td>Contact*</td>
+          {% endif %}
+        </td>
+        </tr>
+        {% endif %}
+    {% endfor %}
+      </tbody>
+    </table>
+  </div>
+    <p>*If you would like to cancel a confirmed experiment, please contact the researcher directly.</p>
+
+
+
+
+{#    <p>You currently have {{ experiments.count }} experiments.</p>#}
+{#    <div class="table table-striped" data-example-id="simple-table" >#}
+{#    <table class="table">#}
+{#      <caption></caption>#}
+{#      <thead>#}
+{#        <tr>#}
+{#          <th>Name</th>#}
+{#          <th>Edit</th>#}
+{#          <th>Applications</th>#}
+{#        </tr>#}
+{#      </thead>#}
+{#      <tbody>#}
+{#    {% for experiment in experiments %}#}
+{#        {% if experiment.has_ended == False %}#}
+{#        <tr>#}
+{#          <td><a href="/part_finder/experiments/{{ experiment.researcher_slug }}/{{ experiment.slug }}">{{ experiment.name }}</a></td>#}
+{#          <td><a href="/part_finder/process_applications/{{ experiment.researcher_slug }}/{{ experiment.slug }}"><button type="button" class="btn btn-default btn-xs">Applications</button></a></td>#}
+{#          <td><a href="{% url 'end_experiment' experiment.id %}"><button type="button" class="btn btn-default btn-xs">End</button></a></td>#}
+{#          <td><a href="/part_finder/delete/experiment/{{ experiment.id }}"><button type="button" class="btn btn-default btn-xs">Delete</button></a></td>#}
+{##}
+{#        </tr>#}
+{#        {% endif %}#}
+{#    {% endfor %}#}
+{#      </tbody>#}
+{#    </table>#}
+{#  </div>#}
+
+
+
+{% endblock %}
+
+

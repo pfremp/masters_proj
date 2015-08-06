@@ -55,9 +55,8 @@
                 </li>
                 {% if user.profile.typex == 'Participant' %}
 
-                    <li><a href="#">Current Experiments</a></li>
-                    <li><a href="#">Applications</a></li>
-                    <li><a href="#">Experiment History</a></li>
+                    <li><a href="{% url 'participant_experiments' %}">My Experiments</a></li>
+                    <li><a href="{% url 'participant_experiment_history' %}">Experiment History</a></li>
 {#                    <li><a href="/part_finder/profile/update">Profile</a></li>#}
                     <li><a href="/part_finder/participant/update/">Participant Details</a></li>
 
