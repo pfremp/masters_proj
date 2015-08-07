@@ -13,6 +13,8 @@ from django.forms.formsets import formset_factory, BaseFormSet
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.context_processors import csrf
 import sys
+from part_finder.forms_search import RequirementForm
+
 
 from django.template import RequestContext # For CSRF
 # Create your views here.
@@ -465,9 +467,10 @@ def add_experiment(request):
         form = ExperimentForm(request.POST)
         ##time_slot_form = TimeSlotFrom(request.POST) # A form bound to the POST data
         payment_form = PaymentForm(request.POST)
+        requirement_form = RequirementForm(request.POST)
         # Create a formset from the submitted data
         time_slot_formset = TimeSlotFormSet(request.POST, request.FILES)
-        if form.is_valid() and time_slot_formset.is_valid() and payment_form.is_valid():
+        if form.is_valid() and time_slot_formset.is_valid() and payment_form.is_valid() and requirement_form.is_valid():
             experiment = form.save(commit=False)
             res = request.user.profile.researcher
             experiment.researcher = res
@@ -477,6 +480,26 @@ def add_experiment(request):
             payment = payment_form.save(commit=False)
             payment.experiment = experiment
             payment_form.save()
+
+            #requirement form details
+            requirement = requirement_form.save(commit=False)
+            requirement.experiment = experiment
+
+            #set matched experiment to true
+            if requirement.age == 'YES':
+                requirement.match = True
+            if requirement.language == 'YES':
+                requirement.match = True
+            if requirement.height == 'YES':
+                requirement.match = True
+            if requirement.weight == 'YES':
+                requirement.match = True
+            if requirement.gender == 'YES':
+                requirement.match = True
+            if requirement.student == 'YES':
+                requirement.match = True
+
+            requirement_form.save()
 
             for form in time_slot_formset.forms:
                 time_slot = form.save(commit=False)
@@ -504,10 +527,11 @@ def add_experiment(request):
         ##time_slot_form = TimeSlotFrom()
         time_slot_formset = TimeSlotFormSet()
         payment_form = PaymentForm()
+        requirement_form = RequirementForm()
 
     # For CSRF protection
     # See http://docs.djangoproject.com/en/dev/ref/contrib/csrf/
-    c = {'form':form,'time_slot_formset': time_slot_formset, 'payment_form': payment_form}
+    c = {'form':form,'time_slot_formset': time_slot_formset, 'payment_form': payment_form, 'requirement_form': requirement_form}
     c.update(csrf(request))
 
     return render(request, 'part_finder/add_experiment.html', c)

@@ -16,15 +16,15 @@ from django.core.context_processors import csrf
 import sys
 
 
-def search
-
-
-
-# checks to see whether a participant is a student
-def check_for_student(participant_id):
-    part = Participant.objects.get(id=participant_id)
-
-    if part.student == True:
-        return True
-    else:
-        return False
+# def search
+#
+#
+#
+# # checks to see whether a participant is a student
+# def check_for_student(participant_id):
+#     part = Participant.objects.get(id=participant_id)
+#
+#     if part.student == True:
+#         return True
+#     else:
+#         return False

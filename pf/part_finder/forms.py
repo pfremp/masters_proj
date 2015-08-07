@@ -43,7 +43,7 @@ class ExperimentForm (forms.ModelForm):
     city = autocomplete_light.ModelChoiceField('CityAutocompleteCity', required=False, label='Location')
     address = forms.CharField(label="Address")
     language_req = autocomplete_light.MultipleChoiceField('OsAutocomplete', required=False, label='Language(s) Required')
-    url = forms.URLField(max_length=200, required=False)
+    url = forms.URLField(max_length=200, required=False, label='URL: http://yoursite.com')
     slug = forms.CharField(widget=forms.HiddenInput(), required=False)
 
     class Media:

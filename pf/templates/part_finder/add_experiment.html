@@ -167,9 +167,24 @@ $(document).ready(function() {
 
                 {% endif %}
             {% endfor %}
-
-
+            <br>
+            <h2>Payment Details</h2>
             {% for field in payment_form.visible_fields %}
+
+            <!-- check for date field -->
+{#                {% if field.name == 'Name'  %}#}
+
+
+                {{ field.errors }}
+{#                {{ field.label }}#}
+                {% bootstrap_field field %}
+
+{#                {% endif %}#}
+            {% endfor %}
+        <br>
+        <h2>Participant Requirements</h2>
+        <p><b>Target your experiment at a specific demographic!</b></p>
+        {% for field in requirement_form.visible_fields %}
 
             <!-- check for date field -->
 {#                {% if field.name == 'Name'  %}#}
