@@ -72,7 +72,8 @@ class ParticipantForm (autocomplete_light.ModelForm):
     occupation = forms.CharField(required=False, label="Occupation", max_length=128)
     education = forms.ChoiceField(choices=EDUCATION, label="Level of Education", required=True)
     student = forms.BooleanField(label="Student", required=False)
-    lang = autocomplete_light.MultipleChoiceField('OsAutocomplete', required=False, label='Languages')
+    # lang = autocomplete_light.MultipleChoiceField('OsAutocomplete', required=False, label='Languages')
+    # lang = autocomplete_light.MultipleModelChoiceField('LangAutocomplete', required=False, label='Languages')
 
     university = forms.ModelChoiceField(label="University", queryset=University.objects.all(), required=False)
     course_name = forms.CharField(label="Course Name",max_length=128, required=False)

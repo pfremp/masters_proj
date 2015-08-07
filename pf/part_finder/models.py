@@ -38,7 +38,12 @@ class Researcher(models.Model):
     def __unicode__(self):
         return self.userprofile.user.username
 
+class Languages(models.Model):
+    lang = models.CharField(max_length=128)
+    # part = models.ForeignKey(Participant, related_name='language')
 
+    def __unicode__(self):
+        return self.lang
 
 class Experiment(models.Model):
     CURRENCY = (('Credits','Credits'),('Money','Money'))
@@ -84,7 +89,8 @@ class Participant(models.Model):
     city = models.ForeignKey('cities_light.city', null=True)
     contact_number = models.IntegerField(max_length=128, blank=True, null=True)
     occupation = models.CharField(max_length=128, blank=True)
-    lang = models.CharField(max_length=128, blank=True)
+    # lang = models.CharField(max_length=128, blank=True)
+    lang = models.ManyToManyField(Languages, related_name='participant', null=True)
     education = models.CharField(choices=EDUCATION, blank=True, max_length=1000)
     student = models.BooleanField(default=False, blank=True)
 

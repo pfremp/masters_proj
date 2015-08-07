@@ -1,5 +1,6 @@
 import autocomplete_light.shortcuts as autocomplete_light
 from cities_light.models import Country, Region, City
+from part_finder.models import Languages
 # from .models import NonAdminAddAnotherModel
 import autocomplete_light.shortcuts as al
 
@@ -52,12 +53,17 @@ autocomplete_light.register(City, AutocompleteCity)
 #languages autocomplete
 class OsAutocomplete(al.AutocompleteListBase):
     choices = ['English', 'French', 'Spanish', 'German', 'Mandarin', 'Cantonese', 'Italian', 'Portugese']
-
-
-
-
-
 al.register(OsAutocomplete)
+
+
+
+
+autocomplete_light.register(Languages, search_fields=('lang', 'lang',),)
+
+# class LangAutocomplete(al.AutocompleteListBase):
+#     choices = Languages.objects.all()
+#
+# al.register(LangAutocomplete, search_fields=('lang', 'lang',))
 
 
 # class OsAutocomplete(al.AutocompleteListBase):
