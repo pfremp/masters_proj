@@ -8,7 +8,8 @@
 
 {% block body_block %}
 
-    <h1>Delete Experiment</h1>
+    {% if user.profile.typex == 'Researcher' %}
+    <h1>Reactivate Experiment</h1>
 
     <p>Are you sure you want to reactivate the "{{ experiment.name }}" experiment?</p>
 
@@ -18,7 +19,8 @@
       <input class="btn-default btn" type="submit" value="Yes, reactivate." />
       <a class="btn btn-default" href="{% url 'researcher_experiments' %}">No, cancel.</a>
     </form>
-
+    {% else %}
+    {% endif %}
 
 
 {% endblock %}

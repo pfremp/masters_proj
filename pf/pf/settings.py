@@ -116,7 +116,7 @@ ACCOUNT_EMAIL_REQUIRED = True
 
 ACCOUNT_EMAIL_VERIFICATION = "optional"
 
-ACCOUNT_EMAIL_SUBJECT_PREFIX ="[Site] "
+ACCOUNT_EMAIL_SUBJECT_PREFIX ="Particiapnt Finder"
 
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = "http"
 
@@ -283,7 +283,17 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
     'django.contrib.auth.context_processors.auth',
 
+
 )
+
+#email config
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'participantfinder1@gmail.com'
+EMAIL_HOST_PASSWORD = 'asam1111'
+EMAIL_USE_TLS = True
+
 
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
@@ -291,6 +301,7 @@ AUTHENTICATION_BACKENDS = (
 
     # `allauth` specific authentication methods, such as login by e-mail
     'allauth.account.auth_backends.AuthenticationBackend',
+
 )
 
 #Datetime picker

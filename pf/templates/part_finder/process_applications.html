@@ -6,7 +6,10 @@
 {% block title %}Process Applications{% endblock %}
 
 {% block body_block %}
-        <h1>{{ experiment.name }} Applications</h1>
+
+
+    {% if user.profile.typex == 'Researcher' %}
+    <h1>{{ experiment.name }} Applications</h1>
         {% for t in time %}
             <p><b>Timeslot: </b>{{ t.date }}, {{ t.start_time }} - {{ t.end_time }}</p>
             {% if t.is_full %}
@@ -42,6 +45,8 @@
             </tbody>
             </table>
             </div>
+    {% else %}
+    {% endif %}
 {% endblock %}
 
 

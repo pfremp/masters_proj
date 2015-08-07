@@ -8,6 +8,8 @@
 
 {% block body_block %}
 
+
+    {% if user.profile.typex == 'Participant' %}
     <h1>Cancel Application</h1>
 
     <p>Are you sure you want to cancel the application for the "{{ experiment.name }}" experiment?</p>
@@ -18,6 +20,8 @@
       <input class="btn-danger btn" type="submit" value="Yes, cancel." />
       <a class="btn btn-default" href="{% url 'participant_experiments' %}">No, go back.</a>
     </form>
+    {% else %}
+    {% endif %}
 
 
 

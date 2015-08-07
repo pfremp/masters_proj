@@ -17,14 +17,6 @@ import sys
 from django.template import RequestContext # For CSRF
 # Create your views here.
 
-#test facebook template
-def facebook(request):
-
-    return render (request, 'sitebase.html')
-    # return render (request, 'site__base.html')
-
-
-
 
 #Homepage
 def index(request):
@@ -43,6 +35,7 @@ def index(request):
 #
 #     user = request.user.profile.participant.application
 
+@login_required
 #Check if user profile exists
 def no_user_profile(request):
     if request.user.profile.researcher == None and request.user.profile.participant == None:
@@ -603,6 +596,7 @@ def add_experiment(request):
 
 #Participant details update
 class ParticipantUpdate(UpdateView):
+
     model = Participant
     form_class = ParticipantForm
     # fields = ['address_line_1', 'address_line_2', 'city', 'postcode', 'contact_number', 'occupation', 'student','university', 'course_name', 'graduation_year', 'matric', 'gender' , 'ethnicity', 'religion', 'height', 'weight', 'max_distance', 'uni_only', 'online_only', 'paid_only']

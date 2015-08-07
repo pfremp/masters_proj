@@ -7,7 +7,7 @@
 {% block title %}My Experiments{% endblock %}
 
 {% block body_block %}
-
+    {% if user.profile.typex == 'Participant' %}
     <h1>Experiment History</h1>
 
 
@@ -32,7 +32,8 @@
       </tbody>
     </table>
   </div>
-
+    {% else %}
+    {% endif %}
 
 
 {% endblock %}

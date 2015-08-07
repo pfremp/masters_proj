@@ -8,7 +8,7 @@
 
 {% block body_block %}
 
-
+    {% if user.profile.typex == 'Researcher' %}
     <h1>Delete Experiment</h1>
 
     <p>Are you sure you want to delete the "{{ experiment.name }}" experiment?</p>
@@ -19,6 +19,8 @@
       <input class="btn-danger btn" type="submit" value="Yes, delete." />
       <a class="btn btn-default" href="{% url 'researcher_experiments' %}">No, cancel.</a>
     </form>
+    {% else %}
+    {% endif %}
 
 
 

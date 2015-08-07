@@ -139,7 +139,8 @@ $(document).ready(function() {
     {% endblock %}
 
     {% block body_block %}
-    <body>
+{% if user.profile.typex == 'Researcher' %}
+<body>
         <h1>Add an Experiment</h1>
 
 
@@ -250,6 +251,9 @@ $(document).ready(function() {
 {##}
 {#</form>#}
     </body>
+        {% else %}
+
+        {% endif %}
 {% endblock %}
 
 </html>

@@ -8,7 +8,7 @@
 
 {% block body_block %}
 
-
+    {% if user.profile.typex == 'Participant' %}
     <h1>My Experiments</h1>
     <p>You currently have <b>{{ pen_count }}</b> pending application(s) and <b>{{ con_count }}</b> confirmed experiment(s).</p>
     <div class="table table-responsive" data-example-id="simple-table" >
@@ -47,7 +47,8 @@
   </div>
     <p>*If you would like to cancel a confirmed experiment, please contact the researcher directly.</p>
 
-
+    {% else %}
+    {% endif %}
 
 
 {#    <p>You currently have {{ experiments.count }} experiments.</p>#}

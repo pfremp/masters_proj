@@ -45,7 +45,7 @@ class Experiment(models.Model):
     PMT_TYPE = (('Total','Total'),('Hourly','Hourly'), ('N/A', 'N/A'))
     name = models.CharField(max_length=128, blank=False)
     short_description = models.CharField(max_length=128, blank=True)
-    long_description = models.CharField(max_length=500, blank=True)
+    long_description = models.CharField(max_length=1000, blank=True)
     duration = models.FloatField(blank=True)
     address = models.CharField(max_length=128, blank=True)
     city = models.ForeignKey('cities_light.city', null=True)
@@ -56,6 +56,7 @@ class Experiment(models.Model):
     slug = models.SlugField(unique=True, null=True, blank=True)
     is_full = models.BooleanField(default=False)
     has_ended = models.BooleanField(default=False)
+    is_featured = models.BooleanField(default=False)
 
 
     def save(self, *args, **kwargs):

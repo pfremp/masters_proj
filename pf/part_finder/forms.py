@@ -27,7 +27,7 @@ class ResearcherForm (forms.ModelForm):
    university = forms.ModelChoiceField(label="University", queryset=University.objects.all(), required=False)
    department = forms.CharField(label="Department Name", max_length=128)
    contact_no = forms.IntegerField(label="Contact Number")
-   url = forms.CharField(label="Department Name")
+   url = forms.CharField(label="URL (Format: http://yoursite.com)")
 
    class Meta():
         model = Researcher

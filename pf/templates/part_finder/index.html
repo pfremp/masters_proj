@@ -12,17 +12,31 @@
 
     {% if user.is_authenticated %}
         <div class="row">
+        {% for experiment in experiments %}
+    {% if experiment.is_featured == True %}
         <div class="col-md-12">
             <div class="panel panel-default">
-                <div class="panel-heading"><h1>Featured Experiment</h1></div>
+                <div class="panel-heading"><h1>{{ experiment.name }}</h1></div>
                 <div class="panel-body">
                     <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book...</p>
-                    <p><b>Location: </b>Glasgow</p>
-                    <p><b>Paid: </b><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></p>
-                    <p><a href="#" class="btn btn-primary" role="button">View / Apply</a>
+                    <p><b>Location: </b>{{ experiment.city }}</p>
+                    <p>
+                    {% for p in payment_list %}
+                        {% if p.experiment == experiment %}
+                            {% if p.is_paid.is_paid == 'Yes' %}
+                                <b>Paid: </b><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                            {% else %}
+                                <b>Paid: </b><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    </p>
+                    <p><a href="{% url 'experiment' experiment.researcher_slug experiment.slug %}" class="btn btn-primary" role="button">View / Apply</a>
                 </div>
             </div>
         </div>
+                        {% endif %}
+                {% endfor %}
 
             <h1 class="text-center">Latest Experiments</h1>
     <div class="row"><p class="text-center pull-right"><a href="#">View Matched</a> / <a href="{% url 'allexperiments' %}">All Experiments</a></p></div>

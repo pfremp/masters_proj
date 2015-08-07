@@ -16,6 +16,7 @@ url(r'^part_finder/', include('part_finder.urls')),
 url(r'^autocomplete/', include('autocomplete_light.urls')),
 url(r'^chaining/', include('smart_selects.urls')),
 
+
 )
 
 if not settings.DEBUG:

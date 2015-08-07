@@ -8,6 +8,8 @@
 
 {% block body_block %}
 
+
+    {% if user.profile.typex == 'Researcher' %}
     <h1>My Researcher Details</h1>
 
 
@@ -16,6 +18,7 @@
        {% bootstrap_form form %}
     <input class="btn btn-default" type="submit" value="Update" />
     </form>
+    {% endif %}
 
 {% endblock %}
 

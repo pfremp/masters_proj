@@ -8,6 +8,7 @@
 
 {% block body_block %}
 
+    {% if user.profile.typex == 'Researcher' %}
     <h1>Experiment History</h1>
 
 
@@ -31,6 +32,8 @@
       </tbody>
     </table>
   </div>
+    {% else %}
+    {% endif %}
 
 
 
