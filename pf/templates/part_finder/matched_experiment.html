@@ -6,6 +6,64 @@
 {% load bootstrap3 %}
 
 <h1>gender</h1>
+
+{% block body_block %}
+
+    <form id="experiment_form" method="post" action="">
+    {% csrf_token %}
+
+    {% if r_gender == '1' %}
+        {% bootstrap_field match_form.gender %}
+    {% endif %}
+
+    {% if r_age == '1' %}
+        {% bootstrap_field match_form.min_age %}
+        {% bootstrap_field match_form.max_age %}
+    {% endif %}
+
+    {% if r_height == '1' %}
+        {% bootstrap_field match_form.height %}
+    {% endif %}
+
+    {% if weight == '1' %}
+        {% bootstrap_field match_form.weight %}
+    {% endif %}
+
+    {% if r_language == '1' %}
+        {% bootstrap_field match_form.l %}
+    {% endif %}
+
+{#        {% for field in match_form.visible_fields %}#}
+{#        #}
+{#            #}
+{#        #}
+{#    #}
+{#        {% bootstrap_field field.gender %}#}
+{##}
+{#    {% endif %}#}
+{#    {% endfor %}#}
+
+{#    {% for field in match_form.visible_fields %}#}
+
+
+{#                    {{ requirement.gender }}#}
+
+            <!-- check for date field -->
+{#                {% if requiremnt{{ field.name }}field.name == '1'  %}#}
+
+{#                {{ field.errors }}#}
+{#                {{ field.label }}#}
+{#                {% bootstrap_field field %}#}
+
+{#                {% endif %}#}
+
+
+
+    <input class="btn btn-default"type="submit" name="submit" value="Submit" />
+        </form>
+
+
+
 {#{% for field in gender_form.visible_fields %}#}
 {##}
 {#            <!-- check for date field -->#}
@@ -33,6 +91,6 @@
 {#            {% endfor %}#}
 
 
-{% block body_block %}
+
 {% endblock %}
 

@@ -4,7 +4,7 @@ from part_finder.models import Experiment,Participant,Researcher, UserProfile, C
 from django.contrib.auth.models import User
 # from .models import NonAdminAddAnotherModel
 import autocomplete_light
-from part_finder.forms_search import Requirement
+from part_finder.forms_search import Requirement, MatchingDetail
 
 
 class ExperimentAdmin(admin.ModelAdmin):
@@ -35,6 +35,7 @@ admin.site.register(Payment)
 admin.site.register(Application)
 admin.site.register(Languages)
 admin.site.register(Requirement)
+admin.site.register(MatchingDetail)
 
 
 

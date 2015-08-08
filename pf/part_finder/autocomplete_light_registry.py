@@ -54,7 +54,13 @@ autocomplete_light.register(City, AutocompleteCity)
 class OsAutocomplete(al.AutocompleteListBase):
     choices = ['English', 'French', 'Spanish', 'German', 'Mandarin', 'Cantonese', 'Italian', 'Portugese']
 al.register(OsAutocomplete)
-# al.register(OsAutocomplete)
+
+
+
+
+class LangAutocomplete(al.AutocompleteListBase):
+    choices = ['English', 'French', 'Spanish', 'German', 'Mandarin', 'Cantonese', 'Italian', 'Portugese']
+al.register(LangAutocomplete)
 
 
 
@@ -73,7 +79,7 @@ al.register(OsAutocomplete)
 
 
 
-autocomplete_light.register(Languages, search_fields=('language',),)
+autocomplete_light.register(Languages, search_fields=('language', 'l'),)
 
 # class LangAutocomplete(al.AutocompleteListBase):
 #     choices = Languages.objects.all()

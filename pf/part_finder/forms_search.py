@@ -23,6 +23,30 @@ class RequirementForm (forms.ModelForm):
         exclude = ('match','experiment',)
 
 
+
+class MatchingDetailForm(al.ModelForm):
+    # l = autocomplete_light.MultipleChoiceField('OsAutocomplete', required=False, label='Language(s) Required')
+    # l = autocomplete_light.MultipleChoiceField('LangAutocomplete', required=False, label='Language(s) Required')
+
+
+    class Media:
+        """
+        We're currently using Media here, but that forced to move the
+        javascript from the footer to the extrahead block ...
+
+        So that example might change when this situation annoys someone a lot.
+        """
+        js = ('js/dependant_autocomplete.js',)
+
+    class Meta():
+        model = MatchingDetail
+        exclude = ('requirement',)
+
+
+
+
+
+
 class GenderForm(forms.ModelForm):
 
     class Meta():

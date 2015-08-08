@@ -63,6 +63,7 @@ class Experiment(models.Model):
     is_full = models.BooleanField(default=False)
     has_ended = models.BooleanField(default=False)
     is_featured = models.BooleanField(default=False)
+    online = models.BooleanField(default=False)
 
 
     def save(self, *args, **kwargs):

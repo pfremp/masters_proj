@@ -14,6 +14,7 @@ from django.contrib.auth.decorators import login_required
 # from .models import NonAdminAddAnotherModel
 import autocomplete_light.shortcuts as al
 from django.views import generic
+from part_finder import views_search
 
 
 
@@ -49,6 +50,7 @@ urlpatterns = patterns('',
     url(r'^reactivate_experiment/(?P<experiment_id>[\w\-]+)/$', views.reac_experiment, name='reac_experiment'),
     url(r'^profile/researcher/(?P<username>[\w\-]+)/$', views.researcher_profile, name='researcher_profile'),
     url(r'^experiments/$', views.all_experiments, name='allexperiments'),
+    url(r'^match/(?P<experiment_id>[\w\-]+)/$', views_search.matched_experiment, name='set_match'),
 
 
 

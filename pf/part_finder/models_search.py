@@ -13,6 +13,7 @@ from smart_selects.db_fields import ChainedForeignKey
 from part_finder.models import Experiment
 
 
+GENDER = (('male', 'male'), ('female','female'))
 
 class Requirement(models.Model):
     CHOICES = (('0','NO'),('1','YES'))
@@ -29,9 +30,23 @@ class Requirement(models.Model):
     def __unicode__(self):
         return self.experiment.name + " Requirement"
 
+class MatchingDetail(models.Model):
+    gender = models.CharField(max_length=128, choices=GENDER, blank=True)
+    min_age = models.IntegerField(null=True, default=1, blank=True)
+    max_age = models.IntegerField(null=True, default=100, blank=True)
+    height = models.IntegerField(default=0, null=True, blank=True)
+    weight = models.IntegerField(default=0, null=True, blank=True)
+    l = models.CharField(max_length=128, blank=True)
+    requirement = models.ForeignKey(Requirement, null=True, related_name='matchdetail')
+
+    def __unicode__(self):
+        return self.gender
+
+
+
 # gender
 class Gender(models.Model):
-    GENDER = (('male', 'male'), ('female','female'))
+
     gender = models.CharField(max_length=128, choices=GENDER)
     requirement = models.ForeignKey(Requirement, null=True, related_name='req_gender')
 

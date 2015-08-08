@@ -514,7 +514,7 @@ def add_experiment(request):
                 time_slot.save()
 
             if requirement.match == True:
-                return matched_experiment(request, experiment)
+                return HttpResponseRedirect("/part_finder/")
             else:
                 return index(request)
 
