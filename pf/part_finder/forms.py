@@ -33,7 +33,7 @@ class ResearcherForm (forms.ModelForm):
         model = Researcher
         fields =  ('university','department', 'contact_no', 'url')
 
-class ExperimentForm (forms.ModelForm):
+class ExperimentForm (autocomplete_light.ModelForm):
     PAYMENT_TYPE = (('Credits','Credits'),('Money','Money'))
     LOCATIONS = (('Glasgow','Glasgow'),('London','London'))
     PMT_TYPE = (('Total','Total'),('Hourly','Hourly'), ('N/A', 'N/A'))
@@ -42,7 +42,8 @@ class ExperimentForm (forms.ModelForm):
     long_description = forms.CharField(max_length=500, widget=forms.Textarea)
     city = autocomplete_light.ModelChoiceField('CityAutocompleteCity', required=False, label='Location')
     address = forms.CharField(label="Address")
-    language_req = autocomplete_light.MultipleChoiceField('OsAutocomplete', required=False, label='Language(s) Required')
+    lang = autocomplete_light.MultipleChoiceField('OsAutocomplete', required=False, label='Language(s) Required')
+    # language = forms.ChoiceField(choices=)
     url = forms.URLField(max_length=200, required=False, label='URL: http://yoursite.com')
     slug = forms.CharField(widget=forms.HiddenInput(), required=False)
 
@@ -58,7 +59,7 @@ class ExperimentForm (forms.ModelForm):
 
     class Meta():
         model = Experiment
-        fields = ('name','short_description','long_description','duration', 'city','address', 'language_req' )
+        fields = ('name','short_description','long_description','duration', 'city','address', 'url', 'lang',)
 
 
 class ParticipantForm (autocomplete_light.ModelForm):
@@ -106,7 +107,7 @@ class ParticipantForm (autocomplete_light.ModelForm):
 
     class Meta():
         model = Participant
-        fields = ('dob','country','region','city','contact_number','occupation','education','student','lang','university', 'course_name', 'year_of_study', 'matric', 'gender' ,'height', 'weight', 'max_distance', 'uni_only', 'online_only', 'paid_only')
+        fields = ('dob','country','region','city','contact_number','occupation','education','student','language','university', 'course_name', 'year_of_study', 'matric', 'gender' ,'height', 'weight', 'max_distance', 'uni_only', 'online_only', 'paid_only')
 
 
 
@@ -121,8 +122,8 @@ class PartDetailsForm (autocomplete_light.ModelForm):
     occupation = forms.CharField(required=False, label="Occupation", max_length=128)
     education = forms.ChoiceField(choices=EDUCATION, label="Level of Education", required=True)
     student = forms.BooleanField(label="Student", required=False)
-    # lang = autocomplete_light.MultipleChoiceField('OsAutocomplete', required=False, label='Languages')
-    lang = autocomplete_light.MultipleChoiceField('OsAutocomplete', required=False, label='Languages')
+    # language = autocomplete_light.MultipleChoiceField('OsAutocomplete', required=False, label='Languages')
+    # language = autocomplete_light.ModelMultipleChoiceField('LanguagesLanguageAutocomplete', required=False, label='Languages')
 
     class Media:
         """
@@ -138,7 +139,7 @@ class PartDetailsForm (autocomplete_light.ModelForm):
     #     exclude = []
     class Meta():
         model = Participant
-        fields = ('dob','country','region','city','contact_number','occupation','education','lang')
+        fields = ('dob','country','region','city','contact_number','occupation','education', 'language',)
 
 
 class PartStudentForm (forms.ModelForm):

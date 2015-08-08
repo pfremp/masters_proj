@@ -145,7 +145,8 @@ $(document).ready(function() {
 
 
 
-        <form id="experiment_form" method="post" action="/part_finder/add_experiment/?next={{ 'index' }}">
+{#        <form id="experiment_form" method="post" novalidate action="/part_finder/add_experiment/?next={{ 'index' }}">#}
+        <form id="experiment_form" method="post" action="/part_finder/add_experiment/">
 
             {% csrf_token %}
             {% for hidden in form.hidden_fields %}
@@ -155,47 +156,49 @@ $(document).ready(function() {
             {% bootstrap_form form %}
 
 
-            {% for field in form.visible_fields %}
-
-            <!-- check for date field -->
-                {% if field.name == 'Name'  %}
-
-
-                {{ field.errors }}
-                {{ field.label }}
-                {% bootstrap_field field %}
-
-                {% endif %}
-            {% endfor %}
-            <br>
-            <h2>Payment Details</h2>
-            {% for field in payment_form.visible_fields %}
-
-            <!-- check for date field -->
+{#            {% for field in form.visible_fields %}#}
+{##}
+{#            <!-- check for date field -->#}
 {#                {% if field.name == 'Name'  %}#}
-
-
-                {{ field.errors }}
+{##}
+{##}
+{#                {{ field.errors }}#}
 {#                {{ field.label }}#}
-                {% bootstrap_field field %}
-
+{#                {% bootstrap_field field %}#}
+{##}
 {#                {% endif %}#}
-            {% endfor %}
-        <br>
+{#            {% endfor %}#}
+
+            <h2>Payment Details</h2>
+            {% bootstrap_form payment_form %}
+{#            {% for field in payment_form.visible_fields %}#}
+{##}
+{#            <!-- check for date field -->#}
+{#                {% if field.name == 'Name'  %}#}
+{##}
+{##}
+{#                {{ field.errors }}#}
+{#                {{ field.label }}#}
+{#                {% bootstrap_field field %}#}
+{##}
+{#                {% endif %}#}
+{#            {% endfor %}#}
+
         <h2>Participant Requirements</h2>
         <p><b>Target your experiment at a specific demographic!</b></p>
-        {% for field in requirement_form.visible_fields %}
-
-            <!-- check for date field -->
+        {% bootstrap_form requirement_form %}
+{#        {% for field in requirement_form.visible_fields %}#}
+{##}
+{#            <!-- check for date field -->#}
 {#                {% if field.name == 'Name'  %}#}
-
-
-                {{ field.errors }}
+{##}
+{##}
+{#                {{ field.errors }}#}
 {#                {{ field.label }}#}
-                {% bootstrap_field field %}
-
+{#                {% bootstrap_field field %}#}
+{##}
 {#                {% endif %}#}
-            {% endfor %}
+{#            {% endfor %}#}
 
 
 

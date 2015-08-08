@@ -9,14 +9,90 @@ from django.shortcuts import redirect
 # from django.contrib.formtools.wizard.views import SessionWizardView
 from formtools.wizard.views import WizardView, SessionWizardView
 from django.views.generic.edit import UpdateView, DeleteView
-
+from part_finder.forms_search import *
 from django.forms.formsets import formset_factory, BaseFormSet
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.context_processors import csrf
 import sys
 
 
-# def search
+def matched_experiment(request, experiment):
+    context_dict = {}
+
+    # requiremen
+    #
+    #
+    #
+    # # requirement = requirement
+    # if request.method == 'POST':
+    #
+    #     #process gender form
+    #     if requirement.gender == 'YES':
+    #
+    #         gender_form = GenderForm(request.POST)
+    #
+    #         if gender_form.is_valid():
+    #             gender = gender_form.save(commit=False)
+    #             gender.requirement = requirement
+    #             gender.save()
+    #         else:
+    #             print gender_form.errors
+    # else:
+    #     gender_form = GenderForm()
+    #
+    # if request.method == 'POST':
+    #
+    #     #process language form
+    #     # if requirement.gender == 'YES':
+    #
+    #         language_form = GenderForm(request.POST)
+    #
+    #         if language_form.is_valid():
+    #             language = language_form.save(commit=False)
+    #             language.requirement = requirement
+    #             language.save()
+    #         else:
+    #             print language_form.errors
+    # else:
+    #     language_form = GenderForm()
+
+
+    # context_dict = {}
+
+
+        #
+        # age_form = AgeForm(request.POST)
+        # height_form = HeightForm(request.POST)
+        # weight_form = WeightForm(request.POST)
+        #
+        #      if gender_form.is_valid() and age_form.is_valid() and height_form.is_valid() and weight_form.is_valid():
+        #         application = appform.save(commit=False)
+        #         application.researcher = experiment.researcher
+        #         application.participant = request.user.profile.participant
+        #         application.experiment = experiment
+        #         application.status = 'Pending'
+        #         timeslot =  application.timeslot
+        #         # timeslot.current_parts += 1
+        #         # timeslot.save()
+        #         application.save()
+        #         return HttpResponseRedirect("/part_finder/")
+        #
+        #
+        #      else:
+        #         print appform.errors
+        # # else:
+        #      appform = ApplicationForm(experiment)
+
+
+    return render(request, 'part_finder/matched_experiment.html', context_dict)
+
+
+
+
+# def match_lang(participant):
+
+
+
 #
 #
 #

@@ -16,6 +16,14 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
+            name='Age',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('min_age', models.IntegerField(default=1)),
+                ('max_age', models.IntegerField(default=1)),
+            ],
+        ),
+        migrations.CreateModel(
             name='Application',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
@@ -53,17 +61,32 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=128)),
-                ('short_description', models.CharField(max_length=128, blank=True)),
-                ('long_description', models.CharField(max_length=500, blank=True)),
-                ('duration', models.FloatField(blank=True)),
+                ('short_description', models.CharField(max_length=128, null=True, blank=True)),
+                ('long_description', models.CharField(max_length=1000, null=True, blank=True)),
+                ('duration', models.FloatField(null=True, blank=True)),
                 ('address', models.CharField(max_length=128, blank=True)),
-                ('language_req', models.CharField(max_length=128, blank=True)),
+                ('lang', models.CharField(max_length=128, blank=True)),
                 ('url', models.URLField(blank=True)),
                 ('researcher_slug', models.SlugField(null=True, blank=True)),
                 ('slug', models.SlugField(unique=True, null=True, blank=True)),
                 ('is_full', models.BooleanField(default=False)),
                 ('has_ended', models.BooleanField(default=False)),
+                ('is_featured', models.BooleanField(default=False)),
                 ('city', models.ForeignKey(to='cities_light.City', null=True)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Gender',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('gender', models.CharField(max_length=128, choices=[(b'male', b'male'), (b'female', b'female')])),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Height',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('height', models.IntegerField(default=0)),
             ],
         ),
         migrations.CreateModel(
@@ -74,29 +97,36 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
+            name='Languages',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('language', models.CharField(max_length=128)),
+            ],
+        ),
+        migrations.CreateModel(
             name='Participant',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('dob', models.DateField(default=datetime.date.today, null=True, verbose_name=b'Date')),
-                ('contact_number', models.IntegerField(max_length=128, null=True, blank=True)),
+                ('contact_number', models.IntegerField(blank=True)),
                 ('occupation', models.CharField(max_length=128, blank=True)),
-                ('lang', models.CharField(max_length=128, blank=True)),
                 ('education', models.CharField(blank=True, max_length=1000, choices=[(b'School', b'School'), (b'SQ1', b'School Qualification1'), (b'College', b'College'), (b'University', b'University')])),
                 ('student', models.BooleanField(default=False)),
                 ('course_name', models.CharField(max_length=100)),
                 ('year', models.IntegerField(null=True)),
                 ('matric', models.CharField(max_length=20, null=True)),
                 ('gender', models.CharField(blank=True, max_length=128, choices=[(b'Male', b'Male'), (b'Female', b'Female'), (b'PNTS', b'Prefer not to say')])),
-                ('height', models.IntegerField(max_length=128, null=True, blank=True)),
-                ('weight', models.IntegerField(max_length=128, null=True, blank=True)),
-                ('max_distance', models.IntegerField(max_length=128, null=True, blank=True)),
+                ('height', models.IntegerField(blank=True)),
+                ('weight', models.IntegerField(blank=True)),
+                ('max_distance', models.IntegerField(blank=True)),
                 ('uni_only', models.BooleanField(default=False)),
                 ('online_only', models.BooleanField(default=False)),
                 ('paid_only', models.BooleanField(default=False)),
                 ('email_notifications', models.BooleanField(default=False)),
                 ('city', models.ForeignKey(to='cities_light.City', null=True)),
                 ('country', models.ForeignKey(to='cities_light.Country', null=True)),
-                ('experiments', models.ManyToManyField(related_name='participants', null=True, to='part_finder.Experiment', blank=True)),
+                ('experiments', models.ManyToManyField(related_name='participants', to='part_finder.Experiment', blank=True)),
+                ('language', models.ManyToManyField(related_name='participant', to='part_finder.Languages', blank=True)),
                 ('region', models.ForeignKey(to='cities_light.Region', null=True)),
             ],
         ),
@@ -116,6 +146,20 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('payment_type', models.CharField(max_length=128, null=True)),
                 ('currency', models.ForeignKey(to='part_finder.Currency')),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Requirement',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('match', models.BooleanField(default=False)),
+                ('student', models.CharField(max_length=128, choices=[(b'0', b'NO'), (b'1', b'YES')])),
+                ('age', models.CharField(max_length=128, choices=[(b'0', b'NO'), (b'1', b'YES')])),
+                ('language', models.CharField(max_length=128, choices=[(b'0', b'NO'), (b'1', b'YES')])),
+                ('height', models.CharField(max_length=128, choices=[(b'0', b'NO'), (b'1', b'YES')])),
+                ('weight', models.CharField(max_length=128, choices=[(b'0', b'NO'), (b'1', b'YES')])),
+                ('gender', models.CharField(max_length=128, choices=[(b'0', b'NO'), (b'1', b'YES')])),
+                ('experiment', models.ForeignKey(to='part_finder.Experiment')),
             ],
         ),
         migrations.CreateModel(
@@ -164,6 +208,14 @@ class Migration(migrations.Migration):
                 ('user', models.OneToOneField(related_name='profile', to=settings.AUTH_USER_MODEL)),
             ],
         ),
+        migrations.CreateModel(
+            name='Weight',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('weight', models.IntegerField(default=0)),
+                ('requirement', models.ForeignKey(related_name='req_weight', to='part_finder.Requirement', null=True)),
+            ],
+        ),
         migrations.AddField(
             model_name='researcher',
             name='university',
@@ -178,6 +230,16 @@ class Migration(migrations.Migration):
             model_name='participant',
             name='university',
             field=models.ForeignKey(blank=True, to='part_finder.University', null=True),
+        ),
+        migrations.AddField(
+            model_name='height',
+            name='requirement',
+            field=models.ForeignKey(related_name='req_height', to='part_finder.Requirement', null=True),
+        ),
+        migrations.AddField(
+            model_name='gender',
+            name='requirement',
+            field=models.ForeignKey(related_name='req_gender', to='part_finder.Requirement', null=True),
         ),
         migrations.AddField(
             model_name='experiment',
@@ -208,5 +270,10 @@ class Migration(migrations.Migration):
             model_name='application',
             name='timeslot',
             field=models.ForeignKey(related_name='application', to='part_finder.TimeSlot', null=True),
+        ),
+        migrations.AddField(
+            model_name='age',
+            name='requirement',
+            field=models.ForeignKey(related_name='req_age', to='part_finder.Requirement', null=True),
         ),
     ]

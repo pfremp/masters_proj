@@ -20,4 +20,29 @@ class RequirementForm (forms.ModelForm):
 
    class Meta():
         model = Requirement
-        exclude =  ('match','experiment',)
+        exclude = ('match','experiment',)
+
+
+class GenderForm(forms.ModelForm):
+
+    class Meta():
+        model = Gender
+        fields = ('gender',)
+
+class AgeForm(forms.ModelForm):
+
+    class Meta():
+        model = Age
+        fields = ('min_age', 'max_age')
+
+class HeightForm(forms.ModelForm):
+
+    class Meta():
+        model = Height
+        fields = ('height',)
+
+class WeightForm(forms.ModelForm):
+
+    class Meta():
+        model = Weight
+        fields = ('weight',)

@@ -39,22 +39,23 @@ class Researcher(models.Model):
         return self.userprofile.user.username
 
 class Languages(models.Model):
-    lang = models.CharField(max_length=128)
+    language = models.CharField(max_length=128)
     # part = models.ForeignKey(Participant, related_name='language')
 
     def __unicode__(self):
-        return self.lang
+        return self.language
 
 class Experiment(models.Model):
     CURRENCY = (('Credits','Credits'),('Money','Money'))
     PMT_TYPE = (('Total','Total'),('Hourly','Hourly'), ('N/A', 'N/A'))
     name = models.CharField(max_length=128, blank=False)
-    short_description = models.CharField(max_length=128, blank=True)
-    long_description = models.CharField(max_length=1000, blank=True)
-    duration = models.FloatField(blank=True)
+    short_description = models.CharField(max_length=128, blank=True, null=True)
+    long_description = models.CharField(max_length=1000, blank=True, null=True)
+    duration = models.FloatField(blank=True, null=True)
     address = models.CharField(max_length=128, blank=True)
     city = models.ForeignKey('cities_light.city', null=True)
-    language_req = models.CharField(max_length=128, blank=True)
+    lang = models.CharField(max_length=128, blank=True)
+    # language = models.ManyToManyField(Languages, related_name='experiment', blank=True, null=True)
     researcher = models.ForeignKey(Researcher, related_name="experiment")
     url = models.URLField(blank=True)
     researcher_slug = models.SlugField(unique=False, null=True, blank=True)
@@ -87,10 +88,10 @@ class Participant(models.Model):
     country = models.ForeignKey('cities_light.country', null=True)
     region = models.ForeignKey('cities_light.region', null=True)
     city = models.ForeignKey('cities_light.city', null=True)
-    contact_number = models.IntegerField(max_length=128, blank=True, null=True)
+    contact_number = models.IntegerField(blank=True)
     occupation = models.CharField(max_length=128, blank=True)
     # lang = models.CharField(max_length=128, blank=True)
-    lang = models.ManyToManyField(Languages, related_name='participant', null=True)
+    language = models.ManyToManyField(Languages, related_name='participant', blank=True)
     education = models.CharField(choices=EDUCATION, blank=True, max_length=1000)
     student = models.BooleanField(default=False, blank=True)
 
@@ -103,16 +104,16 @@ class Participant(models.Model):
     #Demographic informatuon
     gender = models.CharField(max_length=128, blank=True, choices=SEX)
     #Health information
-    height = models.IntegerField(max_length=128, blank=True, null=True)
-    weight = models.IntegerField(max_length=128, blank=True, null=True)
+    height = models.IntegerField(blank=True)
+    weight = models.IntegerField(blank=True)
 
     #Preferences
-    max_distance = models.IntegerField(max_length=128, blank=True, null=True)
+    max_distance = models.IntegerField(blank=True)
     uni_only = models.BooleanField(default=False, blank=True)
     online_only = models.BooleanField(default=False, blank=True)
     paid_only = models.BooleanField(default=False, blank=True)
     email_notifications = models.BooleanField(default=False, blank=True)
-    experiments = models.ManyToManyField(Experiment, null=True, blank=True, related_name="participants")
+    experiments = models.ManyToManyField(Experiment, blank=True, related_name="participants")
 
     def ID(self, obj):
         return obj.id
@@ -194,6 +195,7 @@ class Payment(models.Model):
 
     def __unicode__(self):
         return self.experiment.name
+        # return self.currency.currency
 
 
 class Application(models.Model):

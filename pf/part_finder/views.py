@@ -14,6 +14,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.context_processors import csrf
 import sys
 from part_finder.forms_search import RequirementForm
+from part_finder.views_search import matched_experiment
 
 
 from django.template import RequestContext # For CSRF
@@ -384,11 +385,12 @@ def experiment (request, experiment_name_slug, r_slug):
         userapplied = check_already_applied()
 
         # Remove special characters from language_req string
-        lang = experiment.language_req
-        language_req = lang.replace('[','').replace('u','').replace("'",'').replace(']','')
+        lang = experiment.lang
+        language = lang.replace('[','').replace('u','').replace("'",'').replace(']','')
+        # language = experiment.language.all()
 
         # user_apps = get_user_apps()
-        context_dict= {'appform': appform, 'experiment_name': experiment.name, 'single_experiment': experiment_list, 'experiment': experiment, 'user_applied': userapplied, 'lang': language_req, 'timeslots': timeslots, 'researcher': researcher, 'payment': payment}
+        context_dict= {'appform': appform, 'experiment_name': experiment.name, 'single_experiment': experiment_list, 'experiment': experiment, 'user_applied': userapplied, 'lang': language, 'timeslots': timeslots, 'researcher': researcher, 'payment': payment}
 
         #application
         if request.method == 'POST':
@@ -471,6 +473,7 @@ def add_experiment(request):
         # Create a formset from the submitted data
         time_slot_formset = TimeSlotFormSet(request.POST, request.FILES)
         if form.is_valid() and time_slot_formset.is_valid() and payment_form.is_valid() and requirement_form.is_valid():
+        # if form.is_valid() and time_slot_formset.is_valid() and payment_form.is_valid():
             experiment = form.save(commit=False)
             res = request.user.profile.researcher
             experiment.researcher = res
@@ -484,20 +487,23 @@ def add_experiment(request):
             #requirement form details
             requirement = requirement_form.save(commit=False)
             requirement.experiment = experiment
+            # requirement_form.save()
 
-            #set matched experiment to true
-            if requirement.age == 'YES':
+            # # set matched experiment to true
+            if requirement.age == '1':
                 requirement.match = True
-            if requirement.language == 'YES':
+            if requirement.language == '1':
                 requirement.match = True
-            if requirement.height == 'YES':
+            if requirement.height == '1':
                 requirement.match = True
-            if requirement.weight == 'YES':
+            if requirement.weight == '1':
                 requirement.match = True
-            if requirement.gender == 'YES':
+            if requirement.gender == '1':
                 requirement.match = True
-            if requirement.student == 'YES':
+            if requirement.student == '1':
                 requirement.match = True
+            # else:
+            #     requirement.match = False
 
             requirement_form.save()
 
@@ -507,9 +513,19 @@ def add_experiment(request):
                 time_slot.experiment = experiment
                 time_slot.save()
 
+            if requirement.match == True:
+                return matched_experiment(request, experiment)
+            else:
+                return index(request)
+
+        else:
+            print form.errors
+            print requirement_form.errors
+            print payment_form.errors
 
 
 
+        #old content
         # if todo_list_form.is_valid() and todo_item_formset.is_valid():
         #     todo_list = todo_list_form.save()
         #     for form in todo_item_formset.forms:
@@ -518,10 +534,11 @@ def add_experiment(request):
         #         todo_item.experiment = experiment
         #         todo_item.save()
 
+            # if requirement.match == True:
+            #     return matched_experiment(request)
+            # else:
+            # return researcher_experiments(request)
 
-            return researcher_experiments(request)
-        else:
-            print form.errors
     else:
         form = ExperimentForm()
         ##time_slot_form = TimeSlotFrom()
@@ -531,7 +548,8 @@ def add_experiment(request):
 
     # For CSRF protection
     # See http://docs.djangoproject.com/en/dev/ref/contrib/csrf/
-    c = {'form':form,'time_slot_formset': time_slot_formset, 'payment_form': payment_form, 'requirement_form': requirement_form}
+    # c = {'form':form,'time_slot_formset': time_slot_formset, 'payment_form': payment_form,}
+    c = {'form':form, 'time_slot_formset': time_slot_formset, 'payment_form': payment_form, 'requirement_form': requirement_form}
     c.update(csrf(request))
 
     return render(request, 'part_finder/add_experiment.html', c)
