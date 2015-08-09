@@ -13,7 +13,7 @@ from smart_selects.db_fields import ChainedForeignKey
 from part_finder.models import Experiment
 
 
-GENDER = (('male', 'male'), ('female','female'))
+GENDER = (('male', 'Male'), ('female','Female'))
 
 class Requirement(models.Model):
     CHOICES = (('0','NO'),('1','YES'))

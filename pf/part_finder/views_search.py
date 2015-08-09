@@ -51,35 +51,27 @@ def matched_experiment(request, experiment_id):
 
     context_dict = {'requirement': requirement, 'match_form': match_form, 'r_gender': r_gender, 'r_age': r_age, 'r_height':r_height, 'r_weight': r_weight, 'r_language': r_language}
 
-
-        #
-        # age_form = AgeForm(request.POST)
-        # height_form = HeightForm(request.POST)
-        # weight_form = WeightForm(request.POST)
-        #
-        #      if gender_form.is_valid() and age_form.is_valid() and height_form.is_valid() and weight_form.is_valid():
-        #         application = appform.save(commit=False)
-        #         application.researcher = experiment.researcher
-        #         application.participant = request.user.profile.participant
-        #         application.experiment = experiment
-        #         application.status = 'Pending'
-        #         timeslot =  application.timeslot
-        #         # timeslot.current_parts += 1
-        #         # timeslot.save()
-        #         application.save()
-        #         return HttpResponseRedirect("/part_finder/")
-        #
-        #
-        #      else:
-        #         print appform.errors
-        # # else:
-        #      appform = ApplicationForm(experiment)
-
-
     return render(request, 'part_finder/matched_experiment.html', context_dict)
 
 
+def check_applicant_validity(request, experiment):
+    valid = 0
+    participant = request.user.profile.participant
+    requirement = Requirement.objects.get(experiment=experiment)
 
+    if requirement.gender == 1:
+
+        if match_gender(request,experiment) == True:
+            valid += 0
+        else:
+            valid += 1
+
+    if requirement.student == 1:
+
+        if match_student(request) == True:
+            valid +=0
+        else:
+            valid +=1
 
 
 def match_gender(request, experiment):
@@ -138,28 +130,24 @@ def match_age(request, experiment):
 
 
 
-def match_lang(participant, experiment):
+def match_lang(request, experiment):
 
-    participant = participant
+    participant = request.user.profile.participant
     experiment = experiment
     requirement = Requirement.objects.get(experiment=experiment)
     match_details = MatchingDetail.objects.get(requirement=requirement)
 
     alllanguages = match_details.l
-    language = alllanguages.split()
+    experiment_languages = alllanguages.split()
 
-    meets_requirement = False
-
-    # for l in language:
+    lang_req = False
 
     for p_lang in participant.language:
 
-        if p_lang in language:
-            meets_requirement =True
-        else:
-            meets_requirement = False
+        if any(p_lang in l for l in experiment_languages):
+            lang_req = True
 
-    return meets_requirement
+    return lang_req
 
 
 # checks to see whether a participant is a student
