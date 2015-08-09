@@ -10,7 +10,7 @@ from django.core import urlresolvers
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from smart_selects.db_fields import ChainedForeignKey
-from part_finder.models import Experiment
+from part_finder.models import Experiment, Languages
 
 
 GENDER = (('male', 'Male'), ('female','Female'))
@@ -25,7 +25,7 @@ class Requirement(models.Model):
     height = models.CharField(max_length=128, null=False, choices=CHOICES)
     weight = models.CharField(max_length=128, null=False, choices=CHOICES)
     gender = models.CharField(max_length=128, null=False, choices=CHOICES)
-    experiment = models.ForeignKey(Experiment, null=False)
+    experiment = models.ForeignKey(Experiment, null=False, related_name="requirement")
 
     def __unicode__(self):
         return self.experiment.name + " Requirement"
@@ -39,6 +39,7 @@ class MatchingDetail(models.Model):
     min_weight = models.IntegerField(default=0, null=True, blank=True)
     max_weight = models.IntegerField(default=0, null=True, blank=True)
     l = models.CharField(max_length=128, blank=True)
+    # language = models.ManyToManyField(Languages, related_name='matchingdetail')
     requirement = models.ForeignKey(Requirement, null=True, related_name='matchdetail')
 
     def __unicode__(self):

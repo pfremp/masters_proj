@@ -14,7 +14,7 @@ import autocomplete_light.shortcuts as al
 
 from django.forms import ModelForm
 from smart_selects.db_fields import GroupedForeignKey
-
+from autocomplete_light_registry import *
 
 class RequirementForm (forms.ModelForm):
 
@@ -25,7 +25,7 @@ class RequirementForm (forms.ModelForm):
 
 
 
-class MatchingDetailForm(al.ModelForm):
+class MatchingDetailForm(autocomplete_light.ModelForm):
     # l = autocomplete_light.MultipleChoiceField('OsAutocomplete', required=False, label='Language(s) Required')
     # l = autocomplete_light.MultipleChoiceField('LangAutocomplete', required=False, label='Language(s) Required')
     min_age = forms.IntegerField(initial=1, required=False)
@@ -36,8 +36,9 @@ class MatchingDetailForm(al.ModelForm):
     max_weight = forms.IntegerField(initial=200, label='Maximum Weight (KG)', required=False)
     # l = forms.CharField(max_length=128)
 
-    l = forms.CharField(max_length=128, label="Language(s) Required", help_text='Enter the required languages with a space between each language e.g "English French German".', initial="English ", required=False)
-
+    # l = forms.CharField(max_length=128, label="Language(s) Required", help_text='Enter the required languages with a space between each language e.g "English French German".', initial="English ", required=False)
+    l = autocomplete_light.MultipleChoiceField('OsAutocomplete', required=False, label='Language(s) Required', initial="English")
+    # lang = autocomplete_light.MultipleChoiceField('OsAutocomplete', required=False, label='Language(s) Required')
 
     class Media:
         """
@@ -50,6 +51,7 @@ class MatchingDetailForm(al.ModelForm):
 
     class Meta():
         model = MatchingDetail
+        # fields = ('language',)
         exclude = ('requirement',)
 
 

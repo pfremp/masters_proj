@@ -73,6 +73,7 @@ class ParticipantForm (autocomplete_light.ModelForm):
     occupation = forms.CharField(required=False, label="Occupation", max_length=128)
     education = forms.ChoiceField(choices=EDUCATION, label="Level of Education", required=True)
     student = forms.BooleanField(label="Student", required=False)
+    lang = autocomplete_light.MultipleChoiceField('OsAutocomplete', required=False, label='Language(s) Required')
     # lang = autocomplete_light.MultipleChoiceField('OsAutocomplete', required=False, label='Languages')
     # lang = autocomplete_light.MultipleModelChoiceField('LangAutocomplete', required=False, label='Languages')
 
@@ -107,7 +108,7 @@ class ParticipantForm (autocomplete_light.ModelForm):
 
     class Meta():
         model = Participant
-        fields = ('dob','country','region','city','contact_number','occupation','education','student','language','university', 'course_name', 'year_of_study', 'matric', 'gender' ,'height', 'weight', 'max_distance', 'uni_only', 'online_only', 'paid_only')
+        fields = ('dob','country','region','city','contact_number','occupation','education','student','language', 'lang', 'university', 'course_name', 'year_of_study', 'matric', 'gender' ,'height', 'weight', 'max_distance', 'uni_only', 'online_only', 'paid_only')
 
 
 

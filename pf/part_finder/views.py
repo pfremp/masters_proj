@@ -15,6 +15,7 @@ from django.core.context_processors import csrf
 import sys
 from part_finder.forms_search import RequirementForm
 from part_finder.views_search import *
+from django.core.urlresolvers import reverse
 
 from django.template import RequestContext # For CSRF
 # Create your views here.
@@ -385,8 +386,19 @@ def experiment (request, experiment_name_slug, r_slug):
         userapplied = check_already_applied()
 
         # Remove special characters from language_req string
-        lang = experiment.lang
-        language = lang.replace('[','').replace('u','').replace("'",'').replace(']','')
+        # lang = experiment.lang
+        # try:
+        #     req = experiment.requirement
+        #     details = MatchingDetail.objects.get(requirement=req)
+        #     lang = details.l
+        #     language = lang.replace('[','').replace('u','').replace("'",'').replace(']','')
+        #
+        # except MatchingDetail.DoesNotExist:
+        #     pass
+
+        # lang = experiment.requirement.matchdetail.l
+        # language = lang.replace('[','').replace('u','').replace("'",'').replace(']','')
+        language = ""
 
         #Check if logged in participant meets requirements.
         if request.user.is_authenticated() and request.user.profile.typex == 'Participant':
@@ -525,7 +537,7 @@ def add_experiment(request):
                 time_slot.save()
 
             if requirement.match == True:
-                return HttpResponseRedirect("/part_finder/")
+                return HttpResponseRedirect(reverse('set_match', args=[experiment.id] ))
             else:
                 return index(request)
 

@@ -79,7 +79,7 @@ al.register(LangAutocomplete)
 
 
 
-autocomplete_light.register(Languages, search_fields=('language', 'l'),)
+autocomplete_light.register(Languages, search_fields=('language',), label="languages")
 
 # class LangAutocomplete(al.AutocompleteListBase):
 #     choices = Languages.objects.all()

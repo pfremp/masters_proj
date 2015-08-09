@@ -41,9 +41,12 @@ class Researcher(models.Model):
 class Languages(models.Model):
     language = models.CharField(max_length=128)
     # part = models.ForeignKey(Participant, related_name='language')
+    #
+    # def get_lang(self):
+    #     return self.language
 
     def __unicode__(self):
-        return self.language
+        return str(self.language) or u''
 
 class Experiment(models.Model):
     CURRENCY = (('Credits','Credits'),('Money','Money'))
@@ -54,7 +57,7 @@ class Experiment(models.Model):
     duration = models.FloatField(blank=True, null=True)
     address = models.CharField(max_length=128, blank=True)
     city = models.ForeignKey('cities_light.city', null=True)
-    lang = models.CharField(max_length=128, blank=True)
+    # lang = models.CharField(max_length=128, blank=True)
     # language = models.ManyToManyField(Languages, related_name='experiment', blank=True, null=True)
     researcher = models.ForeignKey(Researcher, related_name="experiment")
     url = models.URLField(blank=True)
@@ -93,6 +96,7 @@ class Participant(models.Model):
     occupation = models.CharField(max_length=128, blank=True)
     # lang = models.CharField(max_length=128, blank=True)
     language = models.ManyToManyField(Languages, related_name='participant', blank=True)
+    # lang = models.CharField(max_length=128, null=True)
     education = models.CharField(choices=EDUCATION, blank=True, max_length=1000)
     student = models.BooleanField(default=False, blank=True)
 
