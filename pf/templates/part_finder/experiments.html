@@ -21,7 +21,7 @@
                 <p><b>Description</b></p>
                 <p>{{ experiment.long_description }}</p>
                 <br>
-                {{ gender }}
+                {{ valid }}
                 <h2>Apply</h2>
                 {%  if user.is_authenticated and user.profile.typex == 'Participant' %}
                     {% if experiment.is_full == True %}

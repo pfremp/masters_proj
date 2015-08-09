@@ -14,7 +14,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.context_processors import csrf
 import sys
 from part_finder.forms_search import RequirementForm
-from part_finder.views_search import matched_experiment, match_lang
 from part_finder.views_search import *
 
 from django.template import RequestContext # For CSRF
@@ -360,9 +359,10 @@ def experiment (request, experiment_name_slug, r_slug):
         researcher = experiment.researcher
         payment = Payment.objects.get(experiment=experiment)
 
-        #check if all experiments are full
+        #check if all experiment timeslots are full
         experiment_full(experiment)
 
+        # get user applications
         def get_user_apps():
             if request.user.is_anonymous():
                 a = Application.objects.all()
@@ -373,6 +373,7 @@ def experiment (request, experiment_name_slug, r_slug):
                 return a
         a = get_user_apps()
 
+        #check if user has already applied for experiment
         def check_already_applied():
             applied = False
 
@@ -381,26 +382,27 @@ def experiment (request, experiment_name_slug, r_slug):
                     applied = True
 
             return applied
-
         userapplied = check_already_applied()
 
         # Remove special characters from language_req string
         lang = experiment.lang
         language = lang.replace('[','').replace('u','').replace("'",'').replace(']','')
-        # language = experiment.language.all()
 
-        # user_apps = get_user_apps()
-
-
-
-        if request.user.is_authenticated():
-            gender = match_gender(request, experiment)
+        #Check if logged in participant meets requirements.
+        if request.user.is_authenticated() and request.user.profile.typex == 'Participant':
+            check_valid = check_applicant_validity(request, experiment)
+            # check_valid = 0
+            # valid = False
+            if check_valid == 0:
+                valid = True
+            else:
+                valid = False
         else:
-            gender = ''
+            valid = ''
 
 
 
-        context_dict= {'appform': appform, 'experiment_name': experiment.name, 'single_experiment': experiment_list, 'experiment': experiment, 'user_applied': userapplied, 'lang': language, 'timeslots': timeslots, 'researcher': researcher, 'payment': payment, 'gender': gender}
+        context_dict= {'appform': appform, 'experiment_name': experiment.name, 'single_experiment': experiment_list, 'experiment': experiment, 'user_applied': userapplied, 'lang': language, 'timeslots': timeslots, 'researcher': researcher, 'payment': payment, 'valid': valid}
 
         #application
         if request.method == 'POST':
