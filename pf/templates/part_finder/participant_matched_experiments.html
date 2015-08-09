@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+{% extends 'sitebase.html' %}
+
+{% load staticfiles %}
+{% load bootstrap3 %}
+{% load easy_maps_tags %}
+{% block extra_head %}
+{% endblock %}
+{% block title %} All Experiments {% endblock %}
+
+{% block body_block %}
+        <h1 class="text-center">All Experiments</h1>
+    {% if user.is_authenticated %}
+    <div class="row"><p class="text-center pull-right"><a href="#">View Matched</a></p></div>
+        {% else %}
+    {% endif %}
+            {% for experiment in experiments %}
+                {% if experiment.has_ended == False %}
+
+          <div class="col-sm-6 col-md-4">
+          <div class="panel panel-default">
+                <div class="panel-heading"><h3>{{ experiment.name }}</h3></div>
+                <div class="panel-body">
+                    <p>{{ experiment.long_description|truncatechars:200 }}</p>
+                    <p><b>Location: </b>{{ experiment.city }}</p>
+                    <p>
+                    {% for p in payment_list %}
+                        {% if p.experiment == experiment %}
+                            {% if p.is_paid.is_paid == 'Yes' %}
+                                <b>Paid: </b><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                            {% else %}
+                                <b>Paid: </b><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    </p>
+                    <p><a href="{{ experiment.researcher_slug }}/{{ experiment.slug }}" class="btn btn-primary" role="button">View / Apply</a>
+ </div>
+
+                </div>
+                      </div>
+
+                {% endif %}
+                {% endfor %}
+
+
+{% endblock %}

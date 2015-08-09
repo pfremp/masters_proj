@@ -18,7 +18,8 @@ from smart_selects.db_fields import GroupedForeignKey
 
 class RequirementForm (forms.ModelForm):
 
-   class Meta():
+
+    class Meta():
         model = Requirement
         exclude = ('match','experiment',)
 
@@ -27,6 +28,15 @@ class RequirementForm (forms.ModelForm):
 class MatchingDetailForm(al.ModelForm):
     # l = autocomplete_light.MultipleChoiceField('OsAutocomplete', required=False, label='Language(s) Required')
     # l = autocomplete_light.MultipleChoiceField('LangAutocomplete', required=False, label='Language(s) Required')
+    min_age = forms.IntegerField(initial=1, required=False)
+    max_age = forms.IntegerField(initial=99, required=False)
+    min_height = forms.IntegerField(initial=0, label='Minimum Height (CM)', required=False)
+    max_height = forms.IntegerField(initial=200, label='Maximum Height (CM)', required=False)
+    min_weight = forms.IntegerField(initial=0, label='Minimum Weight (KG)', required=False)
+    max_weight = forms.IntegerField(initial=200, label='Maximum Weight (KG)', required=False)
+    # l = forms.CharField(max_length=128)
+
+    l = forms.CharField(max_length=128, label="Language(s) Required", help_text='Enter the required languages with a space between each language e.g "English French German".', initial="English ", required=False)
 
 
     class Media:

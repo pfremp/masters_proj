@@ -9,7 +9,7 @@
 
 {% block body_block %}
 
-    <form id="experiment_form" method="post" action="">
+    <form id="experiment_form" method="post" novalidate action="">
     {% csrf_token %}
 
     {% if r_gender == '1' %}
@@ -22,11 +22,13 @@
     {% endif %}
 
     {% if r_height == '1' %}
-        {% bootstrap_field match_form.height %}
+        {% bootstrap_field match_form.min_height %}
+        {% bootstrap_field match_form.max_height %}
     {% endif %}
 
     {% if weight == '1' %}
-        {% bootstrap_field match_form.weight %}
+        {% bootstrap_field match_form.min_weight %}
+        {% bootstrap_field match_form.max_weight %}
     {% endif %}
 
     {% if r_language == '1' %}

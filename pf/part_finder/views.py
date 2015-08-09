@@ -14,8 +14,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.context_processors import csrf
 import sys
 from part_finder.forms_search import RequirementForm
-from part_finder.views_search import matched_experiment
-
+from part_finder.views_search import matched_experiment, match_lang
+from part_finder.views_search import *
 
 from django.template import RequestContext # For CSRF
 # Create your views here.
@@ -390,7 +390,17 @@ def experiment (request, experiment_name_slug, r_slug):
         # language = experiment.language.all()
 
         # user_apps = get_user_apps()
-        context_dict= {'appform': appform, 'experiment_name': experiment.name, 'single_experiment': experiment_list, 'experiment': experiment, 'user_applied': userapplied, 'lang': language, 'timeslots': timeslots, 'researcher': researcher, 'payment': payment}
+
+
+
+        if request.user.is_authenticated():
+            gender = match_gender(request, experiment)
+        else:
+            gender = ''
+
+
+
+        context_dict= {'appform': appform, 'experiment_name': experiment.name, 'single_experiment': experiment_list, 'experiment': experiment, 'user_applied': userapplied, 'lang': language, 'timeslots': timeslots, 'researcher': researcher, 'payment': payment, 'gender': gender}
 
         #application
         if request.method == 'POST':
@@ -414,7 +424,6 @@ def experiment (request, experiment_name_slug, r_slug):
                 print appform.errors
         # else:
         #      appform = ApplicationForm(experiment)
-
 
 
 
@@ -545,6 +554,9 @@ def add_experiment(request):
         time_slot_formset = TimeSlotFormSet()
         payment_form = PaymentForm()
         requirement_form = RequirementForm()
+
+
+
 
     # For CSRF protection
     # See http://docs.djangoproject.com/en/dev/ref/contrib/csrf/

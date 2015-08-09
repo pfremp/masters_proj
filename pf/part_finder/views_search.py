@@ -14,6 +14,7 @@ from django.forms.formsets import formset_factory, BaseFormSet
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.context_processors import csrf
 import sys
+import  datetime
 
 
 def matched_experiment(request, experiment_id):
@@ -80,18 +81,92 @@ def matched_experiment(request, experiment_id):
 
 
 
-# def match_lang(participant):
+
+def match_gender(request, experiment):
+
+    try:
+        participant = request.user.profile.participant
+        requirement = Requirement.objects.get(experiment=experiment)
+        match_details = MatchingDetail.objects.get(requirement=requirement)
+        gender = match_details.gender
+
+        if participant.gender.lower() == gender.lower():
+            return True
+        else:
+            return False
+
+    except User.DoesNotExist:
+        pass
 
 
 
-#
-#
-#
-# # checks to see whether a participant is a student
-# def check_for_student(participant_id):
-#     part = Participant.objects.get(id=participant_id)
-#
-#     if part.student == True:
-#         return True
-#     else:
-#         return False
+def match_student(request):
+
+    try:
+        participant = request.user.profile.participant
+
+        if participant.student == True:
+            return True
+        else:
+            return False
+
+    except User.DoesNotExist:
+        pass
+
+
+def match_age(request, experiment):
+
+    try:
+        participant = request.user.profile.participant
+        requirement = Requirement.objects.get(experiment=experiment)
+        match_details = MatchingDetail.objects.get(requirement=requirement)
+
+        min_years = match_details.min_age
+        max_years = match_details.min_age
+        date = datetime.date.today()
+        min_age_date = date - (datetime.timedelta(days=min_years*365.25))
+        max_age_date = date - (datetime.timedelta(days=max_years*365.25))
+        participant_age = participant.dob
+
+        if participant_age <= min_age_date and participant_age >= max_age_date:
+            return True
+        else:
+            return False
+
+    except User.DoesNotExist:
+        pass
+
+
+
+def match_lang(participant, experiment):
+
+    participant = participant
+    experiment = experiment
+    requirement = Requirement.objects.get(experiment=experiment)
+    match_details = MatchingDetail.objects.get(requirement=requirement)
+
+    alllanguages = match_details.l
+    language = alllanguages.split()
+
+    meets_requirement = False
+
+    # for l in language:
+
+    for p_lang in participant.language:
+
+        if p_lang in language:
+            meets_requirement =True
+        else:
+            meets_requirement = False
+
+    return meets_requirement
+
+
+# checks to see whether a participant is a student
+def check_for_student(participant_id):
+    part = Participant.objects.get(id=participant_id)
+
+    if part.student == True:
+        return True
+    else:
+        return False

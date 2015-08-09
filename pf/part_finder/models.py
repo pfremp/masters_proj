@@ -64,7 +64,7 @@ class Experiment(models.Model):
     has_ended = models.BooleanField(default=False)
     is_featured = models.BooleanField(default=False)
     online = models.BooleanField(default=False)
-
+    student_only = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)

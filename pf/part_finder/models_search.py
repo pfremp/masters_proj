@@ -34,13 +34,15 @@ class MatchingDetail(models.Model):
     gender = models.CharField(max_length=128, choices=GENDER, blank=True)
     min_age = models.IntegerField(null=True, default=1, blank=True)
     max_age = models.IntegerField(null=True, default=100, blank=True)
-    height = models.IntegerField(default=0, null=True, blank=True)
-    weight = models.IntegerField(default=0, null=True, blank=True)
+    min_height = models.IntegerField(default=0, null=True, blank=True)
+    max_height = models.IntegerField(default=0, null=True, blank=True)
+    min_weight = models.IntegerField(default=0, null=True, blank=True)
+    max_weight = models.IntegerField(default=0, null=True, blank=True)
     l = models.CharField(max_length=128, blank=True)
     requirement = models.ForeignKey(Requirement, null=True, related_name='matchdetail')
 
     def __unicode__(self):
-        return self.gender
+        return self.requirement.experiment.name + " Match Details"
 
 
 
