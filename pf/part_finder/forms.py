@@ -14,13 +14,15 @@ import autocomplete_light.shortcuts as al
 
 from django.forms import ModelForm
 from smart_selects.db_fields import GroupedForeignKey
-
+from django.forms.extras.widgets import *
 # class UniversityForm(forms.ModelForm):
 #     name = forms.CharField(max_length=128)
 #
 #     class Meta():
 #         model = University
 #         fields = ('name',)
+
+
 
 
 class ResearcherForm (forms.ModelForm):
@@ -233,7 +235,7 @@ class PaymentForm(forms.ModelForm):
 class ApplicationForm(forms.ModelForm):
     YES = (('Yes','Yes'), (' ',' '))
     # timeslot = forms.ModelChoiceField(queryset=TimeSlot.objects.all(), label="Select Timeslot", required=False)
-    terms = forms.BooleanField(label="Terms Accepted", required=True, help_text='You must accept the T&Cs to proceed.')
+    terms = forms.BooleanField(label="Terms Accepted", required=True,  help_text='You must accept the T&Cs to proceed.', error_messages={'required': 'You must accept the terms and conditions'})
 
 
     def __init__(self, experiment, *args, **kwargs):

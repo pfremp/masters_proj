@@ -16,6 +16,8 @@ import sys
 from part_finder.forms_search import RequirementForm
 from part_finder.views_search import *
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ObjectDoesNotExist
+
 
 from django.template import RequestContext # For CSRF
 # Create your views here.
@@ -350,6 +352,22 @@ def all_experiments(request):
     return render (request, 'part_finder/all_experiments.html', context_dict)
 
 
+
+def get_requirements(experiment):
+
+    reqs = Requirement.objects.get(experiment=experiment)
+
+    for attr, value in reqs.__dict__.iteritems.filter(id):
+        if attr == 'id' or attr == 'match' or attr == 'experiment_id' or attr == '_state':
+           pass
+        else:
+            print attr, value
+
+
+
+
+
+
 def experiment (request, experiment_name_slug, r_slug):
     context_dict = {}
     try:
@@ -359,6 +377,8 @@ def experiment (request, experiment_name_slug, r_slug):
         timeslots = TimeSlot.objects.filter(experiment=experiment).order_by("date")
         researcher = experiment.researcher
         payment = Payment.objects.get(experiment=experiment)
+        valid = ''
+
 
         #check if all experiment timeslots are full
         experiment_full(experiment)
@@ -372,6 +392,7 @@ def experiment (request, experiment_name_slug, r_slug):
                 a = Application.objects.filter(participant=request.user.profile.participant)
                 # context_dict = {'apps': user_apps}
                 return a
+
         a = get_user_apps()
 
         #check if user has already applied for experiment
@@ -383,40 +404,40 @@ def experiment (request, experiment_name_slug, r_slug):
                     applied = True
 
             return applied
+
         userapplied = check_already_applied()
 
-        # Remove special characters from language_req string
-        # lang = experiment.lang
-        # try:
-        #     req = experiment.requirement
-        #     details = MatchingDetail.objects.get(requirement=req)
-        #     lang = details.l
-        #     language = lang.replace('[','').replace('u','').replace("'",'').replace(']','')
-        #
-        # except MatchingDetail.DoesNotExist:
-        #     pass
+        #get participant requirment details
+        try:
+            reqs = Requirement.objects.get(experiment=experiment)
+            match_detail = MatchingDetail.objects.get(requirement=reqs)
+            # Remove special characters from language_req string
+            language_req = match_detail.l.replace('[','').replace('u','').replace("'",'').replace(']','')
 
-        # lang = experiment.requirement.matchdetail.l
-        # language = lang.replace('[','').replace('u','').replace("'",'').replace(']','')
-        language = ""
+        except (Requirement.DoesNotExist, MatchingDetail.DoesNotExist) , e:
+            reqs = None
+            match_detail = None
+            language_req = None
 
+
+        try:
         #Check if logged in participant meets requirements.
-        if request.user.is_authenticated() and request.user.profile.typex == 'Participant':
-            check_valid = check_applicant_validity(request, experiment)
-            # check_valid = 0
-            # valid = False
-            if check_valid == 0:
-                valid = True
-            else:
-                valid = False
-        else:
-            valid = ''
+            if request.user.is_authenticated() and request.user.profile.typex == 'Participant':
+                check_valid = check_applicant_validity(request, experiment)
+
+                if check_valid == 0:
+                    valid = True
+                else:
+                    valid = False
+
+        except (MatchingDetail.DoesNotExist , Requirement.DoesNotExist , reqs.DoesNotExist) , e:
+            reqs = None
+            match_detail = None
 
 
+        context_dict= {'appform': appform, 'experiment_name': experiment.name, 'single_experiment': experiment_list, 'experiment': experiment, 'user_applied': userapplied, 'timeslots': timeslots, 'researcher': researcher, 'payment': payment, 'valid': valid, 'reqs': reqs, 'match_detail': match_detail, 'lang_req': language_req}
 
-        context_dict= {'appform': appform, 'experiment_name': experiment.name, 'single_experiment': experiment_list, 'experiment': experiment, 'user_applied': userapplied, 'lang': language, 'timeslots': timeslots, 'researcher': researcher, 'payment': payment, 'valid': valid}
-
-        #application
+        # process experiment application form
         if request.method == 'POST':
 
              appform = ApplicationForm(experiment, request.POST)
@@ -427,22 +448,15 @@ def experiment (request, experiment_name_slug, r_slug):
                 application.participant = request.user.profile.participant
                 application.experiment = experiment
                 application.status = 'Pending'
-                timeslot =  application.timeslot
-                # timeslot.current_parts += 1
-                # timeslot.save()
                 application.save()
                 return HttpResponseRedirect("/part_finder/")
 
-
              else:
                 print appform.errors
-        # else:
-        #      appform = ApplicationForm(experiment)
 
+    except (Experiment.DoesNotExist , Payment.DoesNotExist) , p:
+        payment = None
 
-
-    except Experiment.DoesNotExist:
-        pass
 
 
     return render(request, 'part_finder/experiments.html', context_dict )
@@ -539,6 +553,9 @@ def add_experiment(request):
             if requirement.match == True:
                 return HttpResponseRedirect(reverse('set_match', args=[experiment.id] ))
             else:
+                # empty_match_detail = models.MatchingDetail
+                # empty_match_detail.requirement = requirement
+                # empty_match_detail.save()
                 return index(request)
 
         else:

@@ -12,6 +12,7 @@ from smart_selects.db_fields import ChainedForeignKey
 
 
 
+
 # #common user attributes
 # class CommonUser(models.Model):
 #     INSTITUTIONS = (('Glasgow','University of Glasgow'),('Strathclyde','Strathclyde University'))
@@ -199,7 +200,7 @@ class Payment(models.Model):
     # street = models.CharField(max_length=100)
 
     def __unicode__(self):
-        return self.experiment.name
+        return str(self.amount)
         # return self.currency.currency
 
 
@@ -209,7 +210,7 @@ class Application(models.Model):
     participant = models.ForeignKey(Participant, null=True, related_name="application")
     experiment = models.ForeignKey(Experiment, null=True, related_name="application")
     timeslot = models.ForeignKey(TimeSlot, null=True, related_name="application")
-    terms = models.BooleanField(default=False, null=False)
+    terms = models.BooleanField(default=True, null=False, blank=False)
     # terms = models.CharField(default=False, max_length=128)
     status = models.CharField(max_length=100)
 

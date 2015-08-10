@@ -21,7 +21,7 @@
                 <p><b>Description</b></p>
                 <p>{{ experiment.long_description }}</p>
                 <br>
-                {{ valid }}
+{#                {{ valid }}#}
                 <h2>Apply</h2>
                 {%  if user.is_authenticated and user.profile.typex == 'Participant' %}
                     {% if experiment.is_full == True %}
@@ -33,7 +33,8 @@
                         <form id="appform" method="post" action="">
                             {% csrf_token %}
                             {% bootstrap_form appform %}
-                            <input class="btn btn-default" type="submit" name="submit" value="Apply" />
+{#                            {% bootstrap_form_errors appform %}#}
+                            <input class="btn btn-default" type="submit" name="submit"  value="Apply" />
                         </form>
                     {% endif %}
 
@@ -75,7 +76,50 @@
                 <!-- left col-->
                 <div class="col-md-6">
                     <h4><b>Requirements</b></h4>
-                    <p><b>Language(s): </b>{{ lang }}</p>
+
+                    {% if reqs %}
+                        {% if match_detail %}
+
+                        <!-- check for student -->
+                        {% if reqs.student == '1' %}
+                            <p><b>Student Participants Only</b></p>
+                        {% endif %}
+
+                        <!-- check for language -->
+                        {% if reqs.language == '1' %}
+                            <p><b>Language(s):</b> {{ lang_req }}</p>
+                        {% endif %}
+
+                        <!-- check for gender -->
+                        {% if reqs.gender == '1' %}
+                            <p><b>Gender:</b> {{ match_detail.gender }}</p>
+                        {% endif %}
+
+                        <!-- check for age -->
+                        {% if reqs.age == '1' %}
+                            <p><b>Min Age:</b> {{ match_detail.min_age }}<b> Max Age:</b> {{ match_detail.max_age }}</p>
+                        {% endif %}
+
+
+                        <!-- check for height -->
+                        {% if reqs.height == '1' %}
+                            <p><b>Min Height:</b> {{ match_detail.min_height }} CM<b> Max Height:</b> {{ match_detail.max_height }} CM</p>
+                        {% endif %}
+
+                        <!-- check for weight -->
+                        {% if reqs.height == '1' %}
+                            <p><b>Min Weight:</b> {{ match_detail.min_weight }} KG<b> Max Weight:</b> {{ match_detail.max_weight }} KG</p>
+                        {% endif %}
+                        {% endif %}
+
+                    {% else %}
+                        <p><b>Available to all</b></p>
+                    {% endif %}
+
+{#                    <p><b>Language(s): </b>{{ lang }}</p>#}
+
+
+
                     <br>
                     <h4><b>More info</b></h4>
                     <p><b><a href="{% url 'researcher_profile' researcher.userprofile.user.username %}">Researcher Profile</a></b></p>
