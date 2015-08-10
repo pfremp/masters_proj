@@ -21,13 +21,15 @@
                 <p><b>Description</b></p>
                 <p>{{ experiment.long_description }}</p>
                 <br>
-{#                {{ valid }}#}
+                {{ part_valid }}
                 <h2>Apply</h2>
                 {%  if user.is_authenticated and user.profile.typex == 'Participant' %}
                     {% if experiment.is_full == True %}
                         <p>Sorry, this experiment is now full</p>
                     {% elif user_applied == True %}
                         <p>You have already applied for this experiment. <a href="{% url 'participant_experiments' %}">View here.</a> </p>
+                    {% elif valid != True %}
+                        <p>Based on your profile, you do not meet the requirements for this experiment.</p>
                     {% else %}
                         <p>Pick a time slot and accept the terms</p>
                         <form id="appform" method="post" action="">

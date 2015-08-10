@@ -99,6 +99,54 @@ def check_applicant_validity(request, experiment):
 
     return valid
 
+
+
+#participant preferences matching
+def participant_pref_filter(request, experiment):
+    valid = 0
+    participant = request.user.profile.participant
+    payment = Payment.objects.get(experiment=experiment)
+    eligible = check_applicant_validity(request, experiment)
+
+    #check for online exps
+    if participant.online_only == True:
+        if experiment.online == True:
+            valid += 0
+        else:
+            valid += 1
+
+    print "valid after online only:- " + str(valid)
+    if participant.paid_only == True:
+
+        if str(payment.is_paid) == 'Yes':
+
+            valid += 0
+        else:
+            valid += 1
+    print "payment.is_paid: " + str(payment.is_paid)
+    print "Valid: " + str(valid)
+    if participant.my_uni_only == True:
+        if experiment.researcher.university == participant.university:
+            valid += 0
+        else:
+            valid += 1
+
+    if participant.city_only == True:
+        if experiment.city ==  participant.city:
+            valid += 0
+        else:
+            valid += 1
+
+    if participant.eligible_only == True:
+        if eligible == 0:
+            valid += 0
+        else:
+            valid += 1
+
+    print "Valid: " + str(valid)
+    return valid
+
+
 def match_gender(request, experiment):
 
     try:
@@ -173,10 +221,10 @@ def match_lang(request, experiment):
     # p = participant.language.all()
     v = 0
     # e_counter = 0
-    print "Part Lang: " + str(participant_languages)
-    print "Exp Lang: " + str(experiment_languages)
-    print "Exp Lang Split: " + str(exp_lang)
-    print "Exp Lang Split: " + str(exp_lang[0])
+    # print "Part Lang: " + str(participant_languages)
+    # print "Exp Lang: " + str(experiment_languages)
+    # print "Exp Lang Split: " + str(exp_lang)
+    # print "Exp Lang Split: " + str(exp_lang[0])
 
     for p in participant_languages:
         for e in exp_lang:
@@ -184,51 +232,14 @@ def match_lang(request, experiment):
             # print e_counter
             if p.language.lower() == e.lower():
                 v += 1
-                print p.language + " = " + e
+                # print p.language + " = " + e
 
     # print v
     # print len(exp_lang)
     if v == len(exp_lang):
-        print str(v) + " = " + str(len(exp_lang))
+        # print str(v) + " = " + str(len(exp_lang))
         return True
 
-
-
-    # e = "English"
-    #
-    # for l in p:
-    #     print l.language
-    #     print e
-    #     if l.language == e:
-    #         print True
-
-    # print "all languages: " + alllanguages
-    # print "experiment languages: " + str(experiment_languages)
-
-    # print p
-    # lang = False
-    # lang_req = 0
-    #
-    # for p_lang in participant_languages:
-    #     # print "p_lang - " + p_lang.language
-    #     if any(p_lang.language in l for l in experiment_languages):
-    #         # print "l - " + str(experiment_languages)
-    #         print "p_lang.language: " + p_lang.language
-    #         print "exp.language: " + str(experiment_languages)
-    #         print str(True)
-    #         lang_req += 0
-    #     else:
-    #         lang_req += 1
-    #         # print lang_req
-    #
-    # if lang_req == 0:
-    #     lang = True
-    # else:
-    #     lang = False
-    # print "lang @ end " + str(lang)
-    # print "lang req " + str(lang_req)
-
-    # return lang
 
 
 def match_height(request, experiment):

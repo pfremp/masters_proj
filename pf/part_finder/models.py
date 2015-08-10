@@ -84,6 +84,8 @@ class Experiment(models.Model):
 
 
 
+
+
 class Participant(models.Model):
     YN = (('Yes','Yes'),('No','No'))
     SEX = (('Male','Male'), ('Female','Female'), ('PNTS','Prefer not to say'))
@@ -114,12 +116,14 @@ class Participant(models.Model):
     weight = models.IntegerField(blank=True)
 
     #Preferences
-    max_distance = models.IntegerField(blank=True)
-    uni_only = models.BooleanField(default=False, blank=True)
+    city_only = models.BooleanField(blank=True, default=False)
+    # uni_only = models.BooleanField(default=False, blank=True)
+    my_uni_only = models.BooleanField(default=False, blank=True)
     online_only = models.BooleanField(default=False, blank=True)
     paid_only = models.BooleanField(default=False, blank=True)
-    email_notifications = models.BooleanField(default=False, blank=True)
+    # email_notifications = models.BooleanField(default=False, blank=True)
     experiments = models.ManyToManyField(Experiment, blank=True, related_name="participants")
+    eligible_only = models.BooleanField(default=False, blank=True)
 
     def ID(self, obj):
         return obj.id
@@ -127,6 +131,11 @@ class Participant(models.Model):
     def __unicode__(self):
         # return self.userprofile.user.username
         return self.userprofile.user.username
+
+
+
+
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, related_name='profile', unique=True)

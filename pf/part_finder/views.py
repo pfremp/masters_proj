@@ -378,6 +378,7 @@ def experiment (request, experiment_name_slug, r_slug):
         researcher = experiment.researcher
         payment = Payment.objects.get(experiment=experiment)
         valid = ''
+        part_valid = ''
 
 
         #check if all experiment timeslots are full
@@ -423,19 +424,33 @@ def experiment (request, experiment_name_slug, r_slug):
         try:
         #Check if logged in participant meets requirements.
             if request.user.is_authenticated() and request.user.profile.typex == 'Participant':
-                check_valid = check_applicant_validity(request, experiment)
+                check_eligible_valid = check_applicant_validity(request, experiment)
 
-                if check_valid == 0:
+                if check_eligible_valid == 0:
                     valid = True
                 else:
                     valid = False
+
+                #check against participant preferences
+                check_part_pref_valid = participant_pref_filter(request, experiment)
+
+
+                if check_part_pref_valid == 0:
+                    part_valid = True
+                else:
+                    part_valid = False
 
         except (MatchingDetail.DoesNotExist , Requirement.DoesNotExist , reqs.DoesNotExist) , e:
             reqs = None
             match_detail = None
 
+        # check if eparticipant preferences
 
-        context_dict= {'appform': appform, 'experiment_name': experiment.name, 'single_experiment': experiment_list, 'experiment': experiment, 'user_applied': userapplied, 'timeslots': timeslots, 'researcher': researcher, 'payment': payment, 'valid': valid, 'reqs': reqs, 'match_detail': match_detail, 'lang_req': language_req}
+
+        context_dict= {'appform': appform, 'experiment_name': experiment.name, 'single_experiment': experiment_list,
+                       'experiment': experiment, 'user_applied': userapplied, 'timeslots': timeslots, 'researcher': researcher, 'payment': payment, 'valid': valid,
+                       'reqs': reqs, 'match_detail': match_detail, 'lang_req': language_req, 'part_valid': part_valid }
+
 
         # process experiment application form
         if request.method == 'POST':
@@ -712,7 +727,7 @@ class ParticipantUpdate(UpdateView):
 class ExperimentUpdate(UpdateView):
     model = Experiment
     form_class = ExperimentForm
-    template_name_suffix = '_update_form'
+    template_name_suffix = 'partici'
     success_url='/part_finder/experiment/update'
     # pk = pk
 
