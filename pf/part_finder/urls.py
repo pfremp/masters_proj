@@ -5,7 +5,7 @@ from part_finder import views, views_search, views_user
 from django.contrib import admin
 from registration.backends.simple.views import RegistrationView
 from part_finder.forms import PartDemoForm,PartDetailsForm,PartStudentForm,PartPrefForm
-from part_finder.views import  ParticipantRegistration, show_message_form_condition, ParticipantUpdate, ResearcherUpdate, process_application, ExperimentUpdate, ExperimentList
+from part_finder.views import  ParticipantRegistration, show_message_form_condition, ParticipantUpdate, ResearcherUpdate, process_application, ExperimentUpdate, ExperimentList, PaymentUpdate, TimeSlotUpdate, RequirementUpdate, MatchDetailsUpdate
 from part_finder.views_user import ParticipantGeneralUpdate, ParticipantStudentUpdate, ParticipantDemoUpdate, ParticipantPrefUpdate, UserAccountUpdate
 from django.views.generic.edit import UpdateView
 from part_finder.models import Participant
@@ -53,6 +53,7 @@ urlpatterns = patterns('',
     url(r'^experiments/$', views.all_experiments, name='allexperiments'),
     url(r'^match/(?P<experiment_id>[\w\-]+)/$', views_search.matched_experiment, name='set_match'),
 
+    #researcher
 
     #participant urls.
     url(r'^participant/profile/$', views_user.profile_page, name='participant_profile'),
@@ -66,7 +67,12 @@ urlpatterns = patterns('',
     # url(r'password_change/$', 'django.contrib.auth.views.password_change', {'template_name': 'part_finder/participant_update_form.html'}),
 
     #experiment urls
-    url(r'^experiment/update/$', login_required(ExperimentUpdate.as_view()), name='update_experiment'),
+    url(r'^experiment/update/(?P<pk>[\w\-]+)/$', login_required(ExperimentUpdate.as_view()), name='update_experiment'),
+    url(r'^experiment/payment/update/(?P<pk>[\w\-]+)/(?P<slug>[\w\-]+)/$', login_required(PaymentUpdate.as_view()), name='update_payment'),
+    url(r'^experiment/timeslot/(?P<experiment_id>[\w\-]+)/$', views.exp_timeslots, name='experiment_timeslots'),
+    url(r'^experiment/timeslot/update/(?P<pk>[\w\-]+)/(?P<slug>[\w\-]+)/$', login_required(TimeSlotUpdate.as_view()), name='update_timeslot'),
+    url(r'^experiment/requirement/update/(?P<pk>[\w\-]+)/(?P<slug>[\w\-]+)/$', login_required(RequirementUpdate.as_view()), name='update_requirement'),
+    url(r'^experiment/requirement/details/update/(?P<pk>[\w\-]+)/(?P<slug>[\w\-]+)/$', login_required(MatchDetailsUpdate.as_view()), name='update_requirement_details'),
     url(r'^res/experiments/$', ExperimentList.as_view()),
 
 

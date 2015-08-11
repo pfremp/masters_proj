@@ -171,7 +171,8 @@ def researcher_experiments(request):
 
     # experiments = Experiment.objects.filter(researcher=request.user.profile.researcher)
     experiments = Experiment.objects.filter(researcher=request.user.profile.researcher)
-
+    requirements = Requirement.objects.all()
+    match_details = MatchingDetail.objects.all()
 
     def get_exp_count():
         count = 0
@@ -182,9 +183,25 @@ def researcher_experiments(request):
 
     exp_count = get_exp_count()
 
-    context_dict = {'experiments': experiments, 'exp_count': exp_count}
+    payment = Payment.objects.all()
+
+    context_dict = {'experiments': experiments, 'exp_count': exp_count, 'payment': payment, 'requirements': requirements, 'match_details': match_details}
 
     return render(request, 'part_finder/myexperiments.html', context_dict)
+
+#timeslots
+@login_required
+def exp_timeslots(request, experiment_id):
+    researcher = request.user.profile.researcher
+    experiment = Experiment.objects.get(id=experiment_id, researcher=researcher)
+    timeslots = TimeSlot.objects.filter(experiment=experiment)
+
+
+    context_dict = {'experiment': experiment, 'timeslots': timeslots}
+
+
+    return render(request, 'part_finder/timeslots.html', context_dict)
+
 
 
 @login_required
@@ -524,6 +541,24 @@ def experiment (request, experiment_name_slug, r_slug):
 #     return render(request, 'part_finder/add_experiment.html', {'form':form})
 #
 
+# @login_required
+# def set_matched(requirement):
+#
+#     if requirement.age == '1':
+#         requirement.match = True
+#     if requirement.language == '1':
+#         requirement.match = True
+#     if requirement.height == '1':
+#         requirement.match = True
+#     if requirement.weight == '1':
+#         requirement.match = True
+#     if requirement.gender == '1':
+#         requirement.match = True
+#     if requirement.student == '1':
+#         requirement.match = True
+#
+#     requirement_form.save()
+
 @login_required
 def add_experiment(request):
 
@@ -559,6 +594,10 @@ def add_experiment(request):
             requirement.experiment = experiment
             # requirement_form.save()
 
+            #check experiment to see if it is matched and
+            #set matched bool to true.
+            # set_matched(requirement)
+
             # # set matched experiment to true
             if requirement.age == '1':
                 requirement.match = True
@@ -572,8 +611,6 @@ def add_experiment(request):
                 requirement.match = True
             if requirement.student == '1':
                 requirement.match = True
-            # else:
-            #     requirement.match = False
 
             requirement_form.save()
 
@@ -589,7 +626,7 @@ def add_experiment(request):
                 # empty_match_detail = models.MatchingDetail
                 # empty_match_detail.requirement = requirement
                 # empty_match_detail.save()
-                return index(request)
+                return researcher_experiments(request)
 
         else:
             print form.errors
@@ -755,9 +792,10 @@ class ExperimentList(ListView):
 class ExperimentUpdate(UpdateView):
 
     model = Experiment
+    form_class = ExperimentForm
     template_name = 'part_finder/experiment_update.html'
-    success_url='/part_finder/'
-    fields = ['name','short_description','long_description','duration', 'city','address', 'url']
+    success_url='/part_finder/current_experiments/'
+    # fields = ['name','short_description','long_description','duration', 'city','address', 'url']
 
     def get_queryset(self):
         qs = super(ExperimentUpdate, self).get_queryset()
@@ -765,49 +803,62 @@ class ExperimentUpdate(UpdateView):
 
 
 
-    # def get_queryset(self):
-    #     qs = super(UpdateView, self).get_queryset()
-    #     return qs.filter(researcher=self.request.user.profile.researcher)
+class PaymentUpdate(UpdateView):
 
-# class ExperimentUpdate(UpdateView):
-#
-#
-#     model = Experiment
-#     form_class = ExperimentForm
-#     template_name = 'part_finder/experiment_update.html'
-#     success_url='/part_finder/'
-#     # queryset = Experiment.objects.filter(id=1)
-
-    #
-    # def get_object(self, *args, **kwargs):
-    #     obj = super(ExperimentUpdate, self).get_object(*args, **kwargs)
-    #     if obj.!= self.request.user:
-    #         pass
-    #     return obj
+    model = Payment
+    form_class = PaymentForm
+    template_name = 'part_finder/experiment_update.html'
+    success_url='/part_finder/current_experiments/'
 
 
-    # def get_queryset(self):
-    #     base_qs = super(ExperimentUpdate, self).get_queryset()
-    #     return base_qs.filter(researcher=self.request.user.profile.researcher)
+    def get_queryset(self):
+        qs = super(PaymentUpdate, self).get_queryset()
+        exp = Experiment.objects.get(id=self.kwargs['slug'])
+        return qs.filter(experiment=exp)
 
 
 
+class TimeSlotUpdate(UpdateView):
+
+    model = TimeSlot
+    form_class = TimeSlotForm
+    template_name = 'part_finder/experiment_update.html'
+    success_url='/part_finder/current_experiments/'
 
 
-# #Experiment details update
-# class ExperimentUpdate(UpdateView):
-#     model = Experiment
-#     form_class = ExperimentForm
-#     template_name_suffix = 'partici'
-#     success_url='/part_finder/experiment/update'
-#     # pk = pk
+    def get_queryset(self):
+        qs = super(TimeSlotUpdate, self).get_queryset()
+        exp = Experiment.objects.get(id=self.kwargs['slug'])
+        return qs.filter(experiment=exp)
 
 
-    # def get_object(self, queryset=None):
-    #     researcher = self.request.user.profile.researcher
-    #     experiment_id = 1
-    #     exp = Experiment.objects.filter(researcher=researcher, id=experiment_id)
-    #     return exp
+class RequirementUpdate(UpdateView):
+
+    model = Requirement
+    form_class = RequirementForm
+    template_name = 'part_finder/experiment_update.html'
+    success_url='/part_finder/current_experiments/'
+
+
+    def get_queryset(self):
+        qs = super(RequirementUpdate, self).get_queryset()
+        exp = Experiment.objects.get(id=self.kwargs['slug'])
+        return qs.filter(experiment=exp)
+
+
+class MatchDetailsUpdate(UpdateView):
+
+    model = MatchingDetail
+    form_class = MatchingDetailForm
+    template_name = 'part_finder/experiment_update.html'
+    success_url='/part_finder/current_experiments/'
+
+
+    def get_queryset(self):
+        qs = super(MatchDetailsUpdate, self).get_queryset()
+        req = Requirement.objects.get(id=self.kwargs['slug'])
+        return qs.filter(requirement=req)
+
 
 
 
@@ -821,40 +872,6 @@ class ResearcherUpdate(UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user.profile.researcher
-
-    # def get_object(self):
-    #     return get_object_or_404(User, pk=request.session['user_id'])
-
-    # def get_object(self, request):
-    #     return get_object_or_404(Participant, pk=request.session['user_id'])
-
-
-    # def get_object(self, queryset=None):
-    #     return self.request.user
-
-    # def get_object(self):
-    #     return self.request.user.get_profile()
-
-    # def get_object(self):
-    #     return Participant.objects.get(pk=self.request.GET.get('pk'))
-    #     # return Participant.objects.get(user=self.request.GET.get('user'))
-    #     # return Participant.objects.get(Participant.userprofile.user=self.request.user)
-    # def get_object(self):
-    #     return Participant.objects.get(Participant.userprofile.user=self.request.user)
-        # return Participant.objects.get(id=self.request.id)
-
-# @login_required
-# # Delete view
-# def delete_experiment(request, experiment):
-#
-#     if request.method == 'POST':
-#         r = request.user.profile.researcher
-#         e = Experiment.objects.filter(experiment, researcher=r)
-#         e.delete()
-#         return HttpResponseRedirect("/part_finder/")
-#
-#
-#     return render(request, 'part_finder/delete_experiment.html')
 
 
 @login_required
@@ -923,7 +940,7 @@ def reac_experiment(request, experiment_id):
 
 
 
-@login_required
+
 #Researcher page
 def researcher_profile(request, username):
     user = User.objects.get(username=username)

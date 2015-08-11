@@ -205,11 +205,11 @@ class Payment(models.Model):
     )
     payment_type = ChainedForeignKey(Payment_type, chained_field="currency", chained_model_field="currency")
     amount = models.IntegerField(null=True)
-    experiment = models.ForeignKey(Experiment, null=True, related_name='experiment')
+    experiment = models.ForeignKey(Experiment, null=True, related_name='payment')
     # street = models.CharField(max_length=100)
 
     def __unicode__(self):
-        return str(self.amount)
+        return self.experiment.name
         # return self.currency.currency
 
 

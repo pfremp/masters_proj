@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+{% extends 'sitebase.html' %}
+
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block title %} My Experiments{% endblock %}
+
+{% block body_block %}
+    {% if user.profile.typex == 'Researcher' %}
+    <h1>{{ experiment.name }} Timeslots</h1>
+
+    <p>You currently have {{ timeslots.count }} timeslot(s).</p>
+    <div class="table table-responsive" data-example-id="simple-table" >
+    <table class="table">
+      <caption></caption>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Time</th>
+          <th>No. of Participants</th>
+{#          <th>Edit</th>#}
+{#          <th>Applications</th>#}
+        </tr>
+      </thead>
+      <tbody>
+    {% for timeslot in timeslots %}
+        {% if timeslot.experiment.has_ended == False %}
+        <tr>
+          <td>{{ timeslot.date }}</td>
+          <td>{{ timeslot.start_time }} - {{ timeslot.end_time }}</td>
+          <td>{{ timeslot.no_of_parts }}</td>
+          <td><a href="/part_finder/experiment/timeslot/update/{{ timeslot.id }}/{{ experiment.id }}"><button type="button" class="btn btn-default btn-xs">Edit</button></a></td>
+          <td><a href="{% url 'experiment-delete' experiment.id %}"><button type="button" class="btn btn-default btn-xs">Delete</button></a></td>
+
+        </tr>
+        {% endif %}
+    {% endfor %}
+      </tbody>
+    </table>
+  </div>
+    {% else %}
+    {% endif %}
+
+
+
+{% endblock %}
+
+
