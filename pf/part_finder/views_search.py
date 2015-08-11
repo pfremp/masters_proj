@@ -56,46 +56,51 @@ def matched_experiment(request, experiment_id):
 
 def check_applicant_validity(request, experiment):
     valid = 0
+
     participant = request.user.profile.participant
-    requirement = Requirement.objects.get(experiment=experiment)
+    try:
+        requirement = Requirement.objects.get(experiment=experiment)
 
-    if requirement.gender == '1':
+        if requirement.gender == '1':
 
-        if match_gender(request,experiment) == True:
-            valid += 0
-        else:
-            valid += 1
+            if match_gender(request,experiment) == True:
+                valid += 0
+            else:
+                valid += 1
 
-    if requirement.student == '1':
+        if requirement.student == '1':
 
-        if match_student(request) == True:
-            valid +=0
-        else:
-            valid +=1
+            if match_student(request) == True:
+                valid +=0
+            else:
+                valid +=1
 
-    if requirement.age == '1':
-        if match_age(request,experiment) == True:
-            valid += 0
-        else:
-            valid += 1
+        if requirement.age == '1':
+            if match_age(request,experiment) == True:
+                valid += 0
+            else:
+                valid += 1
 
-    if requirement.language == '1':
-        if match_lang(request, experiment) == True:
-            valid += 0
-        else:
-            valid += 1
+        if requirement.language == '1':
+            if match_lang(request, experiment) == True:
+                valid += 0
+            else:
+                valid += 1
 
-    if requirement.height == '1':
-        if match_height(request, experiment):
-            valid += 0
-        else:
-            valid += 1
+        if requirement.height == '1':
+            if match_height(request, experiment):
+                valid += 0
+            else:
+                valid += 1
 
-    if requirement.weight == '1':
-        if match_weight(request, experiment):
-            valid += 0
-        else:
-            valid += 1
+        if requirement.weight == '1':
+            if match_weight(request, experiment):
+                valid += 0
+            else:
+                valid += 1
+
+    except Requirement.DoesNotExist:
+        requirement = None
 
     return valid
 
@@ -160,7 +165,7 @@ def match_gender(request, experiment):
         else:
             return False
 
-    except User.DoesNotExist:
+    except (User.DoesNotExist , MatchingDetail.DoesNotExist , Requirement.DoesNotExist), e:
         pass
 
 
@@ -175,7 +180,7 @@ def match_student(request):
         else:
             return False
 
-    except User.DoesNotExist:
+    except (User.DoesNotExist , MatchingDetail.DoesNotExist , Requirement.DoesNotExist), e:
         pass
 
 
@@ -198,7 +203,7 @@ def match_age(request, experiment):
         else:
             return False
 
-    except User.DoesNotExist:
+    except (User.DoesNotExist , MatchingDetail.DoesNotExist , Requirement.DoesNotExist), e:
         pass
 
 
@@ -207,38 +212,45 @@ def match_lang(request, experiment):
 
     participant = request.user.profile.participant
     experiment = experiment
-    requirement = Requirement.objects.get(experiment=experiment)
-    match_details = MatchingDetail.objects.get(requirement=requirement)
 
-    # alllanguages = match_details.l
-    # experiment_languages = alllanguages.split()
+    try:
+        requirement = Requirement.objects.get(experiment=experiment)
+        match_details = MatchingDetail.objects.get(requirement=requirement)
 
-    participant_languages = participant.language.all()
+        # alllanguages = match_details.l
+        # experiment_languages = alllanguages.split()
 
-    experiment_languages = match_details.l.replace('[','').replace('u','').replace("'",'').replace(']','').replace(',','')
-    exp_lang = experiment_languages.split()
+        participant_languages = participant.language.all()
 
-    # p = participant.language.all()
-    v = 0
-    # e_counter = 0
-    # print "Part Lang: " + str(participant_languages)
-    # print "Exp Lang: " + str(experiment_languages)
-    # print "Exp Lang Split: " + str(exp_lang)
-    # print "Exp Lang Split: " + str(exp_lang[0])
+        experiment_languages = match_details.l.replace('[','').replace('u','').replace("'",'').replace(']','').replace(',','')
+        exp_lang = experiment_languages.split()
 
-    for p in participant_languages:
-        for e in exp_lang:
-            # e_counter += 1
-            # print e_counter
-            if p.language.lower() == e.lower():
-                v += 1
-                # print p.language + " = " + e
+        # p = participant.language.all()
+        v = 0
+        # e_counter = 0
+        # print "Part Lang: " + str(participant_languages)
+        # print "Exp Lang: " + str(experiment_languages)
+        # print "Exp Lang Split: " + str(exp_lang)
+        # print "Exp Lang Split: " + str(exp_lang[0])
 
-    # print v
-    # print len(exp_lang)
-    if v == len(exp_lang):
-        # print str(v) + " = " + str(len(exp_lang))
-        return True
+
+        for p in participant_languages:
+            for e in exp_lang:
+                # e_counter += 1
+                # print e_counter
+                if p.language.lower() == e.lower():
+                    v += 1
+                    # print p.language + " = " + e
+
+        # print v
+        # print len(exp_lang)
+        if v == len(exp_lang):
+            # print str(v) + " = " + str(len(exp_lang))
+            return True
+
+    except (MatchingDetail.DoesNotExist, Requirement.DoesNotExist) , e:
+        match_details = None
+        requirement = None
 
 
 
@@ -260,7 +272,7 @@ def match_height(request, experiment):
 
         return height_req
 
-    except User.DoesNotExist:
+    except (User.DoesNotExist , MatchingDetail.DoesNotExist , Requirement.DoesNotExist), e:
         pass
 
 
@@ -282,7 +294,7 @@ def match_weight(request, experiment):
 
         return weight_req
 
-    except User.DoesNotExist:
+    except (User.DoesNotExist , MatchingDetail.DoesNotExist , Requirement.DoesNotExist), e:
         pass
 
 

@@ -17,21 +17,36 @@ from part_finder.forms_search import RequirementForm
 from part_finder.views_search import *
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
+from django import template
+
+# register = template.Library()
 
 
 from django.template import RequestContext # For CSRF
 # Create your views here.
 
 
+
 #Homepage
 def index(request):
     experiments_list = Experiment.objects.all()[:10]
     payment_list = Payment.objects.all()
-    # experiments_list = Experiment.objects.order_by('date')[:10]
+    request = request
+
+    filtered_exp = []
+
+    for e in experiments_list:
+        print "experiment " + str(e)
+        print "Test " + str(participant_pref_filter(request, e))
+        if participant_pref_filter(request, e) == 0:
+            filtered_exp.append(e)
 
 
 
-    context_dict = {'experiments' : experiments_list, 'payment_list': payment_list}
+
+
+
+    context_dict = {'experiments' : experiments_list, 'payment_list': payment_list, 'request': request, 'filtered_exp':filtered_exp}
     return render(request, 'part_finder/index.html', context_dict)
 
 # def current_user(request):

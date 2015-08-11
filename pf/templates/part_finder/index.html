@@ -3,7 +3,7 @@
 {% extends 'sitebase.html' %}
 {% load staticfiles %}
 {% block title %}Participant Finder{% endblock %}
-
+{% load pf_extras %}
 {% block body_block %}
 {#    <img src="{% static "images/home_banner.jpg" %}" class="img-responsive" style="padding: 0;" alt="Responsive image">#}
 {#    <hr style="margin-top: 0px;">#}
@@ -39,7 +39,7 @@
                 {% endfor %}
 
             <h1 class="text-center">Latest Experiments</h1>
-    <div class="row"><p class="text-center pull-right"><a href="#">View Matched</a> / <a href="{% url 'allexperiments' %}">All Experiments</a></p></div>
+    <div class="row"><p class="text-center" style="opacity: 0.5">Experiments have been filtered based on your account <a href="{% url 'participant_settings' %}"><b>preferences.</b></a></p><!--<p class="text-center pull-right"><a style="opacity: 0.4" href="#">View Preferences</a> / <a style="opacity: 0.4" href="{% url 'allexperiments' %}">All Experiments</a></p>--></div>
 
 {#        <ul class="nav navbar-nav navbar-right">#}
 {#                      <li class="dropdown">#}
@@ -57,7 +57,8 @@
     <div class="row">
         {% if experiments %}
 
-            {% for experiment in experiments|slice:"10" %}
+            {% for experiment in filtered_exp|slice:"10" %}
+
                 {% if experiment.has_ended == False %}
                     <div class="col-sm-6 col-md-4">
             <div class="panel panel-default">
@@ -80,6 +81,7 @@
 </div>
    </div>
                 </div>
+{#                {% endif %}#}
                 {% endif %}
                 {% endfor %}
 
