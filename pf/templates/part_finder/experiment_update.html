@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+{% extends 'sitebase.html' %}
+
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block title %}My Participant Details{% endblock %}
+
+{% block body_block %}
+    {% if user.profile.typex == 'Researcher' %}
+        <form action="" method="post" novalidate>{% csrf_token %}
+            {% bootstrap_form form %}
+            <input class="btn btn-default" type="submit" value="Update" />
+        </form>
+    {% else %}
+    {% endif %}
+{% endblock %}
+
+

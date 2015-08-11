@@ -17,6 +17,14 @@ import sys
 import  datetime
 
 
+def get_participant(request):
+    try:
+        if request.user.is_authenticated():
+            participant = request.user.profile.participant
+            return participant
+    except User.is_anonymous:
+        pass
+
 
 # if experiment is matched, researcher will be
 # redirected to complete the specific matched details.
@@ -57,7 +65,7 @@ def matched_experiment(request, experiment_id):
 def check_applicant_validity(request, experiment):
     valid = 0
 
-    participant = request.user.profile.participant
+    participant = get_participant(request)
     try:
         requirement = Requirement.objects.get(experiment=experiment)
 
@@ -109,7 +117,7 @@ def check_applicant_validity(request, experiment):
 #participant preferences matching
 def participant_pref_filter(request, experiment):
     valid = 0
-    participant = request.user.profile.participant
+    participant = get_participant(request)
     payment = Payment.objects.get(experiment=experiment)
     eligible = check_applicant_validity(request, experiment)
 
@@ -155,7 +163,7 @@ def participant_pref_filter(request, experiment):
 def match_gender(request, experiment):
 
     try:
-        participant = request.user.profile.participant
+        participant = get_participant(request)
         requirement = Requirement.objects.get(experiment=experiment)
         match_details = MatchingDetail.objects.get(requirement=requirement)
         gender = match_details.gender

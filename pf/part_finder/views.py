@@ -36,10 +36,13 @@ def index(request):
     filtered_exp = []
 
     for e in experiments_list:
-        print "experiment " + str(e)
-        print "Test " + str(participant_pref_filter(request, e))
-        if participant_pref_filter(request, e) == 0:
-            filtered_exp.append(e)
+        # print "experiment " + str(e)
+        # print "Test " + str(participant_pref_filter(request, e))
+        if request.user.is_authenticated() and request.user.profile.typex == 'Participant':
+            if participant_pref_filter(request, e) == 0:
+                filtered_exp.append(e)
+        else:
+            filtered_exp = experiments_list
 
 
 
@@ -738,20 +741,46 @@ class ParticipantUpdate(UpdateView):
 #         return self.request.user.profile
 
 
-# #Experiment details update
+
 class ExperimentUpdate(UpdateView):
+
+
     model = Experiment
     form_class = ExperimentForm
-    template_name_suffix = 'partici'
-    success_url='/part_finder/experiment/update'
-    # pk = pk
+    template_name = 'part_finder/experiment_update.html'
+    success_url='/part_finder/'
+    # queryset = Experiment.objects.filter(id=1)
+
+    #
+    # def get_object(self, *args, **kwargs):
+    #     obj = super(ExperimentUpdate, self).get_object(*args, **kwargs)
+    #     if obj.!= self.request.user:
+    #         pass
+    #     return obj
 
 
-    def get_object(self, queryset=None):
-        researcher = self.request.user.profile.researcher
-        experiment_id = 1
-        exp = Experiment.objects.filter(researcher=researcher, id=experiment_id)
-        return exp
+    # def get_queryset(self):
+    #     base_qs = super(ExperimentUpdate, self).get_queryset()
+    #     return base_qs.filter(researcher=self.request.user.profile.researcher)
+
+
+
+
+
+# #Experiment details update
+# class ExperimentUpdate(UpdateView):
+#     model = Experiment
+#     form_class = ExperimentForm
+#     template_name_suffix = 'partici'
+#     success_url='/part_finder/experiment/update'
+#     # pk = pk
+
+
+    # def get_object(self, queryset=None):
+    #     researcher = self.request.user.profile.researcher
+    #     experiment_id = 1
+    #     exp = Experiment.objects.filter(researcher=researcher, id=experiment_id)
+    #     return exp
 
 
 
@@ -879,6 +908,11 @@ def researcher_profile(request, username):
     context_dict = {'researcher': researcher, 'experiments': experiments}
 
     return render(request, 'part_finder/researcher_profile.html/', context_dict)
+
+
+
+
+
 
 
 

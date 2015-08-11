@@ -60,10 +60,13 @@ urlpatterns = patterns('',
     url(r'^participant/profile/general/update/$', login_required(ParticipantGeneralUpdate.as_view()), name='update_participant_general'),
     url(r'^participant/profile/student/update/$', login_required(ParticipantStudentUpdate.as_view()), name='update_participant_student'),
     url(r'^participant/profile/demographic/update/$', login_required(ParticipantDemoUpdate.as_view()), name='update_participant_demo'),
-    url(r'^participant/profile/preferences/update/$', login_required(ParticipantPrefUpdate.as_view()), name='update_participant_pref'),
+    url(r'^participant/profile/preferences/update/(?P<pk>[\w\-]+)/(?P<slug>[\w\-]+)/', login_required(ParticipantPrefUpdate.as_view()), name='update_participant_pref'),
     # url(r'^participant/profile/user/update/$', login_required(UserAccountUpdate.as_view()), name='update_user_account'),
     # url(r'^$', views.index, name='password_change_done'),
     # url(r'password_change/$', 'django.contrib.auth.views.password_change', {'template_name': 'part_finder/participant_update_form.html'}),
+
+    #experiment urls
+    url(r'^experiment/update/$', login_required(ExperimentUpdate.as_view()), name='update_experiment'),
 
 
 
