@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+{% extends 'sitebase.html' %}
+
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block title %}My Participant Details{% endblock %}
+
+{% block body_block %}
+    {% if user.profile.typex == 'Researcher' %}
+
+    <h2>My Experiments</h2>
+    <ul>
+        {% for experiment in object_list %}
+            <li>{{ experiment.name }}</li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    {% endif %}
+{% endblock %}
+
+

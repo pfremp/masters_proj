@@ -27,6 +27,22 @@
         <tr>
           <td><a href="/part_finder/experiments/{{ experiment.researcher_slug }}/{{ experiment.slug }}">{{ experiment.name }}</a></td>
           <td><a href="/part_finder/process_applications/{{ experiment.researcher_slug }}/{{ experiment.slug }}"><button type="button" class="btn btn-default btn-xs">Applications</button></a></td>
+          <td>
+
+          <div class="btn-group">
+            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Edit <span class="caret"></span></button>
+              <ul class="dropdown-menu">
+                <li><a href="#">Experiment</a></li>
+                <li><a href="#">Payment</a></li>
+                <li><a href="#">Timeslot</a></li>
+                <li><a href="#">Requirements</a></li>
+                <li><a href="#">Requirements</a></li>
+{#                <li role="separator" class="divider"></li>#}
+{#                <li><a href="#">Separated link</a></li>#}
+              </ul>
+          </div>
+
+          </td>
           <td><a href="{% url 'end_experiment' experiment.id %}"><button type="button" class="btn btn-default btn-xs">End</button></a></td>
           <td><a href="{% url 'experiment-delete' experiment.id %}"><button type="button" class="btn btn-default btn-xs">Delete</button></a></td>
 

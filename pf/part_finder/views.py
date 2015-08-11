@@ -8,7 +8,7 @@ from django.shortcuts import redirect
 # from django.contrib.formtools.wizard.views import SessionWizardView
 from formtools.wizard.views import WizardView, SessionWizardView
 from django.views.generic.edit import UpdateView, DeleteView
-
+from django.views.generic.list import ListView
 from django.forms.formsets import formset_factory, BaseFormSet
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.context_processors import csrf
@@ -741,15 +741,42 @@ class ParticipantUpdate(UpdateView):
 #         return self.request.user.profile
 
 
+class ExperimentList(ListView):
+    model = Experiment
+    template_name = 'part_finder/experiment_list.html'
+
+    def get_queryset(self):
+        self.researcher = get_object_or_404(Researcher, id=self.args[0])
+        return Experiment.objects.filter(researcher=self.researcher)
+
+
+
 
 class ExperimentUpdate(UpdateView):
 
-
     model = Experiment
-    form_class = ExperimentForm
     template_name = 'part_finder/experiment_update.html'
     success_url='/part_finder/'
-    # queryset = Experiment.objects.filter(id=1)
+    fields = ['name','short_description','long_description','duration', 'city','address', 'url']
+
+    def get_queryset(self):
+        qs = super(ExperimentUpdate, self).get_queryset()
+        return qs.filter(researcher=self.request.user.profile.researcher)
+
+
+
+    # def get_queryset(self):
+    #     qs = super(UpdateView, self).get_queryset()
+    #     return qs.filter(researcher=self.request.user.profile.researcher)
+
+# class ExperimentUpdate(UpdateView):
+#
+#
+#     model = Experiment
+#     form_class = ExperimentForm
+#     template_name = 'part_finder/experiment_update.html'
+#     success_url='/part_finder/'
+#     # queryset = Experiment.objects.filter(id=1)
 
     #
     # def get_object(self, *args, **kwargs):

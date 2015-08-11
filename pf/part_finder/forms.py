@@ -61,7 +61,7 @@ class ExperimentForm (autocomplete_light.ModelForm):
 
     class Meta():
         model = Experiment
-        fields = ('name','short_description','long_description','duration', 'city','address', 'url', 'lang',)
+        fields = ('name','short_description','long_description','duration', 'city','address', 'url')
 
 
 class ParticipantForm (autocomplete_light.ModelForm):
