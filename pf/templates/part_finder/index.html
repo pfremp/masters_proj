@@ -61,7 +61,7 @@
             {% for experiment in filtered_exp|slice:"10" %}
 
                 {% if experiment.has_ended == False %}
-                    <div class="col-sm-6 col-md-4">
+                    <div class="col-sm-6 col-md-6">
             <div class="panel panel-default">
                 <div class="panel-heading"><h3>{{ experiment.name }}</h3></div>
                 <div class="panel-body">
@@ -115,7 +115,7 @@
                 <div class="panel-heading"><h1>Researchers</h1></div>
                 <div class="panel-body">
                     <h3 class="lead"><i class="glyphicon glyphicon-ok"></i> Post Experiments</h3>
-                    <h3 class="lead"><i class="glyphicon glyphicon-ok"></i> Search Participant Pool</h3>
+                    <h3 class="lead"><i class="glyphicon glyphicon-ok"></i> Target Demographic</h3>
                     <h3 class="lead"><i class="glyphicon glyphicon-ok"></i> Manage Applications</h3>
                     <div class="text-center"><a href="{% url 'account_signup' %}"><button class="btn btn-lg btn-primary">Free Sign Up</button></a></div>
                 </div>
@@ -124,7 +124,7 @@
     </div>
 
     <h1 class="text-center">Latest Experiments</h1>
-    <div class="row"><p class="text-center pull-right"><a href="#">View Matched</a> / <a href="{% url 'allexperiments' %}">All Experiments</a></p></div>
+    <div class="row"><p class="text-center pull-right"><a href="{% url 'allexperiments' %}">All Experiments</a></p></div>
 
 
     <div class="row">
@@ -132,7 +132,7 @@
 
             {% for experiment in experiments|slice:"10" %}
                 {% if experiment.has_ended == False %}
-                    <div class="col-sm-6 col-md-4">
+                    <div class="col-sm-6 col-md-6">
             <div class="panel panel-default">
                 <div class="panel-heading"><h3>{{ experiment.name }}</h3></div>
                 <div class="panel-body">

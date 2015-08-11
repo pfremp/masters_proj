@@ -382,7 +382,23 @@ def experiment_full(experiment):
 def all_experiments(request):
     experiments = Experiment.objects.all()
     payment_list = Payment.objects.all()
-    context_dict = {'experiments': experiments, 'payment_list': payment_list}
+    request = request
+
+
+    filtered_exp = []
+
+    for e in experiments:
+        # print "experiment " + str(e)
+        # print "Test " + str(participant_pref_filter(request, e))
+        if request.user.is_authenticated() and request.user.profile.typex == 'Participant':
+            if participant_pref_filter(request, e) == 0:
+                filtered_exp.append(e)
+        else:
+            filtered_exp = experiments
+
+
+    context_dict = {'experiments': experiments, 'payment_list': payment_list, 'request': request, 'filtered_exp':filtered_exp}
+
 
     return render (request, 'part_finder/all_experiments.html', context_dict)
 
