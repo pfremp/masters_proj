@@ -30,7 +30,6 @@ class ResearcherForm (forms.ModelForm):
    department = forms.CharField(label="Department Name", max_length=128)
    contact_no = forms.IntegerField(label="Contact Number")
    url = forms.CharField(label="URL (Format: http://yoursite.com)")
-   dob = forms.DateField(label="Date of Birth", widget=DateWidget(usel10n=True, bootstrap_version=3), required=False)
 
    class Meta():
         model = Researcher
@@ -51,12 +50,8 @@ class ExperimentForm (autocomplete_light.ModelForm):
     slug = forms.CharField(widget=forms.HiddenInput(), required=False)
 
     class Media:
-        """
-        We're currently using Media here, but that forced to move the
-        javascript from the footer to the extrahead block ...
 
-        So that example might change when this situation annoys someone a lot.
-        """
+
         js = ('js/dependant_autocomplete.js',)
 
 
