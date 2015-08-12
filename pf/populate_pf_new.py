@@ -37,8 +37,8 @@ def populate():
 
 
     #participant
-    par1 = add_par(dob='1960-04-15', country=None, region=None, city=None, contact_number='02154785985', occupation='Student', education='School', student=True, university=gla, course_name='Information Technology', year='3', height=150, weight=80, matric='325414785', gender='Male', online_only=False, paid_only=False, city_only=False, my_uni_only=False, eligible_only=False )
-    par2 = add_par(dob='1970-02-13', country=None, region=None, city=None, contact_number='08965785985', occupation='Student', education='School', student=True, university=gcu, course_name='Marketing', year='1', height=185, weight=50, matric='1478514525', gender='Female', online_only=False, paid_only=False, city_only=False, my_uni_only=False, eligible_only=False)
+    par1 = add_par(dob='1960-04-15',  city=None, contact_number='02154785985', occupation='Student', education='School', student=True, university=gla, course_name='Information Technology', year='3', height=150, weight=80, matric='325414785', gender='Male', online_only=False, paid_only=False, city_only=False, my_uni_only=False, eligible_only=False )
+    par2 = add_par(dob='1970-02-13', city=None, contact_number='08965785985', occupation='Student', education='School', student=True, university=gcu, course_name='Marketing', year='1', height=185, weight=50, matric='1478514525', gender='Female', online_only=False, paid_only=False, city_only=False, my_uni_only=False, eligible_only=False)
 
 
     #userprofile
@@ -224,8 +224,8 @@ def add_res(university, department, contact_no, url):
     r.save()
     return r
 
-def add_par(dob, country, region, city, contact_number, occupation, education, student, university, course_name, year, height, weight, matric, gender, online_only, paid_only, city_only, my_uni_only, eligible_only):
-    p = Participant.objects.get_or_create(dob=dob, country=country, region=region, city=city, contact_number=contact_number, occupation=occupation, education=education, student=student, university=university, course_name=course_name, year=year, height=height, weight=weight, matric=matric, gender=gender, online_only=online_only, paid_only=paid_only, city_only=city_only, my_uni_only=my_uni_only, eligible_only=eligible_only)[0]
+def add_par(dob, city, contact_number, occupation, education, student, university, course_name, year, height, weight, matric, gender, online_only, paid_only, city_only, my_uni_only, eligible_only):
+    p = Participant.objects.get_or_create(dob=dob, city=city, contact_number=contact_number, occupation=occupation, education=education, student=student, university=university, course_name=course_name, year=year, height=height, weight=weight, matric=matric, gender=gender, online_only=online_only, paid_only=paid_only, city_only=city_only, my_uni_only=my_uni_only, eligible_only=eligible_only)[0]
 
     p.save()
     return p

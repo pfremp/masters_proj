@@ -389,15 +389,17 @@ def all_experiments(request):
 
     filtered_exp = []
 
-    for e in experiments:
-        # print "experiment " + str(e)
-        # print "Test " + str(participant_pref_filter(request, e))
-        if request.user.is_authenticated() and request.user.profile.typex == 'Participant':
-            if participant_pref_filter(request, e) == 0:
-                filtered_exp.append(e)
-        else:
-            filtered_exp = experiments
-
+    try:
+        for e in experiments:
+            # print "experiment " + str(e)
+            # print "Test " + str(participant_pref_filter(request, e))
+            if request.user.is_authenticated() and request.user.profile.typex == 'Participant' and request.user.profile.participant != None:
+                if participant_pref_filter(request, e) == 0:
+                    filtered_exp.append(e)
+            else:
+                filtered_exp = experiments
+    except AttributeError:
+        pass
 
     context_dict = {'experiments': experiments, 'payment_list': payment_list, 'request': request, 'filtered_exp':filtered_exp}
 
