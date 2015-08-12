@@ -92,10 +92,10 @@ class Participant(models.Model):
     EDUCATION = (('School', 'School'),('SQ1', 'School Qualification1'), ('College','College') , ('University' , 'University'))
 
     dob = models.DateField(("Date"), default=date.today, null=True)
-    country = models.ForeignKey('cities_light.country', null=True)
-    region = models.ForeignKey('cities_light.region', null=True)
-    city = models.ForeignKey('cities_light.city', null=True)
-    contact_number = models.IntegerField(blank=True)
+    # country = models.ForeignKey('cities_light.country', null=True)
+    # region = models.ForeignKey('cities_light.region', null=True)
+    city = models.ForeignKey('cities_light.city', null=True, blank=True)
+    contact_number = models.IntegerField(blank=True, null=True)
     occupation = models.CharField(max_length=128, blank=True)
     # lang = models.CharField(max_length=128, blank=True)
     language = models.ManyToManyField(Languages, related_name='participant', blank=True)
@@ -112,8 +112,8 @@ class Participant(models.Model):
     #Demographic informatuon
     gender = models.CharField(max_length=128, blank=True, choices=SEX)
     #Health information
-    height = models.IntegerField(blank=True)
-    weight = models.IntegerField(blank=True)
+    height = models.IntegerField(blank=True, null=True)
+    weight = models.IntegerField(blank=True, null=True )
 
     #Preferences
     city_only = models.BooleanField(blank=True, default=False)
@@ -124,13 +124,15 @@ class Participant(models.Model):
     # email_notifications = models.BooleanField(default=False, blank=True)
     experiments = models.ManyToManyField(Experiment, blank=True, related_name="participants")
     eligible_only = models.BooleanField(default=False, blank=True)
+    reg_2_completed = models.BooleanField(default=False, blank=True)
 
     def ID(self, obj):
         return obj.id
 
     def __unicode__(self):
         # return self.userprofile.user.username
-        return self.userprofile.user.username
+        # return self.userprofile.user.username
+        return str(self.city)
 
 
 
@@ -209,7 +211,7 @@ class Payment(models.Model):
     # street = models.CharField(max_length=100)
 
     def __unicode__(self):
-        return self.experiment.name
+        return str(self.amount)
         # return self.currency.currency
 
 

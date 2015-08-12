@@ -16,6 +16,69 @@ from django.forms import ModelForm
 from smart_selects.db_fields import GroupedForeignKey
 from django.forms.extras.widgets import *
 
+
+#participant form1 - general details
+class ParticipantForm1 (autocomplete_light.ModelForm):
+
+    contact_number = forms.IntegerField(required=False, label="Contact No")
+    student = forms.BooleanField(label="Student", required=False)
+    dob = forms.DateField(label="Date of Birth", widget=DateWidget(usel10n=True, bootstrap_version=3), required=True)
+
+    # class Media:
+    #     js = ('js/dependant_autocomplete.js',)
+
+    class Meta():
+        model = Participant
+        fields = ('city','contact_number','dob','student')
+
+
+#participant form 2 - extra info used for matching experiments
+class ParticipantForm2 (autocomplete_light.ModelForm):
+    SEX = (('Male','Male'), ('Female','Female'), ('PNTS','Prefer not to say'))
+    EDUCATION = (('School', 'School'),('SQ1', 'School Qualification1'), ('College','College') , ('University' , 'University'))
+    YOS = (('1' , '1'), ('2' , '2'),('3' , '3'),('4' , '4'),('5' , '5'))
+
+    education = forms.ChoiceField(choices=EDUCATION, label="Level of Education", required=True)
+    occupation = forms.CharField(required=False, label="Occupation", max_length=128)
+
+    #university details
+    university = forms.ModelChoiceField(label="University", queryset=University.objects.all(), required=False)
+    course_name = forms.CharField(label="Course Name",max_length=128, required=False)
+    year_of_study = forms.ChoiceField(choices=YOS, label="Year of Study", required=False)
+    matric = forms.CharField(label="Matric", required=False)
+
+    #Demographic
+    gender = forms.ChoiceField(required=False, label="Gender", choices=SEX)
+
+    #Health information
+    height = forms.IntegerField(label="Height (CM)", required=False)
+    weight = forms.IntegerField(label="Weight (KG)", required=False)
+
+    #preferences
+    online_only = forms.BooleanField(label="Online Only", required=False, help_text="Only show online experiments.")
+    paid_only = forms.BooleanField(label="Paid Only", required=False, help_text="Only show paid experiments.")
+    my_uni_only = forms.BooleanField(label="My Uni Only", required=False, help_text="Only show experiments from my univerisy.")
+    city_only = forms.BooleanField(label="City Only", required=False, help_text="Only show experiments from my city")
+    eligible_only = forms.BooleanField(label="Eligible Only", required=False, help_text="Only show experiments that I am eligible for")
+
+    class Media:
+        js = ('js/dependant_autocomplete.js',)
+
+    class Meta():
+        model = Participant
+        fields = ('education','occupation','language', 'university', 'course_name', 'year_of_study', 'matric', 'gender' ,'height', 'weight', 'online_only', 'paid_only' , 'my_uni_only', 'eligible_only','city_only')
+
+
+
+
+
+
+
+
+
+
+
+
 class PartGeneralUpdateForm (autocomplete_light.ModelForm):
 
     YN = (('Yes','Yes'),('No','No'))
@@ -32,7 +95,7 @@ class PartGeneralUpdateForm (autocomplete_light.ModelForm):
 
     class Meta():
         model = Participant
-        fields = ('dob','country','region','city','contact_number','occupation','education', 'language', 'student')
+        fields = ('dob','city','contact_number','occupation','education', 'language', 'student')
 
 class PartStudentUpdateForm (forms.ModelForm):
     YOS = (('1' , '1'), ('2' , '2'),('3' , '3'),('4' , '4'),('5' , '5'))

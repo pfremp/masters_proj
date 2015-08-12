@@ -5,8 +5,8 @@ from part_finder import views, views_search, views_user
 from django.contrib import admin
 from registration.backends.simple.views import RegistrationView
 from part_finder.forms import PartDemoForm,PartDetailsForm,PartStudentForm,PartPrefForm
-from part_finder.views import  ParticipantRegistration, show_message_form_condition, ParticipantUpdate, ResearcherUpdate, process_application, ExperimentUpdate, ExperimentList, PaymentUpdate, TimeSlotUpdate, RequirementUpdate, MatchDetailsUpdate
-from part_finder.views_user import ParticipantGeneralUpdate, ParticipantStudentUpdate, ParticipantDemoUpdate, ParticipantPrefUpdate, UserAccountUpdate
+from part_finder.views import  ParticipantUpdate, ResearcherUpdate, process_application, ExperimentUpdate, ExperimentList, PaymentUpdate, TimeSlotUpdate, RequirementUpdate, MatchDetailsUpdate
+from part_finder.views_user import ParticipantGeneralUpdate, ParticipantStudentUpdate, ParticipantDemoUpdate, ParticipantPrefUpdate, UserAccountUpdate, participant_registration_1
 from django.views.generic.edit import UpdateView
 from part_finder.models import Participant
 from django.contrib.auth.decorators import login_required
@@ -15,11 +15,11 @@ from django.contrib.auth.decorators import login_required
 # from .models import NonAdminAddAnotherModel
 import autocomplete_light.shortcuts as al
 from django.views import generic
+from part_finder.forms_user import ParticipantForm1
 
 
 
-
-participant_forms = [PartDetailsForm,PartStudentForm,PartDemoForm,PartPrefForm]
+# participant_forms = [PartDetailsForm,PartStudentForm,PartDemoForm]
 
 urlpatterns = patterns('',
     url(r'^$', views.index, name='index'),
@@ -32,8 +32,9 @@ urlpatterns = patterns('',
     # url(r'^complete_registration/$', views.complete_registration, name='complete_registration'),
     url(r'^login_success/$', views.login_success, name='login_success'),
     # url(r'^login_page/$', views.login_page, name='login_page'),
-    url(r'^participant_registration/$', ParticipantRegistration.as_view(participant_forms, condition_dict = {'1': show_message_form_condition})),
+    # url(r'^participant_registration/$', ParticipantRegistration.as_view(participant_forms, condition_dict = {'1': show_message_form_condition})),
     url(r'^researcher_registration/$', views.researcher_registration, name='researcher_registration'),
+
     url(r'^participant/update/$', login_required(ParticipantUpdate.as_view()), name='update_participant_details'),
     # url(r'^profile/update/$', login_required(ProfileUpdate.as_view()), name='update_profile'),
     url(r'^researcher/update/$', login_required(ResearcherUpdate.as_view()), name='update_researcher_details'),
@@ -62,6 +63,8 @@ urlpatterns = patterns('',
     url(r'^participant/profile/student/update/$', login_required(ParticipantStudentUpdate.as_view()), name='update_participant_student'),
     url(r'^participant/profile/demographic/update/$', login_required(ParticipantDemoUpdate.as_view()), name='update_participant_demo'),
     url(r'^participant/profile/preferences/update/$', login_required(ParticipantPrefUpdate.as_view()), name='update_participant_pref'),
+   url(r'^participant_registration_1/$', views_user.participant_registration_1, name='participant_registration_1'),
+   url(r'^participant_registration_2/$', views_user.participant_registration_2, name='participant_registration_2'),
     # url(r'^participant/profile/user/update/$', login_required(UserAccountUpdate.as_view()), name='update_user_account'),
     # url(r'^$', views.index, name='password_change_done'),
     # url(r'password_change/$', 'django.contrib.auth.views.password_change', {'template_name': 'part_finder/participant_update_form.html'}),

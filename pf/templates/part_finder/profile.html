@@ -37,8 +37,6 @@
         <div class="panel panel-default">
         <div class="panel-body">
         <p><b>D.O.B.</b> {{ participant.dob }}</p>
-        <p><b>Country</b> {{ participant.country }}</p>
-        <p><b>Region</b> {{ participant.region }}</p>
         <p><b>City</b> {{ participant.city }}</p>
         <p><b>Contact No</b> {{ participant.contact_number }}</p>
         <p><b>Occupation</b> {{ participant.occupation }}</p>
@@ -60,16 +58,16 @@
             <h2>Student Details</h2>
             <div class="panel panel-default">
             <div class="panel-body">
-{#            <p><b>University</b> {{ participant.university }}</p>#}
+            <p><b>University</b> {{ participant.university }}</p>
             <p><b>Course Name</b> {{ participant.course_name }}</p>
             <p><b>Year of Study</b> {{ participant.year }}</p>
             <p><b>Matric</b> {{ participant.matric }}</p>
-            {% endif %}
+
             </div>
             </div>
         <a class="btn btn-default" href="{% url 'update_participant_student' %}">Update Student Details</a>
 
-
+  {% endif %}
     <h2>Demographic Details</h2>
 
         <div class="panel panel-default">

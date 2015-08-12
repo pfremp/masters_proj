@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+{% extends 'sitebase.html' %}
+{% load i18n %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+{% block head %}
+{{ form.media }}
+{% endblock %}
+{% block title %}Complete Registration{% endblock %}
+{% block body_block %}
+
+<h1>{{ user.profile.typex }} Details: Part 2</h1>
+    <br>
+    {% if user.profile.typex == 'Participant' %}
+
+        <form id="participant_registration_2" method="post" action="">
+            {% csrf_token %}
+
+
+                {% bootstrap_field form.education %}
+        {% if part.student == True %}
+                {% bootstrap_field form.university %}
+                {% bootstrap_field form.course_name %}
+                {% bootstrap_field form.year_of_study %}
+                {% bootstrap_field form.matric %}
+        {% else %}
+                  {% bootstrap_field form.occupation %}
+        {% endif %}
+                {% bootstrap_field form.language %}
+                {% bootstrap_field form.gender %}
+                {% bootstrap_field form.height %}
+                {% bootstrap_field form.weight %}
+        <h2>Preferences</h2>
+                {% bootstrap_field form.city_only %}
+                {% bootstrap_field form.my_uni_only %}
+                {% bootstrap_field form.online_only %}
+                {% bootstrap_field form.paid_only %}
+
+
+
+            <input class="btn btn-default" type="submit" name="submit" value="Submit" />
+        </form>
+
+    {% endif %}
+
+{% endblock %}
+

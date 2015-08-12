@@ -38,12 +38,14 @@ def index(request):
     for e in experiments_list:
         # print "experiment " + str(e)
         # print "Test " + str(participant_pref_filter(request, e))
-        if request.user.is_authenticated() and request.user.profile.typex == 'Participant':
-            if participant_pref_filter(request, e) == 0:
-                filtered_exp.append(e)
-        else:
-            filtered_exp = experiments_list
-
+        try:
+            if request.user.is_authenticated() and request.user.profile.typex == 'Participant' and request.user.profile.participant != None :
+                if participant_pref_filter(request, e) == 0:
+                    filtered_exp.append(e)
+            else:
+                filtered_exp = experiments_list
+        except AttributeError:
+            pass
 
 
 
@@ -81,7 +83,7 @@ def login_success(request):
         if request.user.profile.typex == 'Researcher':
             return redirect("/part_finder/researcher_registration/")
         if request.user.profile.typex == 'Participant':
-            return redirect("/part_finder/participant_registration/")
+            return redirect("/part_finder/participant_registration_1/")
     else:
         return redirect("index")
 
@@ -108,43 +110,43 @@ def researcher_registration(request):
         return redirect("index")
     return render(request, 'part_finder/researcher_registration.html', {'researcher_form': researcher_form})
 
-
-
-#participant wizard form conditional check
-def show_message_form_condition(wizard):
-    # try to get the cleaned data of step 1
-    cleaned_data = wizard.get_cleaned_data_for_step('0') or {}
-    # check if the field ``leave_message`` was checked.
-    return cleaned_data.get('student', True)
-
-
-
-
-# Particiapnt Registration form
-# Multi-page form using django form wizard
-class ParticipantRegistration(SessionWizardView):
-    template_name = "part_finder/participant_registration.html"
-    def done(self, form_list, **kwargs):
-        request = self.request
-        form_data = process_form_data(form_list, request)
-        return render_to_response('part_finder/update_profile.html', {'form_data': form_data })
-
-
-#Process multi page form data and save to Participant Object
-# http://stackoverflow.com/questions/5769347/easiest-way-to-save-django%C2%B4s-formwizard-form-list-in-db
-def process_form_data(form_list, request):
-    form_data = [form.cleaned_data for form in form_list]
-    instance = Participant()
-    for form in form_list:
-        for field, value in form.cleaned_data.iteritems():
-            setattr(instance, field, value)
-    instance.save()
-    #Assign participant to UserProfile
-    profile = request.user.profile
-    profile.participant = instance
-    profile.save()
-
-    return form_data
+#
+#
+# #participant wizard form conditional check
+# def show_message_form_condition(wizard):
+#     # try to get the cleaned data of step 1
+#     cleaned_data = wizard.get_cleaned_data_for_step('0') or {}
+#     # check if the field ``leave_message`` was checked.
+#     return cleaned_data.get('student', True)
+#
+#
+#
+#
+# # Particiapnt Registration form
+# # Multi-page form using django form wizard
+# class ParticipantRegistration(SessionWizardView):
+#     template_name = "part_finder/participant_registration.html"
+#     def done(self, form_list, **kwargs):
+#         request = self.request
+#         form_data = process_form_data(form_list, request)
+#         return render_to_response('part_finder/update_profile.html', {'form_data': form_data })
+#
+#
+# #Process multi page form data and save to Participant Object
+# # http://stackoverflow.com/questions/5769347/easiest-way-to-save-django%C2%B4s-formwizard-form-list-in-db
+# def process_form_data(form_list, request):
+#     form_data = [form.cleaned_data for form in form_list]
+#     instance = Participant()
+#     for form in form_list:
+#         for field, value in form.cleaned_data.iteritems():
+#             setattr(instance, field, value)
+#     instance.save()
+#     #Assign participant to UserProfile
+#     profile = request.user.profile
+#     profile.participant = instance
+#     profile.save()
+#
+#     return form_data
 
 # def
 #

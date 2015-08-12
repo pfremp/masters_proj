@@ -286,13 +286,13 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 )
 
-#email config
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'participantfinder1@gmail.com'
-EMAIL_HOST_PASSWORD = 'asam1111'
-EMAIL_USE_TLS = True
+# #email config
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = 'participantfinder1@gmail.com'
+# EMAIL_HOST_PASSWORD = 'asam1111'
+# EMAIL_USE_TLS = True
 
 
 AUTHENTICATION_BACKENDS = (
@@ -313,7 +313,7 @@ USE_I18N = True
 #
 # Django cities
 CITIES_LIGHT_TRANSLATION_LANGUAGES = ['en']
-CITIES_LIGHT_INCLUDE_COUNTRIES = ['GB', 'FR']
+CITIES_LIGHT_INCLUDE_COUNTRIES = ['GB',]
 
 SOUTH_MIGRATION_MODULES = {
     'cities_light': 'cities_light.south_migrations',

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+{% extends 'sitebase.html' %}
+{% load i18n %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+{% block head %}
+{{ form.media }}
+{% endblock %}
+
+{% block title %}Complete Registration{% endblock %}
+{% block body_block %}
+
+    <h1>Complete {{ user.profile.typex }} Details</h1>
+
+    {% if user.profile.typex == 'Participant' %}
+
+                  <form id="researcher_registration" method="post" novalidate action="/part_finder/researcher_registration/">
+
+            {% csrf_token %}
+            {% for hidden in part_form.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+
+            {% for field in part_form.visible_fields %}
+                {{ field.errors }}
+                {{ field.label }}
+                {% bootstrap_field field %}
+            {% endfor %}
+        </form>
+
+    {% else %} Invalid User Type, Please log in
+
+    {% endif %}
+{% endblock %}

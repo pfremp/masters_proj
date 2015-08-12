@@ -7,13 +7,13 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('part_finder', '0003_auto_20150808_1704'),
+        ('part_finder', '0002_auto_20150812_1531'),
     ]
 
     operations = [
-        migrations.RenameField(
-            model_name='matchingdetail',
-            old_name='language',
-            new_name='l',
+        migrations.AddField(
+            model_name='participant',
+            name='reg_2_completed',
+            field=models.BooleanField(default=False),
         ),
     ]

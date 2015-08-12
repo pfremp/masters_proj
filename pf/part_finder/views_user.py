@@ -17,6 +17,7 @@ import sys
 from part_finder.forms_search import RequirementForm
 from part_finder.forms_user import *
 from part_finder.views_search import *
+from part_finder.views import index
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -24,6 +25,54 @@ from django.core.exceptions import ObjectDoesNotExist
 
 
 #all views associated with participant and researcher
+
+
+
+
+
+#participant registrations
+#after account signup, participant is redirected here to complete their participant profile
+def participant_registration_1(request):
+    if request.user.profile.participant == None:
+        if request.method == 'POST':
+            part_form = ParticipantForm1(request.POST)
+            if request.user.profile.typex == 'Participant':
+                if part_form.is_valid():
+                    par = part_form.save()
+                    profile = request.user.profile
+                    profile.participant = par
+                    profile.save()
+                    return redirect("participant_registration_2")
+                else:
+                    print part_form.errors
+        else:
+            part_form = ParticipantForm1()
+    else:
+        return redirect("index")
+    return render(request, 'part_finder/participant_registration_1.html', {'form': part_form})
+
+
+
+# participant form 2
+# collects detailed participant data
+def participant_registration_2(request):
+    # participant = Participant.objects.get_or_create(id=p_id)
+    participant = request.user.profile.participant
+    if participant.reg_2_completed == False:
+        form = ParticipantForm2(request.POST or None, instance=participant)
+        if form.is_valid():
+            form.save()
+            participant.reg_2_completed = True
+            participant.save()
+            return redirect("participant_profile")
+        else:
+            print form.errors
+    else:
+        return redirect("participant_profile")
+
+    context_dict = {'form': form, 'part': participant}
+
+    return render(request, 'part_finder/participant_registration_2.html', context_dict)
 
 
 
@@ -70,7 +119,8 @@ class ParticipantGeneralUpdate(UpdateView):
 class ParticipantStudentUpdate(UpdateView):
 
     model = Participant
-    form_class = PartStudentUpdateForm
+    # form_class = PartStudentUpdateForm
+    fields = ['university', 'course_name', 'year', 'matric' ]
     template_name = 'part_finder/participant_update_form.html'
     success_url='/part_finder/participant/profile'
 

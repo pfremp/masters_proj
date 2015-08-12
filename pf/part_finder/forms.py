@@ -30,6 +30,7 @@ class ResearcherForm (forms.ModelForm):
    department = forms.CharField(label="Department Name", max_length=128)
    contact_no = forms.IntegerField(label="Contact Number")
    url = forms.CharField(label="URL (Format: http://yoursite.com)")
+   dob = forms.DateField(label="Date of Birth", widget=DateWidget(usel10n=True, bootstrap_version=3), required=False)
 
    class Meta():
         model = Researcher
@@ -92,12 +93,12 @@ class ParticipantForm (autocomplete_light.ModelForm):
     height = forms.IntegerField(label="Height (cm)", required=False)
     weight = forms.IntegerField(label="Weight (cm)", required=False)
 
-    #preferences
-    max_distance = forms.IntegerField(label="Max Distance", required=False)
-    uni_only = forms.BooleanField(label="Uni Experiments Only", required=False)
-    online_only = forms.BooleanField(label="Online Only", required=False)
-    paid_only = forms.BooleanField(label="Paid Only", required=False)
-    email_notifications = forms.BooleanField(label="Email Notifications", required=False)
+    # #preferences
+    # city_only = forms.BooleanField(label="", required=False)
+    # uni_only = forms.BooleanField(label="Uni Experiments Only", required=False)
+    # online_only = forms.BooleanField(label="Online Only", required=False)
+    # paid_only = forms.BooleanField(label="Paid Only", required=False)
+    # email_notifications = forms.BooleanField(label="Email Notifications", required=False)
 
     class Media:
         """
@@ -110,7 +111,7 @@ class ParticipantForm (autocomplete_light.ModelForm):
 
     class Meta():
         model = Participant
-        fields = ('dob','country','region','city','contact_number','occupation','education','student','language', 'lang', 'university', 'course_name', 'year_of_study', 'matric', 'gender' ,'height', 'weight', 'max_distance', 'uni_only', 'online_only', 'paid_only')
+        fields = ('dob','city','contact_number','occupation','education','student','language', 'lang', 'university', 'course_name', 'year_of_study', 'matric', 'gender' ,'height', 'weight')
 
 
 
@@ -142,7 +143,7 @@ class PartDetailsForm (autocomplete_light.ModelForm):
     #     exclude = []
     class Meta():
         model = Participant
-        fields = ('dob','country','region','city','contact_number','occupation','education', 'language',)
+        fields = ('dob','city','contact_number','occupation','education', 'student', 'language',)
 
 
 class PartStudentForm (forms.ModelForm):
