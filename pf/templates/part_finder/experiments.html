@@ -185,16 +185,27 @@
                     <br>
                     <h4><b>Timeslots</b></h4>
                     <p><b>Duration:</b> {{ experiment.duration }} hrs</p>
+                    <div class="table table-responsive table-striped" data-example-id="simple-table" >
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th><span class="glyphicon glyphicon-time" aria-hidden="true"> Date</span></th>
+                            <th><span class="glyphicon glyphicon-time" aria-hidden="true"> Time</span></th>
+                            <th><span class="glyphicon glyphicon-user" aria-hidden="true"> Capacity</span></th>
+                            </tr>
+                        </thead>
+
+                    <body>
                     {% for t in timeslots %}
-                        <p><span class="glyphicon glyphicon-time" aria-hidden="true"></span> <b>{{ t.date }},</b> {{ t.start_time }} - {{ t.end_time }} </p>
-                        {% if t.is_full %}
-                            <span class="glyphicon glyphicon-user" aria-hidden="true"><b style="color: #f00;"> FULL</b></span>
-                            <br>
-                            <br>
-                        {% else %}
-                            <span class="glyphicon glyphicon-user" aria-hidden="true"><b> {{ t.current_parts }} / {{ t.no_of_parts }}</b></span>
-                        {% endif %}
+                        <tr>
+                        <td><b>{{ t.date }}</b> </td>
+                        <td>{{ t.start_time }} - {{ t.end_time }}</td>
+                        <td>{% if t.is_full %}<span style="color: #f00;">FULL</span>{% else %}{{ t.current_parts }} / {{ t.no_of_parts }}{% endif %}</td>
+                    </tr>
                     {% endfor %}
+                    </body>
+                     </table>
+                    </div>
                 </div>
             </div>
             </div>

@@ -11,11 +11,12 @@ html, body {
 }
 
 a {
-  color:#222222;
+  /*color:#222222;*/
+  color:#428bca;
 }
 
 a:hover {
-  text-decoration:none;
+  text-decoration:underline;
 }
 
 hr {
@@ -73,7 +74,8 @@ hr {
 
 .navbar-blue {
     border-width:0;
-	background-color:#3B5999;
+	background-color:#428bca;
+	/*background-color:#3B5999;*/
     color:#ffffff;
     font-family:arial,sans-serif;
     top:0;
@@ -95,7 +97,8 @@ hr {
 
 #main {
    /*background-color:#e9eaed;*/
-   background-color:#ebebeb;
+   /*background-color:#ebebeb;*/
+   background-color:#ffffff;
    padding-left:0;
    padding-right:0;
 }

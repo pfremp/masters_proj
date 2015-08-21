@@ -34,6 +34,7 @@ def index(request):
     experiments_list = Experiment.objects.all()[:10]
     payment_list = Payment.objects.all()
     request = request
+    app = None
 
     filtered_exp = []
 
@@ -44,8 +45,17 @@ def index(request):
             if request.user.is_authenticated() and request.user.profile.typex == 'Participant' and request.user.profile.participant != None :
                 if participant_pref_filter(request, e) == 0:
                     filtered_exp.append(e)
+
+                    # for x in request.user.profile.participant.experiments.all():
+                    #     if x == e:
+                    #         app = False
+                    #     else:
+                    #         app = True
+
             else:
                 filtered_exp = experiments_list
+
+
         except AttributeError:
             pass
 
@@ -53,7 +63,7 @@ def index(request):
 
 
 
-    context_dict = {'experiments' : experiments_list, 'payment_list': payment_list, 'request': request, 'filtered_exp':filtered_exp}
+    context_dict = {'experiments' : experiments_list, 'payment_list': payment_list, 'request': request, 'filtered_exp':filtered_exp, 'app': app}
     return render(request, 'part_finder/index.html', context_dict)
 
 # def current_user(request):
@@ -917,6 +927,7 @@ def delete_experiment(request, experiment_id):
 
     context_dict = {'experiment': e}
     return render(request, 'part_finder/delete_experiment.html', context_dict)
+
 
 
 @login_required

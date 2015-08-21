@@ -9,9 +9,9 @@
 {% block body_block %}
 
     {% if user.profile.typex == 'Researcher' %}
-    <h1>Delete Experiment</h1>
+    <h1>Delete Timeslot</h1>
 
-    <p>Are you sure you want to delete the "{{ experiment.name }}" experiment?</p>
+    <p>Are you sure you want to delete the "{{ experiment.name }}" timeslot?</p>
 
     <form action="" method="POST">
       {% csrf_token %}

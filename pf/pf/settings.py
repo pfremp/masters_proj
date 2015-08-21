@@ -188,7 +188,7 @@ SOCIALACCOUNT_PROVIDERS = \
 
 # When I sign up I run into connectivity errors (connection refused et al)
 #https://docs.djangoproject.com/en/dev/ref/settings/#email-host
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
 MIDDLEWARE_CLASSES = (

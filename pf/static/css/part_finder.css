@@ -8,3 +8,7 @@ label {
 .autocomplete-light-widget {
     display: block;
 }
+
+.btn-primary{
+    background-color: #428bca;
+}

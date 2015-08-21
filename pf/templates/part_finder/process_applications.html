@@ -19,12 +19,12 @@
             {% endif %}
             </p>
         {% endfor %}
-        <div class="table table-striped" data-example-id="simple-table" >
+        <div class="table table-responsive table-striped" data-example-id="simple-table" >
             <table class="table">
               <caption></caption>
               <thead>
                 <tr>
-                  <th>Participant Name</th>
+                  <th>Participant Details</th>
                   <th>Exp. Date</th>
                   <th>Exp. Time</th>
                   <th>Current Status</th>
@@ -35,7 +35,9 @@
             {% for Application in app %}
 
             <tr>
-                    <td>{{ Application.participant.userprofile }}</td>
+                    <td>{{ Application.participant.userprofile.user.first_name }} {{ Application.participant.userprofile.user.last_name }}
+                    <p><a href="mailto:{{ Application.participant.userprofile.user.email }}">{{ Application.participant.userprofile.user.email }}</a></p>
+                    </td>
                     <td>{{ Application.timeslot.date }}</td>
                     <td>{{ Application.timeslot.start_time }} - {{ Application.timeslot.end_time }}</td>
                     <td>{{ Application.status }}</td>

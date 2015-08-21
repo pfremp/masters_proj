@@ -130,9 +130,9 @@ class Participant(models.Model):
         return obj.id
 
     def __unicode__(self):
+        return self.userprofile.user.username
         # return self.userprofile.user.username
-        # return self.userprofile.user.username
-        return str(self.city)
+        # return str(self.city)
 
 
 

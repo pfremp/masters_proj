@@ -31,7 +31,30 @@
                         {% endif %}
                     {% endfor %}
                     </p>
-                    <p><a href="{% url 'experiment' experiment.researcher_slug experiment.slug %}" class="btn btn-primary" role="button">View / Apply</a>
+{#                    {% if user.profile.typex == 'Participant' %}#}
+{#                        {{ request.user.profile.participant.experiments.all }}#}
+{##}
+{#                        {% with app=0  %}#}
+{#                        {% for e in request.user.profile.participant.experiments.all %}#}
+{#                            {% if e == experiment %}#}
+{#                                #}
+{#                            {% endif %}#}
+{#                        {% endfor %}#}
+{##}
+{#                            {% if colour == 'blue' %}#}
+{##}
+{#                            <p><a href="{% url 'participant_experiments' %}" class="btn btn-success" role="button">Applied</a>#}
+{##}
+{#                            {% else %}#}
+{##}
+{#                            <p><a href="{% url 'experiment' experiment.researcher_slug experiment.slug %}" class="btn btn-primary" role="button">View / Apply</a>#}
+{##}
+{#                            {% endif %}#}
+{#                        {% endwith %}#}
+{#                        {% endwith %}#}
+{#                    {% endif %}#}
+{#                {{ app }}#}
+                     <p><a href="{% url 'experiment' experiment.researcher_slug experiment.slug %}" class="btn btn-primary" role="button">View / Apply</a>
                 </div>
             </div>
         </div>
@@ -79,6 +102,7 @@
                     {% endfor %}
                     </p>
                     <p><a href="{% url 'experiment' experiment.researcher_slug experiment.slug %}" class="btn btn-primary" role="button">View / Apply</a>
+
 </div>
    </div>
                 </div>
