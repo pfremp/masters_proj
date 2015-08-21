@@ -38,6 +38,7 @@ class Researcher(models.Model):
 
     def __unicode__(self):
         return self.userprofile.user.username
+        # return self.department
 
 class Languages(models.Model):
     language = models.CharField(max_length=128)
@@ -69,6 +70,7 @@ class Experiment(models.Model):
     is_featured = models.BooleanField(default=False)
     online = models.BooleanField(default=False)
     student_only = models.BooleanField(default=False)
+    # revised = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)

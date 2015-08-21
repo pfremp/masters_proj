@@ -839,7 +839,8 @@ class ExperimentUpdate(UpdateView):
 
     def get_queryset(self):
         qs = super(ExperimentUpdate, self).get_queryset()
-        return qs.filter(researcher=self.request.user.profile.researcher)
+        exp = qs.filter(researcher=self.request.user.profile.researcher)
+        return exp
 
 
 
