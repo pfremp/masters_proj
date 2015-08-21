@@ -11,6 +11,20 @@
 
 <p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p>
 
+<!-- Added from social signup -->
+    <p><b>Register with a social account.</b></p>
+<div class="socialaccount_ballot">
+
+  <ul class="socialaccount_providers" style="padding-left: 0px;">
+    {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+  </ul>
+
+  <div class="login-or">{% trans 'or' %}</div>
+
+</div>
+
+<!-- end -->
+
 <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
   {% csrf_token %}
    {%  bootstrap_form form %}

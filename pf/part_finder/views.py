@@ -15,6 +15,8 @@ from django.core.context_processors import csrf
 import sys
 from part_finder.forms_search import RequirementForm
 from part_finder.views_search import *
+# from part_finder.views_user import no_user_profile
+import views_user
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from django import template
@@ -60,32 +62,34 @@ def index(request):
 #
 #     user = request.user.profile.participant.application
 
-@login_required
-#Check if user profile exists
-def no_user_profile(request):
-    if request.user.profile.researcher == None and request.user.profile.participant == None:
-        return True
-    else:
-        return False
-    # try:
-    #     if request.user.profile.researcher == None and request.user.profile.participant == None:
-    #         return True
-    #     # else: return False
-    # except UserProfile.DoesNotExist:
-    #     return True
+# @login_required
+# #Check if user profile exists
+# def no_user_profile(request):
+#     if request.user.profile.researcher == None and request.user.profile.participant == None:
+#         return True
+#     else:
+#         return False
+#     # try:
+#     #     if request.user.profile.researcher == None and request.user.profile.participant == None:
+#     #         return True
+#     #     # else: return False
+#     # except UserProfile.DoesNotExist:
+#     #     return True
+#
+#
+# #Check registration status once logged in
+# #if registration hasnt been completed, redirect to reg page
+# @login_required
+# def login_success(request):
+#     if no_user_profile(request) == True:
+#         if request.user.profile.typex == 'Researcher':
+#             return redirect("/part_finder/researcher_registration/")
+#         if request.user.profile.typex == 'Participant':
+#             return redirect("/part_finder/participant_registration_1/")
+#     else:
+#         return redirect("index")
 
 
-#Check registration status once logged in
-#if registration hasnt been completed, redirect to reg page
-@login_required
-def login_success(request):
-    if no_user_profile(request) == True:
-        if request.user.profile.typex == 'Researcher':
-            return redirect("/part_finder/researcher_registration/")
-        if request.user.profile.typex == 'Participant':
-            return redirect("/part_finder/participant_registration_1/")
-    else:
-        return redirect("index")
 
 
 
@@ -476,28 +480,34 @@ def experiment (request, experiment_name_slug, r_slug):
             language_req = None
 
 
-        try:
-        #Check if logged in participant meets requirements.
-            if request.user.is_authenticated() and request.user.profile.typex == 'Participant':
-                check_eligible_valid = check_applicant_validity(request, experiment)
+        if views_user.no_user_profile(request) == True:
+            pass
+            # return redirect_to_reg(request)
+        else:
 
-                if check_eligible_valid == 0:
-                    valid = True
-                else:
-                    valid = False
+            try:
+            #Check if logged in participant meets requirements.
+                if request.user.is_authenticated() and request.user.profile.typex == 'Participant':
+                    check_eligible_valid = check_applicant_validity(request, experiment)
 
-                #check against participant preferences
-                check_part_pref_valid = participant_pref_filter(request, experiment)
+                    if check_eligible_valid == 0:
+                        valid = True
+                    else:
+                        valid = False
+
+                    #check against participant preferences
+                    check_part_pref_valid = participant_pref_filter(request, experiment)
 
 
-                if check_part_pref_valid == 0:
-                    part_valid = True
-                else:
-                    part_valid = False
+                    if check_part_pref_valid == 0:
+                        part_valid = True
+                    else:
+                        part_valid = False
 
-        except (MatchingDetail.DoesNotExist , Requirement.DoesNotExist , reqs.DoesNotExist) , e:
-            reqs = None
-            match_detail = None
+            except (MatchingDetail.DoesNotExist , Requirement.DoesNotExist , reqs.DoesNotExist) , e:
+                reqs = None
+                match_detail = None
+
 
         # check if eparticipant preferences
 

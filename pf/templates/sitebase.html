@@ -27,7 +27,8 @@
 <div class="wrapper">
     <div class="box">
         <div class="row row-offcanvas row-offcanvas-left">
-                      
+
+            {% if user.is_authenticated %}
           
             <!-- sidebar -->
             <div class="column col-sm-2 col-xs-1 sidebar-offcanvas" id="sidebar">
@@ -86,10 +87,16 @@
               
             </div>
             <!-- /sidebar -->
-          
+
+        {% else %}
+        {% endif %}
+
             <!-- main right col -->
+            {% if user.is_authenticated %}
             <div class="column col-sm-10 col-xs-11" id="main">
-                
+            {% else %}
+            <div class="column col-sm-12 col-xs-11" id="main">
+            {% endif %}
                 <!-- top nav -->
               	<div class="navbar navbar-blue navbar-static-top">  
                     <div class="navbar-header">
@@ -127,7 +134,13 @@
 
                     <ul class="nav navbar-nav navbar-right">
                         {% if user.is_authenticated %}
-                            <li><a href="#"><i class="glyphicon glyphicon-user"></i> Hello {{ user.first_name }}</a></li>
+                            {% if user.profile.typex == 'Participant' %}
+                                <li><a href="{% url 'participant_profile' %}"><i class="glyphicon glyphicon-user"></i> Hello {{ user.first_name }}</a></li>
+                            {% elif user.profile.typex == 'Researcher' %}
+                                 <li><a href="{% url 'update_researcher_details' %}"><i class="glyphicon glyphicon-user"></i> Hello {{ user.first_name }}</a></li>
+                            {% else %}
+                                 <li><a href="#"><i class="glyphicon glyphicon-user"></i> Hello {{ user.first_name }}</a></li>
+                            {% endif %}
                             <li><a href="{% url 'account_logout' %}?next=/part_finder/"><i></i>Logout</a></li>
 
                         {% else %}

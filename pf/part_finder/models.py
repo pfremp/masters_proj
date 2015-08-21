@@ -98,7 +98,7 @@ class Participant(models.Model):
     contact_number = models.IntegerField(blank=True, null=True)
     occupation = models.CharField(max_length=128, blank=True)
     # lang = models.CharField(max_length=128, blank=True)
-    language = models.ManyToManyField(Languages, related_name='participant', blank=True)
+    language = models.ManyToManyField(Languages, related_name='participant', blank=True, default=None)
     # lang = models.CharField(max_length=128, null=True)
     education = models.CharField(choices=EDUCATION, blank=True, max_length=1000)
     student = models.BooleanField(default=False, blank=True)

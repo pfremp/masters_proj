@@ -17,7 +17,7 @@ import sys
 from part_finder.forms_search import RequirementForm
 from part_finder.forms_user import *
 from part_finder.views_search import *
-from part_finder.views import index
+# from part_finder.views import index
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -26,6 +26,40 @@ from django.core.exceptions import ObjectDoesNotExist
 
 #all views associated with participant and researcher
 
+#
+# @login_required
+# #Check if user profile exists
+# def no_user_profile(request):
+#     if request.user.profile.researcher == None and request.user.profile.participant == None:
+#         return True
+#     else:
+#         return False
+
+
+@login_required
+#Check if user profile exists
+def no_user_profile(request):
+    if request.user.profile.researcher == None and request.user.profile.participant == None:
+        return True
+    else:
+        return False
+
+
+def redirect_to_reg(request):
+    if request.user.profile.typex == 'Researcher':
+        return redirect("/part_finder/researcher_registration/")
+    if request.user.profile.typex == 'Participant':
+        return redirect("/part_finder/participant_registration_1/")
+
+
+#Check registration status once logged in
+#if registration hasnt been completed, redirect to reg page
+@login_required
+def login_success(request):
+    if no_user_profile(request) == True:
+        return redirect_to_reg(request)
+    else:
+        return redirect("index")
 
 
 
@@ -82,13 +116,17 @@ def participant_registration_2(request):
 #profile page
 def profile_page(request):
     context_dict = {}
-    participant = request.user.profile.participant
-    lang = participant.language.all()
-    user = request.user
 
-    context_dict = {'participant': participant, 'lang': lang, 'user': user}
+    if no_user_profile(request) == True:
+        return redirect_to_reg(request)
+    else:
+        participant = request.user.profile.participant
+        lang = participant.language.all()
+        user = request.user
 
-    return render (request, 'part_finder/profile.html', context_dict)
+        context_dict = {'participant': participant, 'lang': lang, 'user': user}
+
+        return render (request, 'part_finder/profile.html', context_dict)
 
 
 #Participant general details update
