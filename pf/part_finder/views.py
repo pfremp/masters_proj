@@ -103,6 +103,44 @@ def index(request):
 
 
 
+
+#refresh requirements after an update has been made.
+def refresh_reqs(experiment):
+
+    requirement = Requirement.objects.get(experiment=experiment)
+
+    #check requirements to see what reqs
+    #  the participant needs to have.
+    if requirement.age == '1':
+        requirement.match = True
+    if requirement.language == '1':
+        requirement.match = True
+    if requirement.height == '1':
+        requirement.match = True
+    if requirement.weight == '1':
+        requirement.match = True
+    if requirement.gender == '1':
+        requirement.match = True
+    if requirement.student == '1':
+        requirement.match = True
+
+    requirement.save()
+
+    #If the requirements have been removed, set "match" back to false.
+    if requirement.age != '1' and requirement.language != '1' and requirement.height != '1' and requirement.weight != '1' and requirement.gender != '1' and requirement.student != '1':
+        requirement.match = False
+        requirement.save()
+
+
+
+    #Check if req details object exists, if it doesn't exist, create one
+    if requirement.match == True:
+        match_details = MatchingDetail.objects.get_or_create(requirement=requirement)
+
+
+
+
+
 #test masonary
 def masonary(request):
 
@@ -191,10 +229,17 @@ def researcher_registration(request):
 def researcher_experiments(request):
     context_dict = {}
 
+
     # experiments = Experiment.objects.filter(researcher=request.user.profile.researcher)
     experiments = Experiment.objects.filter(researcher=request.user.profile.researcher)
+
+    #refresh_reqs for all experiments
+    for e in experiments:
+        refresh_reqs(e)
+
     requirements = Requirement.objects.all()
     match_details = MatchingDetail.objects.all()
+
 
     def get_exp_count():
         count = 0
@@ -545,7 +590,7 @@ def experiment (request, experiment_name_slug, r_slug):
                 application.experiment = experiment
                 application.status = 'Pending'
                 application.save()
-                return HttpResponseRedirect("/part_finder/")
+                return HttpResponseRedirect(reverse('participant_experiments'))
 
              else:
                 print appform.errors

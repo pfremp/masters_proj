@@ -112,6 +112,10 @@
                         {% if reqs.height == '1' %}
                             <p><b>Min Weight:</b> {{ match_detail.min_weight }} KG<b> Max Weight:</b> {{ match_detail.max_weight }} KG</p>
                         {% endif %}
+
+                        {% if reqs.match == False %}
+                            <p><b>Available to all</b></p>
+                        {% endif %}
                         {% endif %}
 
                     {% else %}

@@ -223,7 +223,7 @@ class Application(models.Model):
     participant = models.ForeignKey(Participant, null=True, related_name="application")
     experiment = models.ForeignKey(Experiment, null=True, related_name="application")
     timeslot = models.ForeignKey(TimeSlot, null=True, related_name="application")
-    terms = models.BooleanField(default=True, null=False, blank=False)
+    # terms = models.BooleanField(null=False, blank=False)
     # terms = models.CharField(default=False, max_length=128)
     status = models.CharField(max_length=100)
 

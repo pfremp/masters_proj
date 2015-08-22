@@ -231,7 +231,7 @@ class PaymentForm(forms.ModelForm):
 class ApplicationForm(forms.ModelForm):
     YES = (('Yes','Yes'), (' ',' '))
     # timeslot = forms.ModelChoiceField(queryset=TimeSlot.objects.all(), label="Select Timeslot", required=False)
-    terms = forms.BooleanField(label="Terms Accepted", required=True,  help_text='You must accept the T&Cs to proceed.', error_messages={'required': 'You must accept the terms and conditions'})
+    # terms = forms.BooleanField(label="Terms Accepted", required=True,  help_text='You must accept the T&Cs to proceed.', error_messages={'required': 'You must accept the terms and conditions'})
 
 
     def __init__(self, experiment, *args, **kwargs):
@@ -241,7 +241,7 @@ class ApplicationForm(forms.ModelForm):
 
     class Meta:
         model = Application
-        fields = ('timeslot' , 'terms')
+        fields = ('timeslot',)
         # exclude = ('researcher', 'participant', 'experiment', 'status')
         # exclude = ()
 

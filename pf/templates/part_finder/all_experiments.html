@@ -18,9 +18,9 @@
                 {% if experiment.has_ended == False %}
           <div class="col-sm-6 col-md-6">
           <div class="panel panel-default">
-                <div class="panel-heading"><h3>{{ experiment.name }}</h3></div>
+                <div class="panel-heading"><h3 class="heading_of">{{ experiment.name }}</h3></div>
                 <div class="panel-body">
-                    <p>{{ experiment.long_description|truncatechars:200 }}</p>
+                    <p class="text_of">{{ experiment.long_description|truncatechars:200 }}</p>
                     <p><b>Location: </b>{{ experiment.city }}</p>
                     <p>
                     {% for p in payment_list %}
@@ -51,9 +51,9 @@
                 {% if experiment.has_ended == False %}
                     <div class="col-sm-6 col-md-6">
             <div class="panel panel-default">
-                <div class="panel-heading"><h3>{{ experiment.name }}</h3></div>
+                <div class="panel-heading"><h3 class="heading_of">{{ experiment.name }}</h3></div>
                 <div class="panel-body">
-                    <p>{{ experiment.long_description|truncatechars:200 }}</p>
+                    <p class="text_of">{{ experiment.long_description|truncatechars:200 }}</p>
                     <p><b>Location: </b>{{ experiment.city }}</p>
                     <p>
                     {% for p in payment_list %}

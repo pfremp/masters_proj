@@ -95,7 +95,7 @@
                     <p class="text_of">{{ experiment.long_description|truncatechars:200 }}</p>
                     <br>
                     <p><b>Location: </b>{{ experiment.city }}</p>
-{#                    <p>#}
+                    <p>
 {#                    <br>#}
                     {% for p in payment_list %}
                         {% if p.experiment == experiment %}
@@ -129,7 +129,7 @@
     <div class="row">
         <div class="col-md-6">
             <div class="panel panel-default">
-                <div class="panel-heading"><h1>Participants</h1></div>
+                <div class="panel-heading"><h3 class="heading_of">Participants</h3></div>
                 <div class="panel-body">
                     <h3 class="lead"><i class="glyphicon glyphicon-ok"></i> View Experiments</h3>
                     <h3 class="lead"><i class="glyphicon glyphicon-ok"></i> Attend Experiments</h3>
@@ -143,7 +143,7 @@
         </div>
         <div class="col-md-6">
             <div class="panel panel-default">
-                <div class="panel-heading"><h1>Researchers</h1></div>
+                <div class="panel-heading"><h3 class="heading_of">Researchers</h3></div>
                 <div class="panel-body">
                     <h3 class="lead"><i class="glyphicon glyphicon-ok"></i> Post Experiments</h3>
                     <h3 class="lead"><i class="glyphicon glyphicon-ok"></i> Target Demographic</h3>
@@ -165,9 +165,9 @@
                 {% if experiment.has_ended == False %}
                     <div class="col-sm-6 col-md-6">
             <div class="panel panel-default">
-                <a href="{% url 'experiment' experiment.researcher_slug experiment.slug %}"><div class="panel-heading"><h1>{{ experiment.name }}</h1></div></a>
+                <a href="{% url 'experiment' experiment.researcher_slug experiment.slug %}"><div class="panel-heading"><h3 class="heading_of">{{ experiment.name }}</h3></div></a>
                 <div class="panel-body">
-                    <p>{{ experiment.long_description|truncatechars:200 }}</p>
+                    <p class="text_of">{{ experiment.long_description|truncatechars:200 }}</p>
                     <p><b>Location: </b>{{ experiment.city }}</p>
                     <p>
                     {% for p in payment_list %}
