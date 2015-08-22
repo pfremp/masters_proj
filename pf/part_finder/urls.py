@@ -82,6 +82,7 @@ urlpatterns = patterns('',
 
     #test urls
     url(r'^todo/$', views.todo, name='todo'),
+    url(r'^masonary/$', views.masonary, name='masonary')
     # url(r'^dummy/$', views.dummy, name='dummy'),
 
     #

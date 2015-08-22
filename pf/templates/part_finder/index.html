@@ -4,19 +4,13 @@
 {% load staticfiles %}
 {% block title %}Participant Finder{% endblock %}
 {% load pf_extras %}
+
 {% block body_block %}
 {#    <img src="{% static "images/home_banner.jpg" %}" class="img-responsive" style="padding: 0;" alt="Responsive image">#}
 {#    <hr style="margin-top: 0px;">#}
 {#    <hr style="margin-top: 0px;">#}
 
-    <style>
-    .row-eq-height {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display:         flex;
-    }
-    </style>
+
 
 
     {% if user.is_authenticated %}
@@ -25,9 +19,9 @@
     {% if experiment.is_featured == True %}
         <div class="col-md-12">
             <div class="panel panel-default">
-                <a href="{% url 'experiment' experiment.researcher_slug experiment.slug %}"><div class="panel-heading"><h1>{{ experiment.name }}</h1></div></a>
+                <a href="{% url 'experiment' experiment.researcher_slug experiment.slug %}"><div class="panel-heading"><h3 class="heading_of">{{ experiment.name }}</h3></div></a>
                 <div class="panel-body">
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book...</p>
+                    <p class="text_of">Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book...</p>
                     <p><b>Location: </b>{{ experiment.city }}</p>
                     <p>
                     {% for p in payment_list %}
@@ -96,11 +90,13 @@
 
                     <div class="col-sm-6 col-md-6">
             <div class="panel panel-default">
-                <a href="{% url 'experiment' experiment.researcher_slug experiment.slug %}"><div class="panel-heading"><h1>{{ experiment.name }}</h1></div></a>
+                <a href="{% url 'experiment' experiment.researcher_slug experiment.slug %}"><div class="panel-heading"><h3 class="heading_of">{{ experiment.name }}</h3></div></a>
                 <div class="panel-body">
-                    <p>{{ experiment.long_description|truncatechars:200 }}</p>
+                    <p class="text_of">{{ experiment.long_description|truncatechars:200 }}</p>
+                    <br>
                     <p><b>Location: </b>{{ experiment.city }}</p>
-                    <p>
+{#                    <p>#}
+{#                    <br>#}
                     {% for p in payment_list %}
                         {% if p.experiment == experiment %}
                             {% if p.is_paid.is_paid == 'Yes' %}

@@ -12,3 +12,16 @@ label {
 .btn-primary{
     background-color: #428bca;
 }
+
+
+.text_of {
+    overflow: hidden;
+    max-height: 75px;
+
+}
+
+.heading_of {
+
+    overflow: hidden;
+    height: 2.2em;
+}

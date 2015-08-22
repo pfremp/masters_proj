@@ -103,6 +103,12 @@ def index(request):
 
 
 
+#test masonary
+def masonary(request):
+
+    return render (request, 'part_finder/bootstrap-masonry-template.htm')
+
+
 #Researcher registration form
 @login_required
 def researcher_registration(request):
