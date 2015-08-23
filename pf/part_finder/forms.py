@@ -40,10 +40,11 @@ class ExperimentForm (autocomplete_light.ModelForm):
     LOCATIONS = (('Glasgow','Glasgow'),('London','London'))
     PMT_TYPE = (('Total','Total'),('Hourly','Hourly'), ('N/A', 'N/A'))
     name = forms.CharField(max_length=128, label="Name", required=True)
-    short_description = forms.CharField(max_length=128, required=False)
-    long_description = forms.CharField(max_length=600, widget=forms.Textarea)
+    # short_description = forms.CharField(max_length=128, required=False)
+    long_description = forms.CharField(label="Description", max_length=600, widget=forms.Textarea)
     city = autocomplete_light.ModelChoiceField('CityAutocompleteCity', required=False, label='Location')
-    address = forms.CharField(label="Address", required=False)
+    address = forms.CharField(label="Address", required=False, help_text="Enter the full address of the experiment, this will be used for the google map display. e.g. 1 George St, Glasgow, G2 1DU.")
+    duration = forms.FloatField(label="Duration (Mins)", required=True, help_text="Enter how long the experiment will last in minutes e.g. 1.5 hours = 90 mins")
     # lang = autocomplete_light.MultipleChoiceField('OsAutocomplete', required=False, label='Language(s) Required')
     # language = forms.ChoiceField(choices=)
     url = forms.URLField(max_length=200, required=False, label='URL: http://yoursite.com')
@@ -57,7 +58,7 @@ class ExperimentForm (autocomplete_light.ModelForm):
 
     class Meta():
         model = Experiment
-        fields = ('name','short_description','long_description','duration', 'city','address', 'url')
+        fields = ('name', 'long_description','duration', 'city','address', 'url')
 
 
 class ParticipantForm (autocomplete_light.ModelForm):
@@ -207,10 +208,10 @@ class SignupForm(forms.Form):
 
 class TimeSlotForm(ModelForm):
     CHOICES = (('choice','choice'),('choice1','choice1') )
-    date = forms.DateField(required=False, label="Experiment Date (YYYY-MM-DD)")
-    start_time = forms.TimeField(label="Start Time (HH:MM)", required=False)
-    end_time = forms.TimeField(label="End Time (HH:MM)", required=False)
-    no_of_parts = forms.IntegerField(label="No of Participants Wanted", required=False)
+    date = forms.DateField(required=False, label="Experiment Date (DD/MM/YYYY)")
+    start_time = forms.TimeField(label="Start Time (HH:MM)", required=False, help_text="Please enter the start time using the 24hr format. e.g. 2.30pm = 14:30")
+    end_time = forms.TimeField(label="End Time (HH:MM)", required=False, help_text="Please enter the start time using the 24hr format. e.g. 2.30pm = 14:30")
+    no_of_parts = forms.IntegerField(label="No of Participants Required", required=False)
 
     class Meta:
         model = TimeSlot
@@ -219,9 +220,9 @@ class TimeSlotForm(ModelForm):
 
 class PaymentForm(forms.ModelForm):
     # is_paid = forms.CharField(label="Paid Experiment", required=False)
-    # currency = forms.ModelChoiceField(label="Currency", queryset=Currency.objects.all(), required=False)
-    # payment_type = forms.ModelChoiceField(label="Payment Type", queryset=Payment_type.objects.all(), required=False)
-    # amount = forms.IntegerField(label="Payment Amount", required=False)
+    currency = forms.ModelChoiceField(label="Currency", queryset=Currency.objects.all(), required=False, help_text="Cash, University Credits or Voucher")
+    # payment_type = forms.ModelChoiceField(label="Payment Type", queryset=Payment_type.objects.all(), required=False, help_text="Hourly or Total")
+    amount = forms.FloatField(label="Payment Amount (GBP)", required=False, help_text="Payment anoout in British Pounds")
 
     class Meta:
         model = Payment

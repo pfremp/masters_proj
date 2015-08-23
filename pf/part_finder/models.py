@@ -54,7 +54,7 @@ class Experiment(models.Model):
     CURRENCY = (('Credits','Credits'),('Money','Money'))
     PMT_TYPE = (('Total','Total'),('Hourly','Hourly'), ('N/A', 'N/A'))
     name = models.CharField(max_length=128, blank=False)
-    short_description = models.CharField(max_length=128, blank=True, null=True)
+    # short_description = models.CharField(max_length=128, blank=True, null=True)
     long_description = models.CharField(max_length=1000, blank=True, null=True)
     duration = models.FloatField(blank=True, null=True)
     address = models.CharField(max_length=128, blank=True)
@@ -208,7 +208,7 @@ class Payment(models.Model):
         auto_choose=True
     )
     payment_type = ChainedForeignKey(Payment_type, chained_field="currency", chained_model_field="currency")
-    amount = models.IntegerField(null=True)
+    amount = models.FloatField(null=True)
     experiment = models.ForeignKey(Experiment, null=True, related_name='payment')
     # street = models.CharField(max_length=100)
 
