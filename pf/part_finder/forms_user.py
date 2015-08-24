@@ -17,10 +17,31 @@ from smart_selects.db_fields import GroupedForeignKey
 from django.forms.extras.widgets import *
 
 
+#Education Levels
+EDUCATION = (('HS' , 'High School Level'),
+            ('SCQF3', 'Access 3 / Foundation Standard Grade'),
+             ('SCQF4', 'Intermediate 1 / General Standard Grade'),
+             ('SCQF5','Intermediate 2 / Credit Standard Grade'),
+             ('GCSE','GCSE'),
+             ('SCQF6' , 'Higher'),
+             ('ALEVEL' , 'A Level'),
+             ('SCQF7' , 'Advanced Higher'),
+             ('College' , 'College Level'),
+             ('HNC' , 'HNC'),
+             ('HND' , 'HND'),
+             ('HE' , 'University Level'),
+             ('HE1' , 'Bachelors  Degree'),
+             ('HE2' , 'Honours  Degree'),
+             ('HE3' , 'Masters  Degree'),
+             ('HE4' , 'Doctorates')
+             )
+
+SEX = (('Male','Male'), ('Female','Female'), ('PNTS','Prefer not to say'))
+
 #participant form1 - general details
 class ParticipantForm1 (autocomplete_light.ModelForm):
 
-    contact_number = forms.IntegerField(required=False, label="Contact No")
+    contact_number = forms.IntegerField(required=False, label="Contact No" , help_text="07712345678")
     student = forms.BooleanField(label="Student", required=False)
     dob = forms.DateField(label="Date of Birth", widget=DateWidget(usel10n=True, bootstrap_version=3), required=True)
 
@@ -34,10 +55,8 @@ class ParticipantForm1 (autocomplete_light.ModelForm):
 
 #participant form 2 - extra info used for matching experiments
 class ParticipantForm2 (autocomplete_light.ModelForm):
-    SEX = (('Male','Male'), ('Female','Female'), ('PNTS','Prefer not to say'))
-    EDUCATION = (('School', 'School'),('SQ1', 'School Qualification1'), ('College','College') , ('University' , 'University'))
-    YOS = (('1' , '1'), ('2' , '2'),('3' , '3'),('4' , '4'),('5' , '5'))
 
+    YOS = (('1' , '1'), ('2' , '2'),('3' , '3'),('4' , '4'),('5' , '5'))
     education = forms.ChoiceField(choices=EDUCATION, label="Level of Education", required=True)
     occupation = forms.CharField(required=False, label="Occupation", max_length=128)
 
@@ -69,21 +88,9 @@ class ParticipantForm2 (autocomplete_light.ModelForm):
         fields = ('education','occupation','language', 'university', 'course_name', 'year_of_study', 'matric', 'gender' ,'height', 'weight', 'online_only', 'paid_only' , 'my_uni_only', 'eligible_only','city_only')
 
 
-
-
-
-
-
-
-
-
-
-
+# Particiapnt Update form - General Details
 class PartGeneralUpdateForm (autocomplete_light.ModelForm):
-
     YN = (('Yes','Yes'),('No','No'))
-    EDUCATION = (('School', 'School'),('SQ1', 'School Qualification1'), ('College','College') , ('University' , 'University'))
-    UNI = (('GCU','GCU'),('UoG','UoG'))
     dob = forms.DateField(label="Date of Birth", widget=DateWidget(usel10n=True, bootstrap_version=3), required=False)
     contact_number = forms.IntegerField(required=False, label="Contact No")
     occupation = forms.CharField(required=False, label="Occupation", max_length=128)
