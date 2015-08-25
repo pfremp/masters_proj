@@ -2,7 +2,7 @@
 
 {% extends 'sitebase.html' %}
 {% load staticfiles %}
-{% block title %}Participant Finder{% endblock %}
+{% block title %} {% endblock %}
 {% load pf_extras %}
 
 {% block body_block %}
@@ -21,7 +21,7 @@
             <div class="panel panel-default">
                 <a href="{% url 'experiment' experiment.researcher_slug experiment.slug %}"><div class="panel-heading"><h3 class="heading_of">{{ experiment.name }}</h3></div></a>
                 <div class="panel-body">
-                    <p class="text_of">Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book...</p>
+                    <p class="text_of">{{ experiment.long_description|truncatechars:400 }}</p>
                     <p><b>Location: </b>{{ experiment.city }}</p>
                     <p>
                     {% for p in payment_list %}

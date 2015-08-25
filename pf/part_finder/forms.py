@@ -92,8 +92,3 @@ class UpdateStatusFormFull(forms.ModelForm):
 
 
 
-class TimeSlotFrom(ModelForm):
-  class Meta:
-    model = TodoList
-    exclude = ('',)
-

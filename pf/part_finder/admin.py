@@ -32,10 +32,3 @@ admin.site.register(Languages)
 admin.site.register(Requirement)
 admin.site.register(MatchingDetail)
 
-
-
-# class NonAdminAddAnotherModelAdmin(admin.ModelAdmin):
-#     form = autocomplete_light.modelform_factory(NonAdminAddAnotherModel,
-#             fields=('name', 'widgets'))
-
-# admin.site.register(NonAdminAddAnotherModel, NonAdminAddAnotherModelAdmin)

@@ -10,6 +10,28 @@ from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from smart_selects.db_fields import ChainedForeignKey
 
+#Education Levels
+EDUCATION = (('HS' , 'High School Level'),
+            ('SCQF3', '  -Access 3 / Foundation Standard Grade'),
+             ('SCQF4', '-Intermediate 1 / General Standard Grade'),
+             ('SCQF5','-Intermediate 2 / Credit Standard Grade'),
+             ('GCSE','-GCSE'),
+             ('SCQF6' , '-Higher'),
+             ('ALEVEL' , '-A Level'),
+             ('SCQF7' , '-Advanced Higher'),
+             ('College' , 'College Level'),
+             ('HNC' , '-HNC'),
+             ('HND' , '-HND'),
+             ('HE' , 'University Level'),
+             ('HE1' , '-Bachelors  Degree'),
+             ('HE2' , '-Honours  Degree'),
+             ('HE3' , '-Masters  Degree'),
+             ('HE4' , '-Doctorates'))
+
+SEX = (('Male','Male'), ('Female','Female'), ('PNTS','Prefer not to say'))
+
+YOS = (('1' , '1'), ('2' , '2'),('3' , '3'),('4' , '4'),('5' , '5'))
+
 
 
 
@@ -72,8 +94,8 @@ class Experiment(models.Model):
 # Participant
 class Participant(models.Model):
     YN = (('Yes','Yes'),('No','No'))
-    SEX = (('Male','Male'), ('Female','Female'), ('PNTS','Prefer not to say'))
-    EDUCATION = (('School', 'School'),('SQ1', 'School Qualification1'), ('College','College') , ('University' , 'University'))
+    # SEX = (('Male','Male'), ('Female','Female'), ('PNTS','Prefer not to say'))
+    # EDUCATION = (('School', 'School'),('SQ1', 'School Qualification1'), ('College','College') , ('University' , 'University'))
 
     dob = models.DateField(("Date"), default=date.today, null=True)
     city = models.ForeignKey('cities_light.city', null=True, blank=True)

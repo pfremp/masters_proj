@@ -177,7 +177,7 @@ class UserAccountUpdateForm(forms.ModelForm):
 class ResearcherForm (forms.ModelForm):
    university = forms.ModelChoiceField(label="University", queryset=University.objects.all(), required=False)
    department = forms.CharField(label="Department Name", max_length=128)
-   contact_no = forms.IntegerField(label="Contact Number", help_text="07712345678")
+   contact_no = forms.IntegerField(label="Contact Number", help_text="e.g. 07712345678")
    url = forms.CharField(label="URL (Format: http://yoursite.com)")
 
    class Meta():
