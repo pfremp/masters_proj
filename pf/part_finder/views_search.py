@@ -2,8 +2,8 @@ __author__ = 'patrickfrempong'
 from django.shortcuts import render
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponse, request
-from part_finder.models import Researcher, Experiment, Participant, UserProfile, Contact, User,Dummy, Payment, Application, TimeSlot
-from part_finder.forms import ExperimentForm, ResearcherForm, PartDetailsForm, ParticipantForm, SignupForm, TodoList, TimeSlotForm, TimeSlotFrom, PaymentForm, ApplicationForm, UpdateStatusForm, UpdateStatusFormFull
+from part_finder.models import Researcher, Experiment, Participant, UserProfile, User, Payment, Application, TimeSlot
+from part_finder.forms import ExperimentForm, TodoList, TimeSlotForm, TimeSlotFrom, PaymentForm, ApplicationForm, UpdateStatusForm, UpdateStatusFormFull
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 # from django.contrib.formtools.wizard.views import SessionWizardView
@@ -16,7 +16,7 @@ from django.core.context_processors import csrf
 import sys
 import  datetime
 
-
+# Retrieve active participant user
 def get_participant(request):
     try:
         if request.user.is_authenticated():
@@ -55,13 +55,12 @@ def matched_experiment(request, experiment_id):
     else:
         match_form = MatchingDetailForm()
 
-
-
     context_dict = {'requirement': requirement, 'match_form': match_form, 'r_gender': r_gender, 'r_age': r_age, 'r_height':r_height, 'r_weight': r_weight, 'r_language': r_language}
 
     return render(request, 'part_finder/matched_experiment.html', context_dict)
 
 
+# Check applicant validity
 def check_applicant_validity(request, experiment):
     valid = 0
 
@@ -69,6 +68,7 @@ def check_applicant_validity(request, experiment):
     try:
         requirement = Requirement.objects.get(experiment=experiment)
 
+        # check gender
         if requirement.gender == '1':
 
             if match_gender(request,experiment) == True:
@@ -76,6 +76,7 @@ def check_applicant_validity(request, experiment):
             else:
                 valid += 1
 
+        # check student status
         if requirement.student == '1':
 
             if match_student(request) == True:
@@ -83,24 +84,28 @@ def check_applicant_validity(request, experiment):
             else:
                 valid +=1
 
+        # check age
         if requirement.age == '1':
             if match_age(request,experiment) == True:
                 valid += 0
             else:
                 valid += 1
 
+        # check language
         if requirement.language == '1':
             if match_lang(request, experiment) == True:
                 valid += 0
             else:
                 valid += 1
 
+        # check height
         if requirement.height == '1':
             if match_height(request, experiment):
                 valid += 0
             else:
                 valid += 1
 
+        # check weight
         if requirement.weight == '1':
             if match_weight(request, experiment):
                 valid += 0
@@ -121,14 +126,14 @@ def participant_pref_filter(request, experiment):
     payment = Payment.objects.get(experiment=experiment)
     eligible = check_applicant_validity(request, experiment)
 
-    #check for online exps
+    #check for online exps - only show online experiments
     if participant.online_only == True:
         if experiment.online == True:
             valid += 0
         else:
             valid += 1
 
-    print "valid after online only:- " + str(valid)
+    # check for paid only experiments - only show paid experiments
     if participant.paid_only == True:
 
         if str(payment.is_paid) == 'Yes':
@@ -136,30 +141,32 @@ def participant_pref_filter(request, experiment):
             valid += 0
         else:
             valid += 1
-    print "payment.is_paid: " + str(payment.is_paid)
-    print "Valid: " + str(valid)
+
+    # check for university status - only show experiments from participants university
     if participant.my_uni_only == True:
         if experiment.researcher.university == participant.university:
             valid += 0
         else:
             valid += 1
 
+    # check for city only - only show experiemnts from the participant's city
     if participant.city_only == True:
         if experiment.city ==  participant.city:
             valid += 0
         else:
             valid += 1
 
+    # check for eligibility - only show experiments that participant is eligible for
     if participant.eligible_only == True:
         if eligible == 0:
             valid += 0
         else:
             valid += 1
 
-    print "Valid: " + str(valid)
     return valid
 
 
+# check if gender matches experiment gender
 def match_gender(request, experiment):
 
     try:
@@ -177,7 +184,7 @@ def match_gender(request, experiment):
         pass
 
 
-
+# check if participant is a student
 def match_student(request):
 
     try:
@@ -191,7 +198,7 @@ def match_student(request):
     except (User.DoesNotExist , MatchingDetail.DoesNotExist , Requirement.DoesNotExist), e:
         pass
 
-
+# check is participant age meets the requirements
 def match_age(request, experiment):
 
     try:
@@ -215,7 +222,7 @@ def match_age(request, experiment):
         pass
 
 
-
+# check if the participant has the required languages
 def match_lang(request, experiment):
 
     participant = request.user.profile.participant
@@ -224,36 +231,18 @@ def match_lang(request, experiment):
     try:
         requirement = Requirement.objects.get(experiment=experiment)
         match_details = MatchingDetail.objects.get(requirement=requirement)
-
-        # alllanguages = match_details.l
-        # experiment_languages = alllanguages.split()
-
         participant_languages = participant.language.all()
-
         experiment_languages = match_details.l.replace('[','').replace('u','').replace("'",'').replace(']','').replace(',','')
         exp_lang = experiment_languages.split()
 
-        # p = participant.language.all()
         v = 0
-        # e_counter = 0
-        # print "Part Lang: " + str(participant_languages)
-        # print "Exp Lang: " + str(experiment_languages)
-        # print "Exp Lang Split: " + str(exp_lang)
-        # print "Exp Lang Split: " + str(exp_lang[0])
-
 
         for p in participant_languages:
             for e in exp_lang:
-                # e_counter += 1
-                # print e_counter
                 if p.language.lower() == e.lower():
                     v += 1
-                    # print p.language + " = " + e
 
-        # print v
-        # print len(exp_lang)
         if v == len(exp_lang):
-            # print str(v) + " = " + str(len(exp_lang))
             return True
 
     except (MatchingDetail.DoesNotExist, Requirement.DoesNotExist) , e:
@@ -261,7 +250,7 @@ def match_lang(request, experiment):
         requirement = None
 
 
-
+# check if the participant meets the height requirements
 def match_height(request, experiment):
 
     try:
@@ -284,6 +273,7 @@ def match_height(request, experiment):
         pass
 
 
+# check if participant has the correct weight
 def match_weight(request, experiment):
 
     try:
@@ -305,13 +295,3 @@ def match_weight(request, experiment):
     except (User.DoesNotExist , MatchingDetail.DoesNotExist , Requirement.DoesNotExist), e:
         pass
 
-
-
-# # checks to see whether a participant is a student
-# def check_for_student(participant_id):
-#     part = Participant.objects.get(id=participant_id)
-#
-#     if part.student == True:
-#         return True
-#     else:
-#         return False

@@ -15,6 +15,8 @@ from part_finder.models import Experiment, Languages
 
 GENDER = (('male', 'Male'), ('female','Female'))
 
+# Experiemnt requirements :-
+# Stores whether a particular requirement will be used for an experiment
 class Requirement(models.Model):
     CHOICES = (('0','NO'),('1','YES'))
     DEF = 'NO'
@@ -30,6 +32,8 @@ class Requirement(models.Model):
     def __unicode__(self):
         return self.experiment.name + " Requirement"
 
+# Experiment requirement details
+# Stores the specific requirement details for an experiment
 class MatchingDetail(models.Model):
     gender = models.CharField(max_length=128, choices=GENDER, blank=True)
     min_age = models.IntegerField(null=True, default=1, blank=True)
@@ -39,44 +43,10 @@ class MatchingDetail(models.Model):
     min_weight = models.IntegerField(default=0, null=True, blank=True)
     max_weight = models.IntegerField(default=0, null=True, blank=True)
     l = models.CharField(max_length=128, blank=True)
-    # language = models.ManyToManyField(Languages, related_name='matchingdetail')
     requirement = models.ForeignKey(Requirement, null=True, related_name='matchdetail')
 
     def __unicode__(self):
         return self.requirement.experiment.name + " Match Details"
-
-
-
-# gender
-class Gender(models.Model):
-
-    gender = models.CharField(max_length=128, choices=GENDER)
-    requirement = models.ForeignKey(Requirement, null=True, related_name='req_gender')
-
-    def __unicode__(self):
-        return self.gender
-
-class Age(models.Model):
-    min_age = models.IntegerField(null=False, default=1)
-    max_age = models.IntegerField(null=False, default=1)
-    requirement = models.ForeignKey(Requirement, null=True, related_name='req_age')
-
-    def __unicode__(self):
-        return self.min_age
-
-class Height(models.Model):
-    height = models.IntegerField(default=0, null=False)
-    requirement = models.ForeignKey(Requirement, null=True, related_name='req_height')
-
-    def __unicode__(self):
-        return self.height
-
-class Weight(models.Model):
-    weight = models.IntegerField(default=0, null=False)
-    requirement = models.ForeignKey(Requirement, null=True, related_name='req_weight')
-
-    def __unicode__(self):
-        return self.weight
 
 
 
