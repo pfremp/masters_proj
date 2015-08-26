@@ -18,7 +18,7 @@
                 {% if experiment.has_ended == False %}
           <div class="col-sm-6 col-md-6">
           <div class="panel panel-default">
-                <div class="panel-heading"><h3 class="heading_of">{{ experiment.name }}</h3></div>
+                <a href="{% url 'experiment' experiment.researcher_slug experiment.slug %}"><div class="panel-heading"><h3 class="heading_of">{{ experiment.name }}</h3></div></a>
                 <div class="panel-body">
                     <p class="text_of">{{ experiment.long_description|truncatechars:200 }}</p>
                     <p><b>Location: </b>{{ experiment.city }}</p>
@@ -51,7 +51,7 @@
                 {% if experiment.has_ended == False %}
                     <div class="col-sm-6 col-md-6">
             <div class="panel panel-default">
-                <div class="panel-heading"><h3 class="heading_of">{{ experiment.name }}</h3></div>
+                <a href="{% url 'experiment' experiment.researcher_slug experiment.slug %}"><div class="panel-heading"><h3 class="heading_of">{{ experiment.name }}</h3></div></a>
                 <div class="panel-body">
                     <p class="text_of">{{ experiment.long_description|truncatechars:200 }}</p>
                     <p><b>Location: </b>{{ experiment.city }}</p>

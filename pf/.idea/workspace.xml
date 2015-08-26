@@ -149,33 +149,31 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="emails.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/part_finder/emails.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="27" column="25" selection-start-line="27" selection-start-column="25" selection-end-line="27" selection-end-column="25" />
-              <folding>
-                <element signature="e#31#69#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="sitebase.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="sitebase.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/sitebase.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.28846154">
-              <caret line="105" column="50" selection-start-line="105" selection-start-column="50" selection-end-line="105" selection-end-column="50" />
+            <state vertical-scroll-proportion="-13.125">
+              <caret line="106" column="23" selection-start-line="106" selection-start-column="23" selection-end-line="106" selection-end-column="23" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="populate_pf_new.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/populate_pf_new.py">
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/part_finder/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="187" column="27" selection-start-line="187" selection-start-column="27" selection-end-line="187" selection-end-column="27" />
+            <state vertical-scroll-proportion="-13.125">
+              <caret line="21" column="178" selection-start-line="21" selection-start-column="16" selection-end-line="21" selection-end-column="178" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="all_experiments.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/templates/part_finder/all_experiments.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.42307693">
+              <caret line="53" column="178" selection-start-line="53" selection-start-column="178" selection-end-line="53" selection-end-column="178" />
               <folding />
             </state>
           </provider>
@@ -216,7 +214,6 @@
         <option value="$PROJECT_DIR$/static/css/styles-fb.css" />
         <option value="$PROJECT_DIR$/templates/part_finder/bootstrap-masonry-template.htm" />
         <option value="$PROJECT_DIR$/static/css/part_finder.css" />
-        <option value="$PROJECT_DIR$/templates/part_finder/all_experiments.html" />
         <option value="$PROJECT_DIR$/templates/part_finder/experiments.html" />
         <option value="$PROJECT_DIR$/templates/part_finder/participant_experiments.html" />
         <option value="$PROJECT_DIR$/part_finder/apply.py" />
@@ -247,6 +244,7 @@
         <option value="$PROJECT_DIR$/part_finder/forms_user.py" />
         <option value="$PROJECT_DIR$/part_finder/views_user.py" />
         <option value="$PROJECT_DIR$/templates/sitebase.html" />
+        <option value="$PROJECT_DIR$/templates/part_finder/all_experiments.html" />
       </list>
     </option>
   </component>
@@ -1047,14 +1045,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/part_finder/all_experiments.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3220339">
-          <caret line="61" column="108" selection-start-line="61" selection-start-column="108" selection-end-line="61" selection-end-column="108" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/part_finder/matched_experiment.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-17.5">
@@ -1191,14 +1181,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-8.125">
           <caret line="13" column="54" selection-start-line="13" selection-start-column="54" selection-end-line="13" selection-end-column="54" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/part_finder/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="35.625">
-          <caret line="23" column="85" selection-start-line="23" selection-start-column="85" selection-end-line="23" selection-end-column="85" />
           <folding />
         </state>
       </provider>
@@ -1385,8 +1367,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/sitebase.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.28846154">
-          <caret line="105" column="50" selection-start-line="105" selection-start-column="50" selection-end-line="105" selection-end-column="50" />
+        <state vertical-scroll-proportion="-13.125">
+          <caret line="106" column="23" selection-start-line="106" selection-start-column="23" selection-end-line="106" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/part_finder/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-13.125">
+          <caret line="21" column="178" selection-start-line="21" selection-start-column="16" selection-end-line="21" selection-end-column="178" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/part_finder/all_experiments.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.42307693">
+          <caret line="53" column="178" selection-start-line="53" selection-start-column="178" selection-end-line="53" selection-end-column="178" />
           <folding />
         </state>
       </provider>
