@@ -97,6 +97,7 @@ SITE_ID = 1
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/part_finder/login_success/'
 
+SITE_ADDRESS = "http://127.0.0.1:8000"
 
 #all auth settings
 ACCOUNT_ADAPTER ="allauth.account.adapter.DefaultAccountAdapter"
@@ -287,12 +288,12 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 # #email config
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_PORT = 587
-# EMAIL_HOST_USER = 'participantfinder1@gmail.com'
-# EMAIL_HOST_PASSWORD = 'asam1111'
-# EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'participantfinder1@gmail.com'
+EMAIL_HOST_PASSWORD = 'asam1111'
+EMAIL_USE_TLS = True
 
 
 AUTHENTICATION_BACKENDS = (

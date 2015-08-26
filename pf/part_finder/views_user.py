@@ -79,7 +79,7 @@ def participant_registration_1(request):
 # participant form 2
 # collects detailed participant data
 def participant_registration_2(request):
-    # participant = Participant.objects.get_or_create(id=p_id)
+
     participant = request.user.profile.participant
     if participant.reg_2_completed == False:
         form = ParticipantForm2(request.POST or None, instance=participant)

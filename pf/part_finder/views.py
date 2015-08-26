@@ -21,6 +21,9 @@ import views_user
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from django import template
+from django.core.mail import send_mail
+from pf.settings import SITE_ADDRESS
+from part_finder.emails import *
 
 # register = template.Library()
 from django.template import RequestContext # For CSRF
@@ -138,6 +141,10 @@ def update_application_status(request, exp_id, app_id):
             application.timeslot.current_parts = 0
             application.timeslot.save()
             application_counter(experiment)
+
+            #emails
+            app_status_update_email(application)
+
             return process_application(request, experiment.slug, experiment.researcher_slug)
 
         else:
@@ -312,6 +319,8 @@ def experiment (request, experiment_name_slug, r_slug):
                 application.experiment = experiment
                 application.status = 'Pending'
                 application.save()
+                experiment_app_email(application)
+
                 return HttpResponseRedirect(reverse('participant_experiments'))
 
              else:
