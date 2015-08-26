@@ -97,7 +97,7 @@ SITE_ID = 1
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/part_finder/login_success/'
 
-SITE_ADDRESS = "http://127.0.0.1:8000"
+SITE_ADDRESS = "http://pfremp1.pythonanywhere.com"
 
 #all auth settings
 ACCOUNT_ADAPTER ="allauth.account.adapter.DefaultAccountAdapter"

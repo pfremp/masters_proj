@@ -177,6 +177,19 @@ class ParticipantPrefUpdate(UpdateView):
     def get_object(self, queryset=None):
         return self.request.user.profile.participant
 
+#Participant preferences details update (non-student)
+# prevents non students from being able to update the "My Uni Only" preference.
+class ParticipantPrefUpdateNS(UpdateView):
+
+    model = Participant
+    # form_class = PartPrefUpdateForm
+    fields = ['online_only', 'paid_only' , 'eligible_only','city_only' ]
+    template_name = 'part_finder/participant_update_form.html'
+    success_url='/part_finder/participant/settings'
+
+    def get_object(self, queryset=None):
+        return self.request.user.profile.participant
+
 
 
 @login_required

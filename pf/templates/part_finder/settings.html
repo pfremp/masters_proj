@@ -22,7 +22,11 @@
 
         </div>
         </div>
-         <a class="btn btn-default" href="{% url 'update_participant_pref' %}">Update Preferences</a>
+        {% if participant.student == True %}
+        <a class="btn btn-default" href="{% url 'update_participant_pref' %}">Update Preferences</a>
+        {% else %}
+        <a class="btn btn-default" href="{% url 'update_participant_pref_ns' %}">Update Preferences</a>
+        {% endif %}
 
 
 {% endblock %}

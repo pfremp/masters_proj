@@ -161,6 +161,7 @@ class PartPrefUpdateForm (forms.ModelForm):
     city_only = forms.BooleanField(label="City Only", required=False, help_text="Only show experiments from my city")
     eligible_only = forms.BooleanField(label="Eligible Only", required=False, help_text="Only show experiments that I am eligible for")
 
+
     class Meta():
         model = Participant
         fields = ('online_only', 'paid_only' , 'my_uni_only', 'eligible_only','city_only')

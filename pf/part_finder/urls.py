@@ -6,7 +6,7 @@ from django.contrib import admin
 from registration.backends.simple.views import RegistrationView
 
 from part_finder.views import process_application, ExperimentUpdate, PaymentUpdate, TimeSlotUpdate, RequirementUpdate, MatchDetailsUpdate
-from part_finder.views_user import ParticipantGeneralUpdate, ParticipantStudentUpdate, ParticipantDemoUpdate, ParticipantPrefUpdate, UserAccountUpdate, participant_registration_1, ResearcherUpdate
+from part_finder.views_user import ParticipantGeneralUpdate, ParticipantStudentUpdate, ParticipantDemoUpdate, ParticipantPrefUpdate, ParticipantPrefUpdateNS,UserAccountUpdate, participant_registration_1, ResearcherUpdate
 
 from django.views.generic.edit import UpdateView
 from part_finder.models import Participant
@@ -46,6 +46,7 @@ urlpatterns = patterns('',
     url(r'^participant/profile/student/update/$', login_required(ParticipantStudentUpdate.as_view()), name='update_participant_student'),
     url(r'^participant/profile/demographic/update/$', login_required(ParticipantDemoUpdate.as_view()), name='update_participant_demo'),
     url(r'^participant/profile/preferences/update/$', login_required(ParticipantPrefUpdate.as_view()), name='update_participant_pref'),
+    url(r'^participant/profile/preferences/update/$', login_required(ParticipantPrefUpdateNS.as_view()), name='update_participant_pref_ns'),
     url(r'^participant_registration_1/$', views_user.participant_registration_1, name='participant_registration_1'),
     url(r'^participant_registration_2/$', views_user.participant_registration_2, name='participant_registration_2'),
     url(r'^my_experiments/$', views_user.participant_experiments, name='participant_experiments'),
