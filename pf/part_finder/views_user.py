@@ -207,34 +207,36 @@ def settings_page(request):
 #refresh requirements after an update has been made.
 def refresh_reqs(experiment):
 
-    requirement = Requirement.objects.get(experiment=experiment)
+    try:
+        requirement = Requirement.objects.get(experiment=experiment)
 
-    #check requirements to see what reqs
-    #  the participant needs to have.
-    if requirement.age == '1':
-        requirement.match = True
-    if requirement.language == '1':
-        requirement.match = True
-    if requirement.height == '1':
-        requirement.match = True
-    if requirement.weight == '1':
-        requirement.match = True
-    if requirement.gender == '1':
-        requirement.match = True
-    if requirement.student == '1':
-        requirement.match = True
+        #check requirements to see what reqs
+        #  the participant needs to have.
+        if requirement.age == '1':
+            requirement.match = True
+        if requirement.language == '1':
+            requirement.match = True
+        if requirement.height == '1':
+            requirement.match = True
+        if requirement.weight == '1':
+            requirement.match = True
+        if requirement.gender == '1':
+            requirement.match = True
+        if requirement.student == '1':
+            requirement.match = True
 
-    requirement.save()
-
-    #If the requirements have been removed, set "match" back to false.
-    if requirement.age != '1' and requirement.language != '1' and requirement.height != '1' and requirement.weight != '1' and requirement.gender != '1' and requirement.student != '1':
-        requirement.match = False
         requirement.save()
 
-    #Check if req details object exists, if it doesn't exist, create one
-    if requirement.match == True:
-        match_details = MatchingDetail.objects.get_or_create(requirement=requirement)
+        #If the requirements have been removed, set "match" back to false.
+        if requirement.age != '1' and requirement.language != '1' and requirement.height != '1' and requirement.weight != '1' and requirement.gender != '1' and requirement.student != '1':
+            requirement.match = False
+            requirement.save()
 
+        #Check if req details object exists, if it doesn't exist, create one
+        if requirement.match == True:
+            match_details = MatchingDetail.objects.get_or_create(requirement=requirement)
+    except ObjectDoesNotExist:
+        pass
 
 
 
