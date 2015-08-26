@@ -182,8 +182,8 @@ class ParticipantPrefUpdate(UpdateView):
 class ParticipantPrefUpdateNS(UpdateView):
 
     model = Participant
-    # form_class = PartPrefUpdateForm
-    fields = ['online_only', 'paid_only' , 'eligible_only','city_only' ]
+    form_class = PartPrefUpdateFormNS
+    # fields = ['online_only', 'paid_only' , 'eligible_only','city_only' ]
     template_name = 'part_finder/participant_update_form.html'
     success_url='/part_finder/participant/settings'
 
