@@ -47,7 +47,7 @@
 
 {% if experiments %}
 
-            {% for experiment in experiments|slice:"10" %}
+            {% for experiment in experiments %}
                 {% if experiment.has_ended == False %}
                     <div class="col-sm-6 col-md-6">
             <div class="panel panel-default">
