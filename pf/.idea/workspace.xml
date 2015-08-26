@@ -53,8 +53,8 @@
             <file leaf-file-name="models.py" pinned="false" current-in-tab="true">
               <entry file="file://$PROJECT_DIR$/part_finder/models.py">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state vertical-scroll-proportion="-0.3414264">
-                    <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
+                  <state vertical-scroll-proportion="0.54628223">
+                    <caret line="91" column="0" selection-start-line="91" selection-start-column="0" selection-end-line="91" selection-end-column="0" />
                     <folding>
                       <element signature="e#0#28#0" expanded="true" />
                     </folding>
@@ -76,7 +76,7 @@
       <file leaf-file-name="forms_user.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/part_finder/forms_user.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-17.25926">
+            <state vertical-scroll-proportion="-61.703705">
               <caret line="153" column="0" selection-start-line="153" selection-start-column="0" selection-end-line="153" selection-end-column="0" />
               <folding>
                 <element signature="e#32#56#0" expanded="true" />
@@ -97,10 +97,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="views_user.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="views_user.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/part_finder/views_user.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6616541">
+            <state vertical-scroll-proportion="0.0">
               <caret line="240" column="0" selection-start-line="240" selection-start-column="0" selection-end-line="240" selection-end-column="0" />
               <folding>
                 <element signature="e#31#66#0" expanded="true" />
@@ -161,11 +161,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="sitebase.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="sitebase.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/templates/sitebase.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-18.75">
-              <caret line="30" column="0" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.28846154">
+              <caret line="105" column="50" selection-start-line="105" selection-start-column="50" selection-end-line="105" selection-end-column="50" />
               <folding />
             </state>
           </provider>
@@ -240,13 +240,13 @@
         <option value="$PROJECT_DIR$/templates/account/email_confirmed.html" />
         <option value="$PROJECT_DIR$/part_finder/views.py" />
         <option value="$PROJECT_DIR$/part_finder/emails.py" />
-        <option value="$PROJECT_DIR$/templates/sitebase.html" />
         <option value="$PROJECT_DIR$/populate_pf_new.py" />
         <option value="$PROJECT_DIR$/pf/settings.py" />
         <option value="$PROJECT_DIR$/templates/part_finder/settings.html" />
         <option value="$PROJECT_DIR$/part_finder/urls.py" />
         <option value="$PROJECT_DIR$/part_finder/forms_user.py" />
         <option value="$PROJECT_DIR$/part_finder/views_user.py" />
+        <option value="$PROJECT_DIR$/templates/sitebase.html" />
       </list>
     </option>
   </component>
@@ -1293,14 +1293,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/sitebase.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-18.75">
-          <caret line="30" column="0" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/part_finder/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.5939968">
@@ -1324,16 +1316,6 @@
         <state vertical-scroll-proportion="-55.0">
           <caret line="99" column="49" selection-start-line="99" selection-start-column="49" selection-end-line="99" selection-end-column="49" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/part_finder/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.3414264">
-          <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1371,9 +1353,29 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/part_finder/views_user.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="240" column="0" selection-start-line="240" selection-start-column="0" selection-end-line="240" selection-end-column="0" />
+          <folding>
+            <element signature="e#31#66#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/part_finder/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.54628223">
+          <caret line="91" column="0" selection-start-line="91" selection-start-column="0" selection-end-line="91" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/part_finder/forms_user.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-17.25926">
+        <state vertical-scroll-proportion="-61.703705">
           <caret line="153" column="0" selection-start-line="153" selection-start-column="0" selection-end-line="153" selection-end-column="0" />
           <folding>
             <element signature="e#32#56#0" expanded="true" />
@@ -1381,13 +1383,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/part_finder/views_user.py">
+    <entry file="file://$PROJECT_DIR$/templates/sitebase.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6616541">
-          <caret line="240" column="0" selection-start-line="240" selection-start-column="0" selection-end-line="240" selection-end-column="0" />
-          <folding>
-            <element signature="e#31#66#0" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.28846154">
+          <caret line="105" column="50" selection-start-line="105" selection-start-column="50" selection-end-line="105" selection-end-column="50" />
+          <folding />
         </state>
       </provider>
     </entry>

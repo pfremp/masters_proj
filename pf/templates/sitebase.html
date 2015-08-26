@@ -20,6 +20,7 @@
         {% include 'autocomplete_light/static.html' %}
         <link href="{{ STATIC_URL }}css/part_finder.css" rel="stylesheet" type="text/css"/>
         {{ form.media }}
+        <!-- myegg heatmap -->
         <script type="text/javascript">
         setTimeout(function(){var a=document.createElement("script");
         var b=document.getElementsByTagName("script")[0];
@@ -102,7 +103,7 @@
             {% if user.is_authenticated %}
             <div class="column col-sm-10 col-xs-11" id="main">
             {% else %}
-            <div class="column col-sm-12 col-xs-11" id="main">
+            <div class="column col-sm-12 col-xs-12" id="main">
             {% endif %}
                 <!-- top nav -->
               	<div class="navbar navbar-blue navbar-static-top">  
