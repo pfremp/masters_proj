@@ -139,6 +139,7 @@ class UserProfile(models.Model):
     participant = models.OneToOneField(Participant, blank=True, null=True, related_name='userprofile')
     researcher = models.OneToOneField(Researcher, blank=True, null=True, related_name='userprofile')
 
+
     def update_res (forms):
         researcher = forms
         researcher.save()
