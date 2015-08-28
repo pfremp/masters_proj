@@ -45,7 +45,8 @@ class SignupForm(forms.Form):
     TYPES = (('Participant','Participant'),('Researcher','Researcher'))
     first_name = forms.CharField(max_length=35, label='First name')
     last_name = forms.CharField(max_length=35, label='Last name')
-    type = forms.ChoiceField(choices=TYPES, label='Type')
+    # type = forms.ChoiceField(choices=TYPES, label='Account Type', help_text="Select 'Participant' or 'Researcher'. ")
+    type = forms.ChoiceField(choices=TYPES, widget=forms.RadioSelect, label='Account Type', help_text="Select 'Participant' or 'Researcher'. ", required=True)
 
     class Meta():
         model = UserProfile
