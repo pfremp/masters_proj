@@ -1,66 +1,7 @@
 # from django.test import TestCase
 import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "pf.settings")
-# __author__ = 'patrickfrempong'
-# from django.test import LiveServerTestCase
-# from django.contrib.auth.models import User
-#
-# from selenium import webdriver
-#
-#
-# class AdminTestCase(LiveServerTestCase):
-#     def setUp(self):
-#         # setUp is where you instantiate the selenium webdriver and loads the browser.
-#         User.objects.create_superuser(
-#             username='admin',
-#             password='admin',
-#             email='admin@examplex.com',
-#             first_name='John',
-#             last_name='Smith'
-#         )
-#
-#         self.selenium = webdriver.Firefox()
-#         self.selenium.maximize_window()
-#         super(AdminTestCase, self).setUp()
-#
-#     def tearDown(self):
-#         # Call tearDown to close the web browser
-#         self.selenium.quit()
-#         super(AdminTestCase, self).tearDown()
-#
-#     def test_create_user(self):
-#         """
-#         Django admin create user test
-#         This test will create a user in django admin and assert that
-#         page is redirected to the new user change form.
-#         """
-#         # Open the django admin page.
-#         # DjangoLiveServerTestCase provides a live server url attribute
-#         # to access the base url in tests
-#         self.selenium.get(
-#             '%s%s' % (self.live_server_url,  "/admin/")
-#         )
-#
-#         # Fill login information of admin
-#         username = self.selenium.find_element_by_id("id_username")
-#         username.send_keys("admin")
-#         password = self.selenium.find_element_by_id("id_password")
-#         password.send_keys("admin")
-#
-#         # Locate Login button and click it
-#         self.selenium.find_element_by_xpath('//input[@value="Log in"]').click()
-#         self.selenium.get(
-#             '%s%s' % (self.live_server_url, "/admin/auth/user/add/")
-#         )
-#
-#         # Fill the create user form with username and password
-#         self.selenium.find_element_by_id("id_username").send_keys("test")
-#         self.selenium.find_element_by_id("id_password1").send_keys("test")
-#         self.selenium.find_element_by_id("id_password2").send_keys("test")
-#
-#         # Forms can be submitted directly by calling its method submit
-#         self.selenium.find_element_by_id("user_form").submit()
-#         self.assertIn("Change user", self.selenium.title)
+
 
 # from django.test import LiveServerTestCase
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
@@ -69,7 +10,9 @@ from django.contrib.auth.models import User
 import populate_pf
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium import webdriver
-#
+from selenium.webdriver.support import expected_conditions as EC
+
+
 # driver = webdriver.Firefox()
 # driver.implicitly_wait(10) # seconds
 
@@ -257,19 +200,22 @@ class MySeleniumTests(StaticLiveServerTestCase):
         ts1_np_input = self.selenium.find_element_by_id("id_form-0-no_of_parts")
         ts1_np_input.send_keys("2")
 
-        #add new timeslot
-        # add_ts2 = self.selenium.find_element_by_xpath('//select[@id="add"]').click()
-        add_ts2 = self.selenium.find_element_by_id("add").click()
-
-        # Timeslot 2
-        ts2_date_input = self.selenium.find_element_by_id("id_form-1-date")
-        ts2_date_input.send_keys("10/11/2015")
-        ts2_stime_input = self.selenium.find_element_by_id("id_form-1-start_time")
-        ts2_stime_input.send_keys("14:00")
-        ts2_etime_input = self.selenium.find_element_by_id("id_form-1-end_time")
-        ts2_etime_input.send_keys("15:00")
-        ts2_np_input = self.selenium.find_element_by_id("id_form-1-no_of_parts").clear()
-        ts2_np_input.send_keys("3")
+        # #add new timeslot
+        # # add_ts2 = self.selenium.find_element_by_xpath('//select[@id="add"]').click()
+        # add_ts2 = self.selenium.find_element_by_id("add").click()
+        #
+        # wait = WebDriverWait(self.selenium, 10)
+        # element = wait.until(EC.element_to_be_clickable((By.ID,'someid')))
+        #
+        # # Timeslot 2
+        # ts2_date_input = self.selenium.find_element_by_id("id_form-1-date")
+        # ts2_date_input.send_keys("10/11/2015")
+        # ts2_stime_input = self.selenium.find_element_by_id("id_form-1-start_time")
+        # ts2_stime_input.send_keys("14:00")
+        # ts2_etime_input = self.selenium.find_element_by_id("id_form-1-end_time")
+        # ts2_etime_input.send_keys("15:00")
+        # ts2_np_input = self.selenium.find_element_by_id("id_form-1-no_of_parts").clear()
+        # ts2_np_input.send_keys("3")
         exp_submit = self.selenium.find_element_by_class_name("btn-default").click()
 
 

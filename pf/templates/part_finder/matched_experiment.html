@@ -5,12 +5,16 @@
 {##}
 {% load bootstrap3 %}
 
-<h1>gender</h1>
+<h1>Experiment Match Details</h1>
 
 {% block body_block %}
 
     <form id="experiment_form" method="post" novalidate action="">
     {% csrf_token %}
+
+    {% if r_student == '1' %}
+        {% bootstrap_field match_form.student %}
+    {% endif %}
 
     {% if r_gender == '1' %}
         {% bootstrap_field match_form.gender %}

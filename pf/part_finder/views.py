@@ -394,10 +394,12 @@ def add_experiment(request):
                 time_slot.experiment = experiment
                 time_slot.save()
 
-            if requirement.match == True:
+            # if only student is true then redirect to res exp area
+            if (requirement.age == '0' and requirement.language == '0' and requirement.height == '0' and requirement.weight == '0' and requirement.gender == '0' and requirement.student == '1'):
+                return HttpResponseRedirect(reverse('researcher_experiments'))
+            elif requirement.match == True:
                 return HttpResponseRedirect(reverse('set_match', args=[experiment.id] ))
             else:
-
                 return HttpResponseRedirect(reverse('researcher_experiments'))
 
         else:
