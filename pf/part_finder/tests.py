@@ -89,19 +89,20 @@ class MySeleniumTests(StaticLiveServerTestCase):
             first_name='John',
             last_name='Smith'
         )
-        # populate_pf.populate()
+
 
         super(MySeleniumTests, cls).setUpClass()
         cls.selenium = WebDriver()
 
 
 
-    @classmethod
-    def tearDownClass(cls):
-        cls.selenium.quit()
-        super(MySeleniumTests, cls).tearDownClass()
+    # @classmethod
+    # def tearDownClass(cls):
+    #     cls.selenium.quit()
+    #     super(MySeleniumTests, cls).tearDownClass()
 
     def test_login(self):
+        populate_pf.populate()
         self.selenium.get('%s%s' % (self.live_server_url, '/admin/'))
         username_input = self.selenium.find_element_by_name("username")
         username_input.send_keys('pf')
@@ -109,11 +110,9 @@ class MySeleniumTests(StaticLiveServerTestCase):
         password_input.send_keys('1')
         self.selenium.find_element_by_xpath('//input[@value="Log in"]').click()
         self.selenium.find_element_by_link_text("Log out").click()
-        # self.selenium.implicitly_wait(10)
-        # WebDriver.implicitly_wait(self.selenium,10)
 
 
-    def test_participant_signup(self):
+    def test_participant_login(self):
         populate_pf.populate()
         self.selenium.get('%s%s' % (self.live_server_url, '/part_finder/'))
         login_page = self.selenium.find_element_by_link_text("Login").click()
@@ -122,6 +121,56 @@ class MySeleniumTests(StaticLiveServerTestCase):
         password_input = self.selenium.find_element_by_id("id_password")
         password_input.send_keys("111111")
         login_submit = self.selenium.find_element_by_class_name("btn-default").click()
-        self.selenium.implicitly_wait(10)
-        self.selenium.get('%s%s' % (self.live_server_url, '/part_finder/my_experiments'))
-        self.selenium.implicitly_wait(10)
+        # self.selenium.get('%s%s' % (self.live_server_url, '/part_finder/my_experiments'))
+
+    def test_participant_signup(self):
+        populate_pf.populate()
+        self.selenium.get('%s%s' % (self.live_server_url, '/accounts/signup/'))
+        first_name_input = self.selenium.find_element_by_id('id_first_name')
+        first_name_input.send_keys("Patrick")
+        last_name_input = self.selenium.find_element_by_id('id_last_name')
+        last_name_input.send_keys("Frempong")
+        account_type = self.selenium.find_element_by_id('id_type_0').click()
+        username_input = self.selenium.find_element_by_id('id_username')
+        username_input.send_keys('pfremp1')
+        email_input = self.selenium.find_element_by_id('id_email')
+        email_input.send_keys('p-fremp@hotmail.com')
+        password_input_1 = self.selenium.find_element_by_id('id_password1')
+        password_input_1.send_keys('111111')
+        password_input_2 = self.selenium.find_element_by_id('id_password2')
+        password_input_2.send_keys('111111')
+        signup_submit = self.selenium.find_element_by_class_name("btn-default").click()
+
+        # Participant Form 1
+        contact_number_input = self.selenium.find_element_by_id('id_contact_number')
+        contact_number_input.send_keys('01415558585')
+        student_input = self.selenium.find_element_by_id('id_student').click()
+        part_1_submit = self.selenium.find_element_by_class_name("btn-default").click()
+
+        # Participant Form 2
+        education_select = self.selenium.find_element_by_xpath('//select[@id="id_education"]/option[@value="HE3"]').click()
+        university_select = self.selenium.find_element_by_xpath('//select[@id="id_university"]/option[@value="9"]').click()
+        course_name_input = self.selenium.find_element_by_id('id_course_name')
+        course_name_input.send_keys('MSc Information Technology')
+        yos_select = self.selenium.find_element_by_xpath('//select[@id="id_year_of_study"]/option[@value="2"]').click()
+        matric_input = self.selenium.find_element_by_id('id_matric')
+        matric_input.send_keys('25241254125')
+        gender_select = self.selenium.find_element_by_xpath('//select[@id="id_gender"]/option[@value="Male"]').click()
+        height_input = self.selenium.find_element_by_id('id_height')
+        height_input.send_keys('150')
+        weight_input = self.selenium.find_element_by_id('id_eeight')
+        weight_input.send_keys('70')
+        part_2_submit = self.selenium.find_element_by_class_name("btn-default").click()
+
+
+
+
+
+
+
+
+
+
+
+
+

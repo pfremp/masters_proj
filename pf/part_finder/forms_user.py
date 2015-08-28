@@ -69,7 +69,7 @@ class ParticipantForm1 (autocomplete_light.ModelForm):
 
     contact_number = forms.IntegerField(required=False, label="Contact No" , help_text="07712345678")
     student = forms.BooleanField(label="Student", required=False)
-    dob = forms.DateField(label="Date of Birth", widget=DateWidget(usel10n=True, bootstrap_version=3), required=True)
+    dob = forms.DateField(label="Date of Birth", widget=DateWidget(usel10n=True, bootstrap_version=3), required=False)
 
     # class Media:
     #     js = ('js/dependant_autocomplete.js',)
