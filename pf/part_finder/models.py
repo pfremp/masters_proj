@@ -9,6 +9,8 @@ from django.core import urlresolvers
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from smart_selects.db_fields import ChainedForeignKey
+from django.core.exceptions import ValidationError
+import datetime
 
 #Education Levels
 EDUCATION = (('HS' , 'High School Level'),
@@ -32,7 +34,10 @@ SEX = (('Male','Male'), ('Female','Female'), ('PNTS','Prefer not to say'))
 
 YOS = (('1' , '1'), ('2' , '2'),('3' , '3'),('4' , '4'),('5' , '5'))
 
-
+# Validate Int is grater than 1
+def validate_gt1(value):
+    if value <= 0:
+        raise ValidationError('Cannot be less than 1')
 
 
 # University
@@ -48,6 +53,7 @@ class Researcher(models.Model):
     department = models.CharField(max_length=128, blank=True, null=True)
     contact_no = models.IntegerField()
     url = models.URLField(max_length=128, blank=True)
+
 
     def __unicode__(self):
         return self.userprofile.user.username
@@ -65,7 +71,7 @@ class Languages(models.Model):
 class Experiment(models.Model):
     CURRENCY = (('Credits','Credits'),('Money','Money'))
     PMT_TYPE = (('Total','Total'),('Hourly','Hourly'), ('N/A', 'N/A'))
-    name = models.CharField(max_length=128, blank=False)
+    name = models.CharField(max_length=65, blank=False)
     long_description = models.CharField(max_length=1000, blank=True, null=True)
     duration = models.FloatField(blank=True, null=True)
     address = models.CharField(max_length=128, blank=True)
@@ -139,7 +145,6 @@ class UserProfile(models.Model):
     participant = models.OneToOneField(Participant, blank=True, null=True, related_name='userprofile')
     researcher = models.OneToOneField(Researcher, blank=True, null=True, related_name='userprofile')
 
-
     def update_res (forms):
         researcher = forms
         researcher.save()
@@ -153,10 +158,19 @@ class TimeSlot(models.Model):
     date = models.DateField(("Date"), default=date.today, null=True)
     start_time = models.TimeField(blank=True, null=True)
     end_time = models.TimeField(blank=True, null=True)
-    no_of_parts = models.IntegerField(blank=True, null=True)
-    current_parts = models.IntegerField(blank=True, null=True)
+    no_of_parts = models.PositiveIntegerField(validators=[validate_gt1])
+    current_parts = models.PositiveIntegerField(default=0)
     experiment = models.ForeignKey(Experiment, null=True, related_name='timeslot')
     is_full = models.BooleanField(default=False)
+
+    def clean(self):
+        #Validate date
+        if self.date < datetime.date.today():
+            raise ValidationError('Date cannot be in the past.')
+
+        # if self.no_of_parts < 1 :
+        #     raise ValidationError('Must require at least 1 participant')
+
 
     def __unicode__(self):
         return str(self.date) + " " + str(self.start_time) + " - " + str(self.end_time)

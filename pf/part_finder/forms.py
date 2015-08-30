@@ -14,6 +14,23 @@ import autocomplete_light.shortcuts as al
 from django.forms import ModelForm
 from smart_selects.db_fields import GroupedForeignKey
 from django.forms.extras.widgets import *
+from django.core.exceptions import ValidationError
+import datetime
+
+
+
+# Validatiors
+
+# Validate Date - experiment date cannot be a historic date
+def validate_date(date):
+    if date < datetime.date.today():
+        raise ValidationError('Date cannot be a date in the past.')
+
+# Validate Int is grater than 1
+def validate_gt1(value):
+    if value < 0:
+        raise ValidationError('Cannot be less than 1')
+
 
 
 # Experiment Form
@@ -37,10 +54,10 @@ class ExperimentForm (autocomplete_light.ModelForm):
 # Experiment timeslot form
 class TimeSlotForm(ModelForm):
     CHOICES = (('choice','choice'),('choice1','choice1') )
-    date = forms.DateField(required=False, label="Experiment Date (DD/MM/YYYY)")
+    date = forms.DateField(required=False, label="Experiment Date (DD/MM/YYYY)", initial=date.today(), validators=[validate_date])
     start_time = forms.TimeField(label="Start Time (HH:MM)", required=False, help_text="Please enter the start time using the 24hr format. e.g. 2.30pm = 14:30")
     end_time = forms.TimeField(label="End Time (HH:MM)", required=False, help_text="Please enter the start time using the 24hr format. e.g. 2.30pm = 14:30")
-    no_of_parts = forms.IntegerField(label="No of Participants Required", required=False)
+    no_of_parts = forms.IntegerField(label="No of Participants Required", required=False, validators=[validate_gt1])
 
     class Meta:
         model = TimeSlot

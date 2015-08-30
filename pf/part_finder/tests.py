@@ -1,20 +1,62 @@
 # from django.test import TestCase
 import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "pf.settings")
-
-
 # from django.test import LiveServerTestCase
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.firefox.webdriver import WebDriver
 from django.contrib.auth.models import User
+from django.test import TestCase
 import populate_pf
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium import webdriver
 from selenium.webdriver.support import expected_conditions as EC
-
+from part_finder.models import TimeSlot, Experiment, University, Researcher, UserProfile
+from part_finder.forms import TimeSlotForm
+import datetime
 
 # driver = webdriver.Firefox()
 # driver.implicitly_wait(10) # seconds
+
+
+
+# Tests for all models and forms
+class ModelFormTests(TestCase):
+
+    # Setup Timeslot, Experiment and Researcher
+    def setUp(self):
+        populate_pf.populate()
+
+        #user
+        user = User.objects.get(username="fsmith")
+
+        #User profile
+        up = UserProfile.objects.get(user=user)
+
+        # Create Experiment
+        exp1 = Experiment.objects.create(name="Science Experiment", long_description="Long Des..", duration=60, address="George Square, Glasgow", url="http://google.com", researcher=up.researcher)
+
+        # Create TS Data
+        # ts = TimeSlot.objects.create(date='2015-12-12', start_time='12:00', end_time='14:00', no_of_parts=5, current_parts = 0, experiment = exp)
+
+        # ts = TimeSlot.objects.get(id=1)
+
+
+    # Test timeslots
+
+    # Test Historic Date
+    def test_ts_historic_date_form(self):
+        ts = TimeSlot(date='2016-12-12', start_time='12:00', end_time='14:00', no_of_parts=5, current_parts = 0, experiment = Experiment.objects.all()[0])
+        data = {'date': ts.date, 'start_time': ts.start_time, 'end_time': ts.end_time, 'no_of_parts': ts.no_of_parts, 'current_parts': ts.current_parts, 'experiment': ts.experiment}
+        ts_form = TimeSlotForm(data=data)
+        self.assertEqual(ts_form.is_valid(), True)
+
+    # Test Historic Date - model
+    def test_ts_historic_date_model(self):
+        ts = TimeSlot(date=datetime.date(2016,12,12), start_time='12:00', end_time='14:00', no_of_parts=5, current_parts = 0, experiment = Experiment.objects.all()[0])
+        self.assertIsNone(ts.clean())
+
+
+    # 
 
 class MySeleniumTests(StaticLiveServerTestCase):
     fixtures = ['user-data.json']
@@ -39,10 +81,10 @@ class MySeleniumTests(StaticLiveServerTestCase):
 
 
 
-    # @classmethod
-    # def tearDownClass(cls):
-    #     cls.selenium.quit()
-    #     super(MySeleniumTests, cls).tearDownClass()
+    @classmethod
+    def tearDownClass(cls):
+        cls.selenium.quit()
+        super(MySeleniumTests, cls).tearDownClass()
 
     def test_login(self):
         populate_pf.populate()
