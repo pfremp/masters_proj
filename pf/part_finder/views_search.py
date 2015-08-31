@@ -163,6 +163,9 @@ def participant_pref_filter(request, experiment):
         else:
             valid += 1
 
+    # Dont show experiments that have already been applied for
+
+
     return valid
 
 
@@ -294,4 +297,6 @@ def match_weight(request, experiment):
 
     except (User.DoesNotExist , MatchingDetail.DoesNotExist , Requirement.DoesNotExist), e:
         pass
+
+
 
