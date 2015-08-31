@@ -14,20 +14,26 @@ from django.contrib.auth.models import User
 
 def populate():
     #Users
-    par_user1 = add_user(first_name='Andrew', last_name='Smith', username='Andrews1', email='andrew.smith@photmail.com', password=111111, is_active=True)
-    par_user2 = add_user(first_name='Mary', last_name='Jones', username='Mjones', email='maryjones@photmail.com', password=111111, is_active=True)
+    par_user1 = add_user(first_name='Andrew', last_name='Smith', username='andrews1', email='andrew.smith@photmail.com', password=111111, is_active=True)
+    par_user2 = add_user(first_name='Mary', last_name='Jones', username='mjones', email='maryjones@photmail.com', password=111111, is_active=True)
     par_user3 = add_user(first_name='David', last_name='Stevens', username='davstev', email='dstevens@photmail.com', password=111111, is_active=True)
     par_user4 = add_user(first_name='Sarah', last_name='Anderson', username='sarah1', email='sarahanderson@photmail.com', password=111111, is_active=True)
     par_user5 = add_user(first_name='Mark', last_name='Fuller', username='mark', email='markf@photmail.com', password=111111, is_active=True)
     res_user1 = add_user(first_name='Dr. Fred', last_name='Smith', username='fsmith', email='drfredsmith@gla.ac.uk', password=111111, is_active=True)
     res_user2 = add_user(first_name='Dr. Angela', last_name='Matthews', username='amatthew', email='dramatthews@gcu.ac.uk', password=111111, is_active=True)
-    res_user3 = add_user(first_name='Dr John', last_name='Thomas', username='Jenkins', email='tjenkins@strath.ac.uk', password=111111, is_active=True)
+    res_user3 = add_user(first_name='Dr John', last_name='Thomas', username='jenkins', email='tjenkins@strath.ac.uk', password=111111, is_active=True)
 
     #universities
     gla = add_uni(name='University of Glasgow')
     gcu = add_uni(name='Glasgow Caledonian University')
-    strath = add_uni(name='Strathclyde University')
-    edin = add_uni(name='Edinburgh University')
+    strath = add_uni(name='University of Strathclyde')
+    edin = add_uni(name='University of Edinburgh')
+
+    # Remaining Univeisities
+    with open("list_of_universities.txt") as f:
+        for uni in f:
+            add_uni(uni)
+            print uni
 
     #researcher
     res1 = add_res( university=gla, contact_no='01413256987', department='Maths', url='http://gla.ac.uk')
@@ -130,10 +136,14 @@ def populate():
     l3= add_lang(language="German")
     l4 = add_lang(language="Spanish")
     l5 = add_lang(language="Mandarin")
-    l6 = add_lang(language="Portugese")
-    l7 = add_lang(language="Japanese")
-    l8 = add_lang(language="Italian")
-    l9 = add_lang(language="Dutch")
+
+    # Add remaining Languages
+    # Remaining Univeisities
+    with open("languages.txt") as f:
+        for lang in f:
+            add_lang(lang)
+            print lang
+
 
     #add lang to part
     add_lang_to_part(par1, l1)

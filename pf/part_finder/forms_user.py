@@ -1,7 +1,7 @@
 __author__ = 'patrickfrempong'
 
 from django import forms
-from part_finder.models import Researcher,Experiment,Participant,  UserProfile, University, TimeSlot, TodoList, Payment_type,Payment, Is_paid, Currency, Application
+from part_finder.models import Researcher,Experiment,Participant,  UserProfile, University, TimeSlot, Payment_type,Payment, Is_paid, Currency, Application
 from django.contrib.auth.models import User
 from datetime import date
 from django.contrib.auth import get_user_model
@@ -85,7 +85,7 @@ class ParticipantForm2 (autocomplete_light.ModelForm):
     occupation = forms.CharField(required=False, label="Occupation", max_length=128)
 
     #university details
-    university = forms.ModelChoiceField(label="University", queryset=University.objects.all(), required=False)
+    # university = forms.ModelChoiceField(label="University", queryset=University.objects.all(), required=False)
     course_name = forms.CharField(label="Course Name",max_length=128, required=False)
     year_of_study = forms.ChoiceField(choices=YOS, label="Year of Study", required=False)
     matric = forms.CharField(label="Matric", required=False)
@@ -129,11 +129,14 @@ class PartGeneralUpdateForm (autocomplete_light.ModelForm):
         fields = ('dob','city','contact_number','occupation','education', 'language', 'student')
 
 # Participant Update form - Student Details
-class PartStudentUpdateForm (forms.ModelForm):
+class PartStudentUpdateForm (autocomplete_light.ModelForm):
     university = forms.ModelChoiceField(label="University", queryset=University.objects.all(), required=False)
     course_name = forms.CharField(label="Course Name",max_length=128, required=False)
     year_of_study = forms.ChoiceField(choices=YOS, label="Year of Study", required=False)
     matric = forms.CharField(label="Matric", required=False)
+
+    class Media:
+        js = ('js/dependant_autocomplete.js',)
 
     class Meta():
         model = Participant

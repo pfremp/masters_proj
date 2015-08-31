@@ -5,6 +5,7 @@ from django.db import models, migrations
 import smart_selects.db_fields
 import datetime
 from django.conf import settings
+import part_finder.models
 
 
 class Migration(migrations.Migration):
@@ -33,19 +34,19 @@ class Migration(migrations.Migration):
             name='Experiment',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('name', models.CharField(max_length=128)),
-                ('long_description', models.CharField(max_length=1000, null=True, blank=True)),
-                ('duration', models.FloatField(null=True, blank=True)),
+                ('name', models.CharField(max_length=65)),
+                ('long_description', models.CharField(default=b' ', max_length=1000)),
+                ('duration', models.IntegerField(default=0)),
                 ('address', models.CharField(max_length=128, blank=True)),
                 ('url', models.URLField(blank=True)),
-                ('researcher_slug', models.SlugField(null=True, blank=True)),
-                ('slug', models.SlugField(unique=True, null=True, blank=True)),
+                ('researcher_slug', models.SlugField(null=True)),
+                ('slug', models.SlugField(unique=True, null=True)),
                 ('is_full', models.BooleanField(default=False)),
                 ('has_ended', models.BooleanField(default=False)),
                 ('is_featured', models.BooleanField(default=False)),
                 ('online', models.BooleanField(default=False)),
                 ('student_only', models.BooleanField(default=False)),
-                ('city', models.ForeignKey(to='cities_light.City', null=True)),
+                ('city', models.ForeignKey(blank=True, to='cities_light.City', null=True)),
             ],
         ),
         migrations.CreateModel(
@@ -85,7 +86,7 @@ class Migration(migrations.Migration):
                 ('occupation', models.CharField(max_length=128, blank=True)),
                 ('education', models.CharField(blank=True, max_length=1000, choices=[(b'HS', b'High School Level'), (b'SCQF3', b'  -Access 3 / Foundation Standard Grade'), (b'SCQF4', b'-Intermediate 1 / General Standard Grade'), (b'SCQF5', b'-Intermediate 2 / Credit Standard Grade'), (b'GCSE', b'-GCSE'), (b'SCQF6', b'-Higher'), (b'ALEVEL', b'-A Level'), (b'SCQF7', b'-Advanced Higher'), (b'College', b'College Level'), (b'HNC', b'-HNC'), (b'HND', b'-HND'), (b'HE', b'University Level'), (b'HE1', b'-Bachelors  Degree'), (b'HE2', b'-Honours  Degree'), (b'HE3', b'-Masters  Degree'), (b'HE4', b'-Doctorates')])),
                 ('student', models.BooleanField(default=False)),
-                ('course_name', models.CharField(max_length=100)),
+                ('course_name', models.CharField(max_length=100, null=True, blank=True)),
                 ('year', models.IntegerField(null=True)),
                 ('matric', models.CharField(max_length=20, null=True)),
                 ('gender', models.CharField(blank=True, max_length=128, choices=[(b'Male', b'Male'), (b'Female', b'Female'), (b'PNTS', b'Prefer not to say')])),
@@ -106,7 +107,7 @@ class Migration(migrations.Migration):
             name='Payment',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('amount', models.FloatField(null=True)),
+                ('amount', models.FloatField(null=True, blank=True)),
                 ('currency', smart_selects.db_fields.ChainedForeignKey(chained_model_field=b'is_paid', chained_field=b'is_paid', auto_choose=True, to='part_finder.Currency')),
                 ('experiment', models.ForeignKey(related_name='payment', to='part_finder.Experiment', null=True)),
                 ('is_paid', models.ForeignKey(to='part_finder.Is_paid')),
@@ -139,7 +140,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('department', models.CharField(max_length=128, null=True, blank=True)),
-                ('contact_no', models.IntegerField()),
+                ('contact_no', models.IntegerField(null=True, blank=True)),
                 ('url', models.URLField(max_length=128, blank=True)),
             ],
         ),
@@ -148,19 +149,12 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('date', models.DateField(default=datetime.date.today, null=True, verbose_name=b'Date')),
-                ('start_time', models.TimeField(null=True, blank=True)),
-                ('end_time', models.TimeField(null=True, blank=True)),
-                ('no_of_parts', models.IntegerField(null=True, blank=True)),
-                ('current_parts', models.IntegerField(null=True, blank=True)),
+                ('start_time', models.TimeField(null=True)),
+                ('end_time', models.TimeField(null=True)),
+                ('no_of_parts', models.PositiveIntegerField(validators=[part_finder.models.validate_gt1])),
+                ('current_parts', models.PositiveIntegerField(default=0)),
                 ('is_full', models.BooleanField(default=False)),
-                ('experiment', models.ForeignKey(related_name='timeslot', to='part_finder.Experiment', null=True)),
-            ],
-        ),
-        migrations.CreateModel(
-            name='TodoList',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('name', models.CharField(max_length=100)),
+                ('experiment', models.ForeignKey(related_name='timeslot', to='part_finder.Experiment')),
             ],
         ),
         migrations.CreateModel(

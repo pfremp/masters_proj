@@ -1,6 +1,6 @@
 __author__ = 'patrickfrempong'
 from django import forms
-from part_finder.models import Researcher,Experiment,Participant,  UserProfile, University, TimeSlot, TodoList, Payment_type,Payment, Is_paid, Currency, Application
+from part_finder.models import Researcher,Experiment,Participant,  UserProfile, University, TimeSlot, Payment_type,Payment, Is_paid, Currency, Application
 from part_finder.models_search import *
 from django.contrib.auth.models import User
 from datetime import date
@@ -34,7 +34,7 @@ class MatchingDetailForm(autocomplete_light.ModelForm):
     max_height = forms.IntegerField(initial=200, label='Maximum Height (CM)', required=False)
     min_weight = forms.IntegerField(initial=0, label='Minimum Weight (KG)', required=False)
     max_weight = forms.IntegerField(initial=200, label='Maximum Weight (KG)', required=False)
-    l = autocomplete_light.MultipleChoiceField('OsAutocomplete', required=False, label='Language(s) Required', initial="English")
+    l = autocomplete_light.MultipleChoiceField('OsAutocomplete', required=False, label='Language(s) Required', help_text="Enter languages in addition to English required.")
 
     class Media:
         js = ('js/dependant_autocomplete.js',)

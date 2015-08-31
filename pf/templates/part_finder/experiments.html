@@ -24,7 +24,9 @@
 
                 <h2>Apply</h2>
                 {%  if user.is_authenticated and user.profile.typex == 'Participant' %}
-                    {% if experiment.is_full == True %}
+                    {% if experiment.has_ended %}
+                        <p style="color: #ff0000">This Experiment Has Ended</p>
+                    {% elif experiment.is_full == True %}
                         <p>Sorry, this experiment is now full</p>
                     {% elif user_applied == True %}
                         <p>You have already applied for this experiment. <a href="{% url 'participant_experiments' %}">View here.</a> </p>

@@ -82,7 +82,7 @@ $(document).ready(function() {
       }
     } // End if
     else {
-        alert("You have to enter at least one todo item!");
+        alert("You have to enter at least one timeslot!");
     }
     return false;
   }
@@ -115,7 +115,7 @@ $(document).ready(function() {
       $('#id_' + prefix + '-TOTAL_FORMS').val(formCount + 1);
     } // End if
     else {
-      alert("Sorry, you can only enter a maximum of ten items.");
+      alert("Sorry, you can only enter a maximum of ten timeslots.");
     }
     return false;
   }
@@ -238,7 +238,7 @@ $(document).ready(function() {
     </div>
     {% endfor %}
 
-    <p><a id="add" href="#">Add another item</a></p>
+    <p><a id="add" href="#">Add another timeslot</a></p>
 
 
             <input class="btn btn-default"type="submit" name="submit" value="Create Experiment" />

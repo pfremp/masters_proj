@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponse, request
 from part_finder.models import Researcher, Experiment, Participant, UserProfile, User, Payment, Application, TimeSlot
-from part_finder.forms import ExperimentForm, TodoList, TimeSlotForm, PaymentForm, ApplicationForm, UpdateStatusForm, UpdateStatusFormFull
+from part_finder.forms import ExperimentForm, TimeSlotForm, PaymentForm, ApplicationForm, UpdateStatusForm, UpdateStatusFormFull
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 # from django.contrib.formtools.wizard.views import SessionWizardView

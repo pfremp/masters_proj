@@ -11,254 +11,97 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium import webdriver
 from selenium.webdriver.support import expected_conditions as EC
 from part_finder.models import TimeSlot, Experiment, University, Researcher, UserProfile
-from part_finder.forms import TimeSlotForm
+from part_finder.forms import TimeSlotForm, ExperimentForm
 import datetime
+from django.core.exceptions import ValidationError
 
 # driver = webdriver.Firefox()
 # driver.implicitly_wait(10) # seconds
 
 
 
-# Tests for all models and forms
-class ModelFormTests(TestCase):
+# Tests for all models
+class ModelTests(TestCase):
 
     # Setup Timeslot, Experiment and Researcher
     def setUp(self):
         populate_pf.populate()
 
         #user
-        user = User.objects.get(username="fsmith")
+        self.user = User.objects.get(username="fsmith")
 
         #User profile
-        up = UserProfile.objects.get(user=user)
+        self.up = UserProfile.objects.get(user=self.user)
 
         # Create Experiment
-        exp1 = Experiment.objects.create(name="Science Experiment", long_description="Long Des..", duration=60, address="George Square, Glasgow", url="http://google.com", researcher=up.researcher)
+        self.exp1 = Experiment.objects.create(name="Science Experiment", long_description="Long Des..", duration=60, address="George Square, Glasgow", url="http://google.com", city=None, researcher=self.up.researcher)
 
-        # Create TS Data
-        # ts = TimeSlot.objects.create(date='2015-12-12', start_time='12:00', end_time='14:00', no_of_parts=5, current_parts = 0, experiment = exp)
+        # Timeslot
+        self.ts = TimeSlot.objects.create(date=datetime.date(2016,12,12), start_time='12:00', end_time='14:00', no_of_parts=5, current_parts = 0, experiment = Experiment.objects.all()[0])
 
-        # ts = TimeSlot.objects.get(id=1)
+
+    # Test Historic Date - model
+    def test_ts_historic_date_model(self):
+        ts = TimeSlot(date=datetime.date(2016,12,12), start_time='12:00', end_time='14:00', no_of_parts=5, current_parts = 0, experiment = Experiment.objects.all()[0])
+        self.assertIsNone(ts.full_clean())
+
+
+    # Test timeslot number of participant - model
+    def test_ts_parts_model(self):
+        ts = TimeSlot(date=datetime.date(2016,12,12), start_time='12:00', end_time='14:00', no_of_parts=5, current_parts = 0, experiment = Experiment.objects.all()[0])
+        self.assertIsNone(ts.full_clean())
+
+    # Add experiment - model
+    def test_add_exp_model(self):
+        exp = Experiment.objects.create(name="Test Experiment", long_description="Long Des..", duration=60, address="George Square, Glasgow", url="http://google.com", city=None, researcher=self.up.researcher)
+        self.assertIsNone(exp.full_clean(), True)
+
+
+    # # Ensure timeslot has experiment
+    # def test_timeslot_has_exp(self):
+    #     timeslot = self.ts
+    #
+    #     timeslot.experiment=None
+    #     self.assertRaises(ValidationError,  )
+    #     print timeslot.experiment
+
+
+# Tests for all forms
+class FormTests(TestCase):
+
+
+     # Setup Timeslot, Experiment and Researcher
+    def setUp(self):
+        populate_pf.populate()
+
+        #user
+        self.user = User.objects.get(username="fsmith")
+
+        #User profile
+        self.up = UserProfile.objects.get(user=self.user)
+
+        # Create Experiment
+        self.exp1 = Experiment.objects.create(name="Science Experiment", long_description="Long Des..", duration=60, address="George Square, Glasgow", url="http://google.com", city=None, researcher=self.up.researcher)
 
 
     # Test timeslots
-
-    # Test Historic Date
+    # Test Historic Date - form
     def test_ts_historic_date_form(self):
         ts = TimeSlot(date='2016-12-12', start_time='12:00', end_time='14:00', no_of_parts=5, current_parts = 0, experiment = Experiment.objects.all()[0])
         data = {'date': ts.date, 'start_time': ts.start_time, 'end_time': ts.end_time, 'no_of_parts': ts.no_of_parts, 'current_parts': ts.current_parts, 'experiment': ts.experiment}
         ts_form = TimeSlotForm(data=data)
         self.assertEqual(ts_form.is_valid(), True)
 
-    # Test Historic Date - model
-    def test_ts_historic_date_model(self):
-        ts = TimeSlot(date=datetime.date(2016,12,12), start_time='12:00', end_time='14:00', no_of_parts=5, current_parts = 0, experiment = Experiment.objects.all()[0])
-        self.assertIsNone(ts.clean())
+    # Test timeslot number of participants - form
+    def test_ts_parts_form(self):
+        ts = TimeSlot(date='2016-12-12', start_time='12:00', end_time='14:00', no_of_parts=5, current_parts = 0, experiment = Experiment.objects.all()[0])
+        data = {'date': ts.date, 'start_time': ts.start_time, 'end_time': ts.end_time, 'no_of_parts': ts.no_of_parts, 'current_parts': ts.current_parts, 'experiment': ts.experiment}
+        ts_form = TimeSlotForm(data=data)
+        self.assertEqual(ts_form.is_valid(), True)
 
-
-    # 
-
-class MySeleniumTests(StaticLiveServerTestCase):
-    fixtures = ['user-data.json']
-
-
-
-
-    @classmethod
-    def setUpClass(cls):
-
-        User.objects.create_superuser(
-            username='pf',
-            password='1',
-            email='admin@examplex.com',
-            first_name='John',
-            last_name='Smith'
-        )
-
-
-        super(MySeleniumTests, cls).setUpClass()
-        cls.selenium = WebDriver()
-
-
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.selenium.quit()
-        super(MySeleniumTests, cls).tearDownClass()
-
-    def test_login(self):
-        populate_pf.populate()
-        self.selenium.get('%s%s' % (self.live_server_url, '/admin/'))
-        username_input = self.selenium.find_element_by_name("username")
-        username_input.send_keys('pf')
-        password_input = self.selenium.find_element_by_name("password")
-        password_input.send_keys('1')
-        self.selenium.find_element_by_xpath('//input[@value="Log in"]').click()
-        self.selenium.find_element_by_link_text("Log out").click()
-
-
-    def test_participant_login(self):
-        populate_pf.populate()
-        self.selenium.get('%s%s' % (self.live_server_url, '/part_finder/'))
-        login_page = self.selenium.find_element_by_link_text("Login").click()
-        username_input = self.selenium.find_element_by_id("id_login")
-        username_input.send_keys("andrews1")
-        password_input = self.selenium.find_element_by_id("id_password")
-        password_input.send_keys("111111")
-        login_submit = self.selenium.find_element_by_class_name("btn-default").click()
-        # self.selenium.get('%s%s' % (self.live_server_url, '/part_finder/my_experiments'))
-
-    def test_participant_signup(self):
-        populate_pf.populate()
-        self.selenium.get('%s%s' % (self.live_server_url, '/accounts/signup/'))
-        first_name_input = self.selenium.find_element_by_id('id_first_name')
-        first_name_input.send_keys("Patrick")
-        last_name_input = self.selenium.find_element_by_id('id_last_name')
-        last_name_input.send_keys("Frempong")
-        account_type = self.selenium.find_element_by_id('id_type_0').click()
-        username_input = self.selenium.find_element_by_id('id_username')
-        username_input.send_keys('pfremp1')
-        email_input = self.selenium.find_element_by_id('id_email')
-        email_input.send_keys('p-fremp@hotmail.com')
-        password_input_1 = self.selenium.find_element_by_id('id_password1')
-        password_input_1.send_keys('111111')
-        password_input_2 = self.selenium.find_element_by_id('id_password2')
-        password_input_2.send_keys('111111')
-        signup_submit = self.selenium.find_element_by_class_name("btn-default").click()
-
-        # Participant Form 1
-        contact_number_input = self.selenium.find_element_by_id('id_contact_number')
-        contact_number_input.send_keys('01415558585')
-        student_input = self.selenium.find_element_by_id('id_student').click()
-        part_1_submit = self.selenium.find_element_by_class_name("btn-default").click()
-
-        # Participant Form 2
-        education_select = self.selenium.find_element_by_xpath('//select[@id="id_education"]/option[@value="HE3"]').click()
-        university_select = self.selenium.find_element_by_xpath('//select[@id="id_university"]/option[2]').click()
-        course_name_input = self.selenium.find_element_by_id('id_course_name')
-        course_name_input.send_keys('MSc Information Technology')
-        yos_select = self.selenium.find_element_by_xpath('//select[@id="id_year_of_study"]/option[@value="2"]').click()
-        matric_input = self.selenium.find_element_by_id('id_matric')
-        matric_input.send_keys('25241254125')
-        gender_select = self.selenium.find_element_by_xpath('//select[@id="id_gender"]/option[@value="Male"]').click()
-        height_input = self.selenium.find_element_by_id('id_height')
-        height_input.send_keys('150')
-        weight_input = self.selenium.find_element_by_id('id_weight')
-        weight_input.send_keys('70')
-        part_2_submit = self.selenium.find_element_by_class_name("btn-default").click()
-
-
-
-    def test_experiment_signup(self):
-        populate_pf.populate()
-        self.selenium.get('%s%s' % (self.live_server_url, '/part_finder/'))
-        login_page = self.selenium.find_element_by_link_text("Login").click()
-        username_input = self.selenium.find_element_by_id("id_login")
-        username_input.send_keys("andrews1")
-        password_input = self.selenium.find_element_by_id("id_password")
-        password_input.send_keys("111111")
-        login_submit = self.selenium.find_element_by_class_name("btn-default").click()
-        select_experiment = self.selenium.find_elements_by_class_name('btn-primary')
-        select_experiment[0].click()
-        timeslot_select = self.selenium.find_element_by_xpath('//select[@id="id_timeslot"]/option[2]').click()
-        apply_select = self.selenium.find_element_by_class_name("btn-default").click()
-
-    def test_res_reg(self):
-        populate_pf.populate()
-        self.selenium.get('%s%s' % (self.live_server_url, '/accounts/signup/'))
-        first_name_input = self.selenium.find_element_by_id('id_first_name')
-        first_name_input.send_keys("Patrick")
-        last_name_input = self.selenium.find_element_by_id('id_last_name')
-        last_name_input.send_keys("Frempong")
-        account_type = self.selenium.find_element_by_id('id_type_1').click()
-        username_input = self.selenium.find_element_by_id('id_username')
-        username_input.send_keys('drfremp')
-        email_input = self.selenium.find_element_by_id('id_email')
-        email_input.send_keys('p-fremp@hotmail.com')
-        password_input_1 = self.selenium.find_element_by_id('id_password1')
-        password_input_1.send_keys('111111')
-        password_input_2 = self.selenium.find_element_by_id('id_password2')
-        password_input_2.send_keys('111111')
-        signup_submit = self.selenium.find_element_by_class_name("btn-default").click()
-
-        # Researcher Signup
-        university_select = self.selenium.find_element_by_xpath('//select[@id="id_university"]/option[2]').click()
-        dept_name_input = self.selenium.find_element_by_id('id_department')
-        dept_name_input.send_keys('Computing')
-        contact_no_input = self.selenium.find_element_by_id('id_contact_no')
-        contact_no_input.send_keys('01412563256')
-        url_input = self.selenium.find_element_by_id('id_url')
-        url_input.send_keys('http://google.com')
-        researcher_details = self.selenium.find_element_by_class_name("btn-default").click()
-
-
-    def add_exp(self):
-        populate_pf.populate()
-
-        # Login
-        self.selenium.get('%s%s' % (self.live_server_url, '/part_finder/'))
-        login_page = self.selenium.find_element_by_link_text("Login").click()
-        username_input = self.selenium.find_element_by_id("id_login")
-        username_input.send_keys("fsmith")
-        password_input = self.selenium.find_element_by_id("id_password")
-        password_input.send_keys("111111")
-        login_submit = self.selenium.find_element_by_class_name("btn-default").click()
-
-        # Add Experiment
-        self.selenium.get('%s%s' % (self.live_server_url, '/part_finder/add_experiment/'))
-        exp_name_input = self.selenium.find_element_by_id("id_name")
-        exp_name_input.send_keys("Science Experiment")
-        desc_input = self.selenium.find_element_by_id("id_long_description")
-        desc_input.send_keys("Science Experiment Description")
-        duration_input = self.selenium.find_element_by_id("id_duration")
-        duration_input.send_keys("60")
-        address_input = self.selenium.find_element_by_id("id_address")
-        address_input.send_keys("George St, Glasgow, G2 1DU")
-        url_input = self.selenium.find_element_by_id("id_url")
-        url_input.send_keys("http://google.com")
-
-        # Payment Details
-        is_paid = self.selenium.find_element_by_xpath('//select[@id="id_is_paid"]/option[2]').click()
-        currency = self.selenium.find_element_by_xpath('//select[@id="id_currency"]/option[2]').click()
-        currency = self.selenium.find_element_by_xpath('//select[@id="id_payment_type"]/option[2]').click()
-        payment_input = self.selenium.find_element_by_id("id_amount")
-        payment_input.send_keys("8")
-
-        # Requirements
-        student = self.selenium.find_element_by_xpath('//select[@id="id_student"]/option[3]').click()
-        age = self.selenium.find_element_by_xpath('//select[@id="id_age"]/option[2]').click()
-        lang = self.selenium.find_element_by_xpath('//select[@id="id_language"]/option[2]').click()
-        height = self.selenium.find_element_by_xpath('//select[@id="id_height"]/option[2]').click()
-        weight = self.selenium.find_element_by_xpath('//select[@id="id_weight"]/option[2]').click()
-        gender = self.selenium.find_element_by_xpath('//select[@id="id_gender"]/option[2]').click()
-
-        # Timeslot 1
-        ts1_date_input = self.selenium.find_element_by_id("id_form-0-date")
-        ts1_date_input.send_keys("30/10/2015")
-        ts1_stime_input = self.selenium.find_element_by_id("id_form-0-start_time")
-        ts1_stime_input.send_keys("12:00")
-        ts1_etime_input = self.selenium.find_element_by_id("id_form-0-end_time")
-        ts1_etime_input.send_keys("13:00")
-        ts1_np_input = self.selenium.find_element_by_id("id_form-0-no_of_parts")
-        ts1_np_input.send_keys("2")
-
-        # #add new timeslot
-        # # add_ts2 = self.selenium.find_element_by_xpath('//select[@id="add"]').click()
-        # add_ts2 = self.selenium.find_element_by_id("add").click()
-        #
-        # wait = WebDriverWait(self.selenium, 10)
-        # element = wait.until(EC.element_to_be_clickable((By.ID,'someid')))
-        #
-        # # Timeslot 2
-        # ts2_date_input = self.selenium.find_element_by_id("id_form-1-date")
-        # ts2_date_input.send_keys("10/11/2015")
-        # ts2_stime_input = self.selenium.find_element_by_id("id_form-1-start_time")
-        # ts2_stime_input.send_keys("14:00")
-        # ts2_etime_input = self.selenium.find_element_by_id("id_form-1-end_time")
-        # ts2_etime_input.send_keys("15:00")
-        # ts2_np_input = self.selenium.find_element_by_id("id_form-1-no_of_parts").clear()
-        # ts2_np_input.send_keys("3")
-        exp_submit = self.selenium.find_element_by_class_name("btn-default").click()
-
-
-
+    # Add experiment - form
+    def test_add_exp_form(self):
+        exp = Experiment(name="Test Experiment", long_description="Long Des..", duration=60, address="George Square, Glasgow", city=None, url="")
+        data = {'name': exp.name, 'long_description': exp.long_description, 'duration': exp.duration, 'address': exp.address, 'city': exp.city, 'url': exp.url}
+        exp_form = ExperimentForm(data=data)
+        self.assertEqual(exp_form.is_valid(), True)

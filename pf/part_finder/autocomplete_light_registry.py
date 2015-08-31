@@ -1,14 +1,13 @@
 import autocomplete_light.shortcuts as autocomplete_light
 from cities_light.models import Country, Region, City
-from part_finder.models import Languages
-# from .models import NonAdminAddAnotherModel
+from part_finder.models import Languages, University
 import autocomplete_light.shortcuts as al
 
-#countries auto complete
+# countries auto complete
 autocomplete_light.register(Country, search_fields=('name', 'name_ascii',),
     autocomplete_js_attributes={'placeholder': 'country name ..'})
 
-
+# Auto complete region - filter by city
 class AutocompleteRegion(autocomplete_light.AutocompleteModelBase):
     autocomplete_js_attributes={'placeholder': 'region name ..'}
 
@@ -46,18 +45,19 @@ autocomplete_light.register(City, AutocompleteCity)
 
 #languages autocomplete
 class OsAutocomplete(al.AutocompleteListBase):
-    choices = ['English', 'French', 'Spanish', 'German', 'Mandarin', 'Cantonese', 'Italian', 'Portugese']
+    choices = ['French', 'Spanish', 'German', 'Mandarin', 'Cantonese', 'Italian', 'Portugese']
 al.register(OsAutocomplete)
 
 
 
 
-class LangAutocomplete(al.AutocompleteListBase):
-    choices = ['English', 'French', 'Spanish', 'German', 'Mandarin', 'Cantonese', 'Italian', 'Portugese']
-al.register(LangAutocomplete)
+# class LangAutocomplete(al.AutocompleteListBase):
+#     choices = ['French', 'Spanish', 'German', 'Mandarin', 'Cantonese', 'Italian', 'Portugese']
+# al.register(LangAutocomplete)
 
 
 autocomplete_light.register(Languages, search_fields=('language',), label="languages")
+autocomplete_light.register(University, search_fields=('name',), label="university")
 
 
 
