@@ -145,8 +145,8 @@ class ParticipantGeneralUpdate(UpdateView):
 class ParticipantStudentUpdate(UpdateView):
 
     model = Participant
-    # form_class = PartStudentUpdateForm
-    fields = ['university', 'course_name', 'year', 'matric' ]
+    form_class = PartStudentUpdateForm
+    # fields = ['university', 'course_name', 'year', 'matric' ]
     template_name = 'part_finder/participant_update_form.html'
     success_url='/part_finder/participant/profile'
 

@@ -130,7 +130,7 @@ class PartGeneralUpdateForm (autocomplete_light.ModelForm):
 
 # Participant Update form - Student Details
 class PartStudentUpdateForm (autocomplete_light.ModelForm):
-    university = forms.ModelChoiceField(label="University", queryset=University.objects.all(), required=False)
+    # university = forms.ModelChoiceField(label="University", queryset=University.objects.all(), required=False)
     course_name = forms.CharField(label="Course Name",max_length=128, required=False)
     year_of_study = forms.ChoiceField(choices=YOS, label="Year of Study", required=False)
     matric = forms.CharField(label="Matric", required=False)
@@ -191,8 +191,8 @@ class UserAccountUpdateForm(forms.ModelForm):
 
 
 #Researcher Details Form
-class ResearcherForm (forms.ModelForm):
-   university = forms.ModelChoiceField(label="University", queryset=University.objects.all(), required=False)
+class ResearcherForm (autocomplete_light.ModelForm):
+   # university = forms.ModelChoiceField(label="University", queryset=University.objects.all(), required=False)
    department = forms.CharField(label="Department Name", max_length=128)
    contact_no = forms.IntegerField(label="Contact Number", help_text="e.g. 07712345678")
    url = forms.CharField(label="URL (Format: http://yoursite.com)")

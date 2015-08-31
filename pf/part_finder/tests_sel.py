@@ -8,6 +8,7 @@ from selenium.webdriver.firefox.webdriver import WebDriver
 from django.contrib.auth.models import User
 from django.test import TestCase
 import populate_pf
+from django.http import HttpResponse, request, response
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium import webdriver
 from selenium.webdriver.support import expected_conditions as EC
@@ -96,7 +97,7 @@ class MySeleniumTests(StaticLiveServerTestCase):
 
         # Participant Form 2
         education_select = self.selenium.find_element_by_xpath('//select[@id="id_education"]/option[@value="HE3"]').click()
-        university_select = self.selenium.find_element_by_xpath('//select[@id="id_university"]/option[2]').click()
+        # university_select = self.selenium.find_element_by_xpath('//select[@id="id_university"]/option[2]').click()
         course_name_input = self.selenium.find_element_by_id('id_course_name')
         course_name_input.send_keys('MSc Information Technology')
         yos_select = self.selenium.find_element_by_xpath('//select[@id="id_year_of_study"]/option[@value="2"]').click()
@@ -144,7 +145,7 @@ class MySeleniumTests(StaticLiveServerTestCase):
         signup_submit = self.selenium.find_element_by_class_name("btn-default").click()
 
         # Researcher Signup
-        university_select = self.selenium.find_element_by_xpath('//select[@id="id_university"]/option[2]').click()
+        # university_select = self.selenium.find_element_by_xpath('//select[@id="id_university"]/option[2]').click()
         dept_name_input = self.selenium.find_element_by_id('id_department')
         dept_name_input.send_keys('Computing')
         contact_no_input = self.selenium.find_element_by_id('id_contact_no')
