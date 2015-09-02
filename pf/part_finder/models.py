@@ -125,6 +125,7 @@ class Participant(models.Model):
     # email_notifications = models.BooleanField(default=False, blank=True)
     experiments = models.ManyToManyField(Experiment, blank=True, related_name="participants")
     eligible_only = models.BooleanField(default=False, blank=True)
+    non_applied_only = models.BooleanField(default=False, blank=True)
     reg_2_completed = models.BooleanField(default=False, blank=True)
 
     def __unicode__(self):

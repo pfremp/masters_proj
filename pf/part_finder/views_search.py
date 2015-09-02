@@ -126,6 +126,7 @@ def participant_pref_filter(request, experiment):
     participant = get_participant(request)
     payment = Payment.objects.get(experiment=experiment)
     eligible = check_applicant_validity(request, experiment)
+    applications = Application.objects.filter(participant=participant)
 
     #check for online exps - only show online experiments
     if participant.online_only == True:
@@ -165,7 +166,13 @@ def participant_pref_filter(request, experiment):
             valid += 1
 
     # Dont show experiments that have already been applied for
-
+    if participant.non_applied_only == True:
+        for a in applications:
+            if a.experiment == experiment:
+                valid += 1
+            else:
+                valid += 0
+        print valid
 
     return valid
 
@@ -298,6 +305,8 @@ def match_weight(request, experiment):
 
     except (User.DoesNotExist , MatchingDetail.DoesNotExist , Requirement.DoesNotExist), e:
         pass
+
+
 
 
 

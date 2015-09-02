@@ -164,11 +164,12 @@ class PartPrefUpdateForm (forms.ModelForm):
     my_uni_only = forms.BooleanField(label="My Uni Only", required=False, help_text="Only show experiments from my univerisy.")
     city_only = forms.BooleanField(label="City Only", required=False, help_text="Only show experiments from my city")
     eligible_only = forms.BooleanField(label="Eligible Only", required=False, help_text="Only show experiments that I am eligible for")
+    non_applied_only = forms.BooleanField(label="Non Applied Experiments Only", required=False, help_text="Don't show listings for experiments you have already applied for")
 
 
     class Meta():
         model = Participant
-        fields = ('online_only', 'paid_only' , 'my_uni_only', 'eligible_only','city_only')
+        fields = ('online_only', 'paid_only' , 'my_uni_only', 'eligible_only','city_only', 'non_applied_only')
 
 # Participant Update form - Preference Details (Non student)
 class PartPrefUpdateFormNS (forms.ModelForm):
@@ -176,11 +177,12 @@ class PartPrefUpdateFormNS (forms.ModelForm):
     paid_only = forms.BooleanField(label="Paid Only", required=False, help_text="Only show paid experiments.")
     city_only = forms.BooleanField(label="City Only", required=False, help_text="Only show experiments from my city")
     eligible_only = forms.BooleanField(label="Eligible Only", required=False, help_text="Only show experiments that I am eligible for")
+    non_applied_only = forms.BooleanField(label="Non Applied Experiments Only", required=False, help_text="Don't show listings for experiments you have already applied for")
 
 
     class Meta():
         model = Participant
-        fields = ('online_only', 'paid_only' , 'eligible_only','city_only')
+        fields = ('online_only', 'paid_only' , 'eligible_only','city_only', 'non_applied_only')
 
 # User account update form
 class UserAccountUpdateForm(forms.ModelForm):
