@@ -1,6 +1,6 @@
 <!DOCTYPE html>
+<!-- Template for deleting experiment -->
 {% extends 'sitebase.html' %}
-
 {% load staticfiles %}
 {% load bootstrap3 %}
 
@@ -8,24 +8,29 @@
 
 {% block body_block %}
 
+    <!-- Researcher: Delete experiment-->
     {% if user.profile.typex == 'Researcher' %}
-    <h1>Delete Experiment</h1>
+        <h1>Delete Experiment</h1>
+        <p>Are you sure you want to delete the "{{ experiment.name }}" experiment?</p>
 
-    <p>Are you sure you want to delete the "{{ experiment.name }}" experiment?</p>
-
-    <form action="" method="POST">
-      {% csrf_token %}
-
-      <input class="btn-danger btn" type="submit" value="Yes, delete." />
-      <a class="btn btn-default" href="{% url 'researcher_experiments' %}">No, cancel.</a>
-    </form>
-    {% else %}
-    {% endif %}
+        <form action="" method="POST">
+            {% csrf_token %}
+            <input class="btn-danger btn" type="submit" value="Yes, delete." />
+            <a class="btn btn-default" href="{% url 'researcher_experiments' %}">No, cancel.</a>
+        </form>
 
 
-
-
-
+    <!-- Participant: Cancel experiment application-->
+        {% elif user.profile.typex == 'Participant' %}
+            <h1>Cancel Application</h1>
+            <p>Are you sure you want to cancel the application for the "{{ experiment.name }}" experiment?</p>
+            <form action="" method="POST">
+                {% csrf_token %}
+                <input class="btn-danger btn" type="submit" value="Yes, cancel." />
+                <a class="btn btn-default" href="{% url 'participant_experiments' %}">No, go back.</a>
+            </form>
+        {% else %}
+        {% endif %}
 {% endblock %}
 
 

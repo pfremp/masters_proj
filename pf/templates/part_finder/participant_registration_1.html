@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- participant registration form 1 -->
 {% extends 'sitebase.html' %}
 {% load i18n %}
 {% load staticfiles %}
@@ -10,18 +11,14 @@
 {% block body_block %}
 
 <h1>{{ user.profile.typex }} Details: Part 1 </h1>
-
     {% if user.profile.typex == 'Participant' %}
-
-        <form id="participant_registration_1" method="post" action="/part_finder/participant_registration_1/">
+        <form id="participant_registration_1" method="post" action="{% url 'participant_registration_1' %}">
             {% csrf_token %}
             {% bootstrap_form form %}
             <input class="btn btn-default" type="submit" name="submit" value="Submit" />
         </form>
 
     {% else %} Invalid User Type, Please log in
-
     {% endif %}
-
 {% endblock %}
 

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- homepage -->
 
 {% extends 'sitebase.html' %}
 {% load staticfiles %}
@@ -6,284 +7,144 @@
 {% load pf_extras %}
 
 {% block body_block %}
-{#    <img src="{% static "images/home_banner.jpg" %}" class="img-responsive" style="padding: 0;" alt="Responsive image">#}
-{#    <hr style="margin-top: 0px;">#}
-{#    <hr style="margin-top: 0px;">#}
 
-
-
-
+    <!-- if user is authenticated show filtered featured experiments -->
     {% if user.is_authenticated %}
         <div class="row">
         {% for experiment in filtered_exp %}
-    {% if experiment.is_featured == True %}
-        <div class="col-md-12">
-            <div class="panel panel-default">
-                <a href="{% url 'experiment' experiment.researcher_slug experiment.slug %}"><div class="panel-heading"><h3 class="heading_of">{{ experiment.name }}</h3></div></a>
-                <div class="panel-body">
-                    <p class="text_of">{{ experiment.long_description|truncatechars:400 }}</p>
-                    <p><b>Location: </b>{{ experiment.city }}</p>
-                    <p>
-                    {% for p in payment_list %}
-                        {% if p.experiment == experiment %}
-                            {% if p.is_paid.is_paid == 'Yes' %}
-                                <b>Paid: </b><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                            {% else %}
-                                <b>Paid: </b><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                            {% endif %}
-                        {% endif %}
-                    {% endfor %}
-                    </p>
-{#                    {% if user.profile.typex == 'Participant' %}#}
-{#                        {{ request.user.profile.participant.experiments.all }}#}
-{##}
-{#                        {% with app=0  %}#}
-{#                        {% for e in request.user.profile.participant.experiments.all %}#}
-{#                            {% if e == experiment %}#}
-{#                                #}
-{#                            {% endif %}#}
-{#                        {% endfor %}#}
-{##}
-{#                            {% if colour == 'blue' %}#}
-{##}
-{#                            <p><a href="{% url 'participant_experiments' %}" class="btn btn-success" role="button">Applied</a>#}
-{##}
-{#                            {% else %}#}
-{##}
-{#                            <p><a href="{% url 'experiment' experiment.researcher_slug experiment.slug %}" class="btn btn-primary" role="button">View / Apply</a>#}
-{##}
-{#                            {% endif %}#}
-{#                        {% endwith %}#}
-{#                        {% endwith %}#}
-{#                    {% endif %}#}
-{#                {{ app }}#}
-                     <p><a href="{% url 'experiment' experiment.researcher_slug experiment.slug %}" class="btn btn-primary" role="button">View / Apply</a>
+            {% if experiment.is_featured == True %}
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <a href="{% url 'experiment' experiment.researcher_slug experiment.slug %}"><div class="panel-heading"><h3 class="heading_of">{{ experiment.name }}</h3></div></a>
+                        <div class="panel-body">
+                            <p class="text_of">{{ experiment.long_description|truncatechars:400 }}</p>
+                            <p><b>Location: </b>{{ experiment.city }}</p>
+                            <p>
+                            {% for p in payment_list %}
+                                {% if p.experiment == experiment %}
+                                    {% if p.is_paid.is_paid == 'Yes' %}
+                                        <b>Paid: </b><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                                    {% else %}
+                                        <b>Paid: </b><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                            </p>
+                             <p><a href="{% url 'experiment' experiment.researcher_slug experiment.slug %}" class="btn btn-primary" role="button">View / Apply</a>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-                        {% endif %}
-                {% endfor %}
+            {% endif %}
+        {% endfor %}
 
+            <!-- show remaining filtered experiments-->
             <h1 class="text-center">Latest Experiments</h1>
-        {% if user.profile.typex == 'Participant' %}
-        <div class="row"><p class="text-center" style="opacity: 0.5">Experiments have been filtered based on your account <a href="{% url 'participant_settings' %}"><b>preferences.</b></a></p><!--<p class="text-center pull-right"><a style="opacity: 0.4" href="#">View Preferences</a> / <a style="opacity: 0.4" href="{% url 'allexperiments' %}">All Experiments</a></p>--></div>
-        {% endif %}
-{#        <ul class="nav navbar-nav navbar-right">#}
-{#                      <li class="dropdown">#}
-{#                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i>Filter</a>#}
-{#                        <ul class="dropdown-menu">#}
-{#                          <li><a href="">More</a></li>#}
-{#                          <li><a href="">More</a></li>#}
-{#                          <li><a href="">More</a></li>#}
-{#                          <li><a href="">More</a></li>#}
-{#                          <li><a href="">More</a></li>#}
-{#                        </ul>#}
-{#                      </li>#}
-{#                    </ul>#}
+            {% if user.profile.typex == 'Participant' %}
+                <div class="row"><p class="text-center" style="opacity: 0.5">Experiments have been filtered based on your account <a href="{% url 'participant_settings' %}"><b>preferences.</b></a></p><!--<p class="text-center pull-right"><a style="opacity: 0.4" href="#">View Preferences</a> / <a style="opacity: 0.4" href="{% url 'allexperiments' %}">All Experiments</a></p>--></div>
+            {% endif %}
 
-    <div class="row">
-        {% if experiments %}
-
-            {% for experiment in filtered_exp|slice:"10" %}
-
-                {% if experiment.has_ended == False %}
-
-                    <div class="col-sm-6 col-md-6">
-            <div class="panel panel-default">
-                <a href="{% url 'experiment' experiment.researcher_slug experiment.slug %}"><div class="panel-heading"><h3 class="heading_of">{{ experiment.name }}</h3></div></a>
-                <div class="panel-body">
-                    <p class="text_of">{{ experiment.long_description|truncatechars:200 }}</p>
-                    <br>
-                    <p><b>Location: </b>{{ experiment.city }}</p>
-                    <p>
-{#                    <br>#}
-                    {% for p in payment_list %}
-                        {% if p.experiment == experiment %}
-                            {% if p.is_paid.is_paid == 'Yes' %}
-                                <b>Paid: </b><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                            {% else %}
-                                <b>Paid: </b><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                            {% endif %}
-                        {% endif %}
-                    {% endfor %}
-                    </p>
-                    <p><a href="{% url 'experiment' experiment.researcher_slug experiment.slug %}" class="btn btn-primary" role="button">View / Apply</a>
-
-</div>
-   </div>
-
-                    </div>
-{#                {% endif %}#}
-                {% endif %}
+        <div class="row">
+            {% if experiments %}
+                {% for experiment in filtered_exp|slice:"10" %}
+                    {% if experiment.has_ended == False %}
+                        <div class="col-sm-6 col-md-6">
+                            <div class="panel panel-default">
+                                <a href="{% url 'experiment' experiment.researcher_slug experiment.slug %}"><div class="panel-heading"><h3 class="heading_of">{{ experiment.name }}</h3></div></a>
+                                <div class="panel-body">
+                                    <p class="text_of">{{ experiment.long_description|truncatechars:200 }}</p>
+                                    <br>
+                                    <p><b>Location: </b>{{ experiment.city }}</p>
+                                    <p>
+                                    {% for p in payment_list %}
+                                        {% if p.experiment == experiment %}
+                                            {% if p.is_paid.is_paid == 'Yes' %}
+                                                <b>Paid: </b><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                                            {% else %}
+                                                <b>Paid: </b><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    </p>
+                                    <p><a href="{% url 'experiment' experiment.researcher_slug experiment.slug %}" class="btn btn-primary" role="button">View / Apply</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
                 {% endfor %}
-
-
-    {% else %}
-    <p>There are currently no experiments.</p>
-    {% endif %}
-    </div>
+            {% else %}
+                <p>There are currently no experiments.</p>
+            {% endif %}
+        </div>
 
     {% else %}
 
+        <!-- if user is not authenticated show signup boxes -->
 
-    <div class="row">
-        <div class="col-md-6">
-            <div class="panel panel-default">
-                <div class="panel-heading"><h3 class="heading_of">Participants</h3></div>
-                <div class="panel-body">
-                    <h3 class="lead"><i class="glyphicon glyphicon-ok"></i> View Experiments</h3>
-                    <h3 class="lead"><i class="glyphicon glyphicon-ok"></i> Attend Experiments</h3>
-                    <h3 class="lead"><i class="glyphicon glyphicon-ok"></i> Earn Rewards</h3>
-                    <div class="text-center"><a href="{% url 'account_signup' %}"><button class="btn btn-lg btn-primary">Free Sign Up</button></a></div>
+        <!-- Particiapnt Signup-->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><h3 class="heading_of">Participants</h3></div>
+                    <div class="panel-body">
+                        <h3 class="lead"><i class="glyphicon glyphicon-ok"></i> View Experiments</h3>
+                        <h3 class="lead"><i class="glyphicon glyphicon-ok"></i> Attend Experiments</h3>
+                        <h3 class="lead"><i class="glyphicon glyphicon-ok"></i> Earn Rewards</h3>
+                        <div class="text-center"><a href="{% url 'account_signup' %}"><button class="btn btn-lg btn-primary">Free Sign Up</button></a></div>
+                    </div>
                 </div>
             </div>
 
-
-
-        </div>
-        <div class="col-md-6">
-            <div class="panel panel-default">
-                <div class="panel-heading"><h3 class="heading_of">Researchers</h3></div>
-                <div class="panel-body">
-                    <h3 class="lead"><i class="glyphicon glyphicon-ok"></i> Post Experiments</h3>
-                    <h3 class="lead"><i class="glyphicon glyphicon-ok"></i> Target Demographic</h3>
-                    <h3 class="lead"><i class="glyphicon glyphicon-ok"></i> Manage Applications</h3>
-                    <div class="text-center"><a href="{% url 'account_signup' %}"><button class="btn btn-lg btn-primary">Free Sign Up</button></a></div>
+            <!-- Researcher signup -->
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><h3 class="heading_of">Researchers</h3></div>
+                    <div class="panel-body">
+                        <h3 class="lead"><i class="glyphicon glyphicon-ok"></i> Post Experiments</h3>
+                        <h3 class="lead"><i class="glyphicon glyphicon-ok"></i> Target Demographic</h3>
+                        <h3 class="lead"><i class="glyphicon glyphicon-ok"></i> Manage Applications</h3>
+                        <div class="text-center"><a href="{% url 'account_signup' %}"><button class="btn btn-lg btn-primary">Free Sign Up</button></a></div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <h1 class="text-center">Latest Experiments</h1>
-    <div class="row"><p class="text-center pull-right"><a href="{% url 'allexperiments' %}">All Experiments</a></p></div>
+        <h1 class="text-center">Latest Experiments</h1>
+        <div class="row"><p class="text-center pull-right"><a href="{% url 'allexperiments' %}">All Experiments</a></p></div>
 
 
-    <div class="row">
-        {% if experiments %}
-
-            {% for experiment in experiments|slice:"10" %}
-                {% if experiment.has_ended == False %}
-                    <div class="col-sm-6 col-md-6">
-            <div class="panel panel-default">
-                <a href="{% url 'experiment' experiment.researcher_slug experiment.slug %}"><div class="panel-heading"><h3 class="heading_of">{{ experiment.name }}</h3></div></a>
-                <div class="panel-body">
-                    <p class="text_of">{{ experiment.long_description|truncatechars:200 }}</p>
-                    <p><b>Location: </b>{{ experiment.city }}</p>
-                    <p>
-                    {% for p in payment_list %}
-                        {% if p.experiment == experiment %}
-                            {% if p.is_paid.is_paid == 'Yes' %}
-                                <b>Paid: </b><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                            {% else %}
-                                <b>Paid: </b><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                            {% endif %}
-                        {% endif %}
-                    {% endfor %}
-                    </p>
-                    <p><a href="{% url 'experiment' experiment.researcher_slug experiment.slug %}" class="btn btn-primary" role="button">View / Apply</a>
-
-                    </div>
-                </div>
-                    </div>
-                {% endif %}
+        <div class="row">
+            {% if experiments %}
+                {% for experiment in experiments|slice:"10" %}
+                    {% if experiment.has_ended == False %}
+                        <div class="col-sm-6 col-md-6">
+                            <div class="panel panel-default">
+                                <a href="{% url 'experiment' experiment.researcher_slug experiment.slug %}"><div class="panel-heading"><h3 class="heading_of">{{ experiment.name }}</h3></div></a>
+                                <div class="panel-body">
+                                    <p class="text_of">{{ experiment.long_description|truncatechars:200 }}</p>
+                                    <p><b>Location: </b>{{ experiment.city }}</p>
+                                    <p>
+                                    {% for p in payment_list %}
+                                        {% if p.experiment == experiment %}
+                                            {% if p.is_paid.is_paid == 'Yes' %}
+                                                <b>Paid: </b><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                                            {% else %}
+                                                <b>Paid: </b><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    </p>
+                                    <p><a href="{% url 'experiment' experiment.researcher_slug experiment.slug %}" class="btn btn-primary" role="button">View / Apply</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
                 {% endfor %}
 
-
-    {% else %}
-    <p>There are currently no experiments.</p>
+            {% else %}
+                <p>There are currently no experiments.</p>
+            {% endif %}
+        </div>
     {% endif %}
-    </div>
-
-    {% endif %}
-
-
-
-
-
-
-{#<div style="padding-left: 20px; padding-right: 20px;">#}
-{#  <!-- Nav tabs -->#}
-{#  <ul class="nav nav-tabs" role="tablist">#}
-{#    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">All</a></li>#}
-{#    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Matched</a></li>#}
-{#  </ul>#}
-{##}
-{#  <!-- Tab panes -->#}
-{#  <div class="tab-content">#}
-{#    <div role="tabpanel" class="tab-pane active" id="home">#}
-{#        {% if experiments %}#}
-{#            <div class="table table-striped" data-example-id="simple-table" >#}
-{#                <table class="table">#}
-{#                  <caption></caption>#}
-{#                  <thead>#}
-{#                    <tr>#}
-{#                      <th>Name</th>#}
-{#                      <th>Description</th>#}
-{#                      <th>Location</th>#}
-{#                      <th>Paid</th>#}
-{#                      <th></th>#}
-{#                    </tr>#}
-{#                  </thead>#}
-{#                  <tbody>#}
-{##}
-{#                  {% for experiment in experiments|slice:"10" %}#}
-{#                      {% if experiment.has_ended == False %}#}
-{#                    <tr>#}
-{#                      <th scope="row"><a href="/part_finder/experiments/{{ experiment.researcher_slug }}/{{ experiment.slug }}">{{ experiment.name }}</a></th>#}
-{#                      <td>{{ experiment.short_description }}</td>#}
-{#                      <td>{{ experiment.city }}</td>#}
-{#                      <td>#}
-{#                          {% for p in payment_list %}#}
-{#                              {% if p.experiment == experiment %}#}
-{#                                  {% if p.is_paid.is_paid == 'Yes' %}#}
-{#                                      <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>#}
-{#                                  {% else %}#}
-{#                                      <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>#}
-{#                                  {% endif %}#}
-{#                              {% endif %}#}
-{#                              {% endfor %}#}
-{#                      </td>#}
-{#                      <td>#}
-{#                          <a href="/part_finder/experiments/{{ experiment.researcher_slug }}/{{ experiment.slug }}"><button type="button" class="btn btn-default btn-xs">Info / Sign up</button></a>#}
-{#                      </td>#}
-{#                    </tr>#}
-{#                      {% endif %}#}
-{#                  {% endfor %}#}
-{#                  </tbody>#}
-{#                </table>#}
-{#            </div>#}
-{##}
-{#        {% else %}#}
-{#            <strong>There are no experiments present.</strong>#}
-{#        {% endif %}#}
-{#    </div>#}
-{##}
-{#    <div role="tabpanel" class="tab-pane" id="profile">#}
-{##}
-{##}
-{#        {%  if user.is_authenticated %}#}
-{##}
-{#            Matched Experiments#}
-{##}
-{#        {% else %}#}
-{##}
-{#            Please sign in to view matched experiments.#}
-{##}
-{#        {% endif %}#}
-{#    </div>#}
-{#    <div role="tabpanel" class="tab-pane" id="messages">...</div>#}
-{#    <div role="tabpanel" class="tab-pane" id="settings">...</div>#}
-{#  </div>#}
-{##}
-{# <p><b><a href="{% url 'allexperiments' %}">View All Experiments</a> </b></p>#}
-{##}
-{#</div>#}
-
-
-
-
-
-
 {% endblock %}
 
 

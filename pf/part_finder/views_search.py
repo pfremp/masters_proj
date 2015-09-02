@@ -13,6 +13,7 @@ from part_finder.forms_search import *
 from django.forms.formsets import formset_factory, BaseFormSet
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.context_processors import csrf
+from django.core.urlresolvers import reverse
 import sys
 import  datetime
 
@@ -48,7 +49,7 @@ def matched_experiment(request, experiment_id):
             match_detail = match_form.save(commit=False)
             match_detail.requirement = requirement
             match_detail.save()
-            return HttpResponseRedirect("/part_finder/")
+            return HttpResponseRedirect(reverse('index'))
         else:
             print match_form.errors
 

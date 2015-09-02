@@ -11,9 +11,6 @@ from part_finder.views_user import ParticipantGeneralUpdate, ParticipantStudentU
 from django.views.generic.edit import UpdateView
 from part_finder.models import Participant
 from django.contrib.auth.decorators import login_required
-# from django.views.generic.simple import direct_to_template
-# from .forms import NonAdminAddAnotherModelForm
-# from .models import NonAdminAddAnotherModel
 import autocomplete_light.shortcuts as al
 from django.views import generic
 from part_finder.forms_user import ParticipantForm1
@@ -25,7 +22,6 @@ from part_finder.forms_user import ParticipantForm1
 urlpatterns = patterns('',
     url(r'^$', views.index, name='index'),
     url(r'^login_success/$', views_user.login_success, name='login_success'),
-    url(r'^participant/experiment_history/$', views_user.participant_experiment_history, name='participant_experiment_history'),
     url(r'^experiments/$', views.all_experiments, name='allexperiments'),
 
     #researcher
@@ -51,9 +47,8 @@ urlpatterns = patterns('',
     url(r'^participant_registration_2/$', views_user.participant_registration_2, name='participant_registration_2'),
     url(r'^my_experiments/$', views_user.participant_experiments, name='participant_experiments'),
     url(r'^participant/delete/experiment/(?P<experiment_id>[\w\-]+)/$', views.delete_participant_experiment, name='delete_participant_experiment'),
-    # url(r'^participant/profile/user/update/$', login_required(UserAccountUpdate.as_view()), name='update_user_account'),
-    # url(r'^$', views.index, name='password_change_done'),
-    # url(r'password_change/$', 'django.contrib.auth.views.password_change', {'template_name': 'part_finder/participant_update_form.html'}),
+    url(r'^participant/experiment_history/$', views_user.participant_experiment_history, name='participant_experiment_history'),
+
 
     #experiment urls
     url(r'^experiments/(?P<r_slug>[\w\-]+)/(?P<experiment_name_slug>[\w\-]+)/$', views.experiment, name='experiment'),
@@ -65,24 +60,11 @@ urlpatterns = patterns('',
     url(r'^experiment/timeslot/update/(?P<pk>[\w\-]+)/(?P<slug>[\w\-]+)/$', login_required(TimeSlotUpdate.as_view()), name='update_timeslot'),
     url(r'^experiment/requirement/update/(?P<pk>[\w\-]+)/(?P<slug>[\w\-]+)/$', login_required(RequirementUpdate.as_view()), name='update_requirement'),
     url(r'^experiment/requirement/details/update/(?P<pk>[\w\-]+)/(?P<slug>[\w\-]+)/$', login_required(MatchDetailsUpdate.as_view()), name='update_requirement_details'),
-    url(r'^experiment_history/$', views.experiment_history, name='experiment-history'),
+    url(r'^experiment_history/$', views.experiment_history, name='experiment_history'),
     url(r'^match/(?P<experiment_id>[\w\-]+)/$', views_search.matched_experiment, name='set_match'),
 
     url(r'^autocomplete/', include('autocomplete_light.urls')),
 
-    #test urls
-    # url(r'^todo/$', views.todo, name='todo'),
-    # url(r'^masonary/$', views.masonary, name='masonary')
-    # url(r'^dummy/$', views.dummy, name='dummy'),
-
-    #
-    # url(r'$', al.CreateView.as_view(
-    #     model=NonAdminAddAnotherModel, form_class=NonAdminAddAnotherModelForm),
-    #     name='non_admin_add_another_model_create'),
-    # url(r'(?P<pk>\d+)/$', generic.UpdateView.as_view(
-    #     model=NonAdminAddAnotherModel, form_class=NonAdminAddAnotherModelForm),
-    #     name='non_admin_add_another_model_update'),
 )
 
 
-# url(r'^myobject/update/(?P<pk>\w+)/$' UpdateView.as_view(model=myModel, template_name="myupdate.html")) - See more at: http://glitterbug.in/blog/django-class-based-generic-views-the-good-the-bad-/show/#sthash.wehZtdWJ.dpuf

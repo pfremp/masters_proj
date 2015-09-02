@@ -504,7 +504,7 @@ def delete_experiment(request, experiment_id):
 
     if request.method == 'POST':
         e.delete()
-        return HttpResponseRedirect("/part_finder/current_experiments/")
+        return HttpResponseRedirect(reverse('researcher_experiments'))
 
     context_dict = {'experiment': e}
     return render(request, 'part_finder/delete_experiment.html', context_dict)
@@ -521,10 +521,10 @@ def delete_participant_experiment(request, experiment_id):
 
     if request.method == 'POST':
         a.delete()
-        return HttpResponseRedirect("/part_finder/my_experiments/")
+        return HttpResponseRedirect(reverse('participant_experiments'))
 
     context_dict = {'experiment': e}
-    return render(request, 'part_finder/delete_participant_experiment.html', context_dict)
+    return render(request, 'part_finder/delete_experiment.html', context_dict)
 
 
 
@@ -538,7 +538,7 @@ def end_experiment(request, experiment_id):
     if request.method == 'POST':
         e.has_ended = True
         e.save()
-        return HttpResponseRedirect("/part_finder/current_experiments/")
+        return HttpResponseRedirect(reverse('researcher_experiments'))
 
     context_dict = {'experiment': e}
 
@@ -555,7 +555,7 @@ def reac_experiment(request, experiment_id):
     if request.method == 'POST':
         e.has_ended = False
         e.save()
-        return HttpResponseRedirect("/part_finder/experiment_history/")
+        return HttpResponseRedirect(reverse('experiment_history'))
 
     context_dict = {'experiment': e}
 

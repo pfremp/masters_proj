@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-{% extends 'sitebase.html' %}
+<!-- settings page -->
 
+{% extends 'sitebase.html' %}
 {% load staticfiles %}
 {% load bootstrap3 %}
 {% block title %}  Settings{% endblock %}
@@ -10,23 +11,19 @@
 
 <div class="panel panel-default">
         <div class="panel-body">
-        <p>Experiments will be filtered based on your preferences</p>
-        <p><b>Online Experiments Only</b>    {% if participant.online_only == True %}YES{% else %}NO{% endif %}</p>
-        <p><b>Paid Only</b> {% if participant.paid_only == True %}YES{% else %}NO{% endif %}</p>
-{#        <p><b>University Only</b> {% if participant.uni_only == True %}YES{% else %}NO{% endif %}</p>#}
-        {% if participant.student == True %}
-            <p><b>My University Only</b> {% if participant.my_uni_only == True %}YES{% else %}NO{% endif %}</p>
-        {% endif %}
-        <p><b>Eligible Only</b> {% if participant.eligible_only == True %}YES{% else %}NO{% endif %}</p>
-        <p><b>City Only</b> {% if participant.city_only == True %}YES{% else %}NO{% endif %}</p>
-
+            <p>Experiments will be filtered based on your preferences</p>
+            <p><b>Online Experiments Only</b>    {% if participant.online_only == True %}YES{% else %}NO{% endif %}</p>
+            <p><b>Paid Only</b> {% if participant.paid_only == True %}YES{% else %}NO{% endif %}</p>
+            {% if participant.student == True %}
+                <p><b>My University Only</b> {% if participant.my_uni_only == True %}YES{% else %}NO{% endif %}</p>
+            {% endif %}
+                <p><b>Eligible Only</b> {% if participant.eligible_only == True %}YES{% else %}NO{% endif %}</p>
+                <p><b>City Only</b> {% if participant.city_only == True %}YES{% else %}NO{% endif %}</p>
         </div>
-        </div>
-        {% if participant.student == True %}
+</div>
+    {% if participant.student == True %}
         <a class="btn btn-default" href="{% url 'update_participant_pref' %}">Update Preferences</a>
-        {% else %}
+    {% else %}
         <a class="btn btn-default" href="{% url 'update_participant_pref_ns' %}">Update Preferences</a>
-        {% endif %}
-
-
+    {% endif %}
 {% endblock %}

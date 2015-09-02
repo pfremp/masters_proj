@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-{% extends 'sitebase.html' %}
+<!-- researcher profile -->
 
+{% extends 'sitebase.html' %}
 {% load staticfiles %}
 {% load bootstrap3 %}
 {% block title %} {{ researcher.userprofile.user.first_name }} {{ researcher.userprofile.user.first_name }} Profile{% endblock %}
@@ -21,9 +22,8 @@
                 {% if experiments %}
                     <h1>Current Experiments</h1>
                     {% for e in experiments %}
-                        <p><b><a href="/part_finder/experiments/{{ e.researcher_slug }}/{{ e.slug }}">{{ e.name }}</a></b></p>
+                        <p><b><a href="{% url 'experiment' e.researcher_slug e.slug %}">{{ e.name }}</a></b></p>
                     {% endfor %}
-
                 {% else %}
                     <p>There are currently no experiments.</p>
                 {% endif %}

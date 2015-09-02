@@ -1,28 +1,22 @@
 <!DOCTYPE html>
+<!-- reactivate experiment -->
 {% extends 'sitebase.html' %}
-
 {% load staticfiles %}
 {% load bootstrap3 %}
 
 {% block title %}My Experiments{% endblock %}
 
 {% block body_block %}
-
     {% if user.profile.typex == 'Researcher' %}
     <h1>Reactivate Experiment</h1>
-
     <p>Are you sure you want to reactivate the "{{ experiment.name }}" experiment?</p>
-
     <form action="" method="POST">
       {% csrf_token %}
-
-      <input class="btn-default btn" type="submit" value="Yes, reactivate." />
-      <a class="btn btn-default" href="{% url 'researcher_experiments' %}">No, cancel.</a>
+        <input class="btn-default btn" type="submit" value="Yes, reactivate." />
+        <a class="btn btn-default" href="{% url 'researcher_experiments' %}">No, cancel.</a>
     </form>
     {% else %}
     {% endif %}
-
-
 {% endblock %}
 
 

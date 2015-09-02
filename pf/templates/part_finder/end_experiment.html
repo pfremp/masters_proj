@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- Tempalte for researcher to end experiment-->
 {% extends 'sitebase.html' %}
 
 {% load staticfiles %}
@@ -7,20 +8,17 @@
 {% block title %}My Experiments{% endblock %}
 
 {% block body_block %}
-
     {% if user.profile.typex == 'Researcher' %}
-    <h1>End Experiment</h1>
+        <h1>End Experiment</h1>
+        <p>Are you sure you want to end the "{{ experiment.name }}" experiment?</p>
 
-    <p>Are you sure you want to end the "{{ experiment.name }}" experiment?</p>
-
-    <form action="" method="POST">
-      {% csrf_token %}
-
-      <input class="btn-danger btn" type="submit" value="Yes, end." />
-      <a class="btn btn-default" href="{% url 'researcher_experiments' %}">No, cancel.</a>
-    </form>
-    {% else %}
-    {% endif %}
+        <form action="" method="POST">
+        {% csrf_token %}
+            <input class="btn-danger btn" type="submit" value="Yes, end." />
+            <a class="btn btn-default" href="{% url 'researcher_experiments' %}">No, cancel.</a>
+        </form>
+        {% else %}
+        {% endif %}
 {% endblock %}
 
 

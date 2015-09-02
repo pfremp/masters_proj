@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-{% extends 'sitebase.html' %}
 
+<!-- Experiments page -->
+{% extends 'sitebase.html' %}
 {% load staticfiles %}
 {% load bootstrap3 %}
 {% load easy_maps_tags %}
@@ -9,7 +10,6 @@
 {% block title %} {{ experiment }}{% endblock %}
 
 {% block body_block %}
-
     {% if experiment %}
         <div class="container-fluid">
         <div class="row" style="min-height: 300px;">
@@ -22,6 +22,7 @@
                 <p>{{ experiment.long_description }}</p>
                 <br>
 
+                <!-- Application form -->
                 <h2>Apply</h2>
                 {%  if user.is_authenticated and user.profile.typex == 'Participant' %}
                     {% if experiment.has_ended %}
@@ -65,7 +66,6 @@
                 <!-- right half 2 of page, more info -->
                 <div class="panel panel-default">
                     <div class="panel-body">
-{#                    <img style="width: 100%;" src="/static/images/gmph.png">#}
                     {% easy_map experiment.address 500 350 using 'part_finder/map.html' %}
                     </div>
                 </div>
@@ -74,7 +74,6 @@
 <br>
 <br>
         <!-- Bottom half, more details -->
-{#        <div class="row">#}
             <div class="panel panel-default">
                 <div class="panel-body">
                 <!-- left col-->
@@ -124,11 +123,9 @@
                         <p><b>Available to all</b></p>
                     {% endif %}
 
-{#                    <p><b>Language(s): </b>{{ lang }}</p>#}
-
-
-
                     <br>
+
+                    <!-- more info section -->
                     <h4><b>More info</b></h4>
                     <p><b><a href="{% url 'researcher_profile' researcher.userprofile.user.username %}">Researcher Profile</a></b></p>
                     <b>Experiment URL: </b><a href="{{ experiment.url }}">{{ experiment.url }}</a>
@@ -143,52 +140,14 @@
                     <h4><b>Payment</b></h4>
                     <!-- payment info -->
                     {% if payment.is_paid.is_paid == 'Yes' %}
-{#                        <table class="table table-responsive">#}
-{#                          <caption></caption>#}
-{#                          <thead>#}
-{#                            <tr>#}
-{#                              <th>Type</th>#}
-{#                              <th>Amount (£)</th>#}
-{#                              <th>Frequency</th>#}
-{#                            </tr>#}
-{#                          </thead>#}
-{#                          <tbody>#}
-{#                            <tr>#}
-{#                                <td>{{ payment.currency }}</td>#}
-{#                                <td>{{ payment.amount }}</td>#}
-{#                                <td>{{ payment.payment_type }}</td>#}
-{#                            </tr>#}
-{#                        </table>#}
-                                <p><b>Type:</b> {{ payment.currency }}&nbsp;&nbsp;&nbsp;<b>Amount (£)</b>: {{ payment.amount }}&nbsp;&nbsp;&nbsp;   <b>Frequency</b>: {{ payment.payment_type }}&nbsp;&nbsp;&nbsp;</p>
+                        <p><b>Type:</b> {{ payment.currency }}&nbsp;&nbsp;&nbsp;<b>Amount (£)</b>: {{ payment.amount }}&nbsp;&nbsp;&nbsp;   <b>Frequency</b>: {{ payment.payment_type }}&nbsp;&nbsp;&nbsp;</p>
                     {% else %}
                         <p>N/A</p>
                     {% endif %}
 
 
-{#                    <p><b>Payment </b></p>#}
-{#                    <div class="col-md-3">#}
-{#                        {% if experiment.currency == 'Money' %}#}
-{#                            <span class="glyphicon glyphicon-gbp" aria-hidden="true"> {{ experiment.payment_amount }} {{ experiment.pmt_type }}</span>#}
-{#                        {% else %}#}
-{#                            <span>{{ experiment.payment_amount }} Credits</span>#}
-{#                        {% endif %}#}
-{#                    </div>#}
-{##}
-{#                    <!-- Duration -->#}
-{#                    <div class="col-md-3">#}
-{#                        <span class="glyphicon glyphicon-time" aria-hidden="true"> {{ experiment.duration }} Hours</span>#}
-{#                    </div>#}
-{##}
-{#                    <!-- Date info. -->#}
-{#                    <div class="col-md-3">#}
-{#                        <span class="glyphicon glyphicon-calendar" aria-hidden="true"> {{ experiment.date | date:'M-d' }}</span>#}
-{#                    </div>#}
-{##}
-{#                    <!-- number of participants -->#}
-{#                    <div class="col-md-3">#}
-{#                        <span class="glyphicon glyphicon-user" aria-hidden="true"> {{ experiment.no_of_participants_wanted }}</span>#}
-{#                    </div>#}
                     <br>
+                    <!-- Timeslots table -->
                     <h4><b>Timeslots</b></h4>
                     <p><b>Duration:</b> {{ experiment.duration }} mins</p>
                     <div class="table table-responsive table-striped" data-example-id="simple-table" >
@@ -215,7 +174,6 @@
                 </div>
             </div>
             </div>
-{#        </div>#}
     </div>
 
 

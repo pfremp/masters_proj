@@ -54,9 +54,9 @@
                     {% elif user.profile.typex == 'Researcher' %}
                         <li><a href="{% url 'add_experiment' %}"><i class="glyphicon glyphicon-plus"></i> Create New Experiment</a></li>
                         <li><a href="{% url 'researcher_experiments' %}"><i class="glyphicon glyphicon-list-alt"></i> Current Experiments</a></li>
-                        <li><a href="{% url 'experiment-history' %}"><i class="glyphicon glyphicon-time"></i> History</a></li>
+                        <li><a href="{% url 'experiment_history' %}"><i class="glyphicon glyphicon-time"></i> History</a></li>
                         <li><a href="{% url 'update_researcher_details' %}"><i class="glyphicon glyphicon-user"></i> My Profile</a></li>
-                        <li><a href="#"><i class="glyphicon glyphicon-cog"></i> Settings</a></li>
+{#                        <li><a href="#"><i class="glyphicon glyphicon-cog"></i> Settings</a></li>#}
 
                     {% else %}
                         <li><a href="#"><i class="glyphicon glyphicon-check"></i> How it works</a></li>
@@ -82,9 +82,9 @@
                   {% elif user.profile.typex == 'Researcher' %}
                         <li><a href="{% url 'add_experiment' %}" class="text-center"><i class="glyphicon glyphicon-plus"></i></a></li>
                         <li><a href="{% url 'researcher_experiments' %}" class="text-center"><i class="glyphicon glyphicon-list-alt"></i></a></li>
-                        <li><a href="{% url 'experiment-history' %}" class="text-center"><i class="glyphicon glyphicon-time"></i></a></li>
+                        <li><a href="{% url 'experiment_history' %}" class="text-center"><i class="glyphicon glyphicon-time"></i></a></li>
                         <li><a href="{% url 'update_researcher_details' %}" class="text-center"><i class="glyphicon glyphicon-user"></i></a></li>
-                        <li><a href="#" class="text-center"><i class="glyphicon glyphicon-cog"></i></a></li>
+{#                        <li><a href="#" class="text-center"><i class="glyphicon glyphicon-cog"></i></a></li>#}
                   {% else %}
                         <li><a href="#" class="text-center"><i class="glyphicon glyphicon-check"></i></a></li>
                         <li><a href="#" class="text-center"><i class="glyphicon glyphicon-check"></i></a></li>

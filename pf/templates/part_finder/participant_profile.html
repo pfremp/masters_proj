@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<!-- participant profile template -->
+
+{% extends 'sitebase.html' %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+{% block title %}My Profile{% endblock %}
+
+{% block body_block %}
+    {% if user.profile.typex == 'Participant' %}
+        <h1>My Profile</h1>
+        <h2>Account Details</h2>
+
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <p><b>Username</b> {{ user.username }}</p>
+                <p><b>First Name</b> {{ user.first_name }}</p>
+                <p><b>Last Name</b> {{ user.last_name }}</p>
+                <p><b>Email</b> {{ user.email }}</p>
+                <p><b>Last Login</b> {{ user.last_login }}</p>
+            </div>
+        </div>
+        <a class="btn btn-default" href="/accounts/password/change/">Change Password</a>
+
+        <br>
+
+        <!-- General details -->
+        <h2>General Details</h2>
+        <div class="panel panel-default">
+            <div class="panel-body">
+            <p><b>D.O.B.</b> {{ participant.dob }}</p>
+            <p><b>City</b> {{ participant.city }}</p>
+            <p><b>Contact No</b> {{ participant.contact_number }}</p>
+            <p><b>Occupation</b> {{ participant.occupation }}</p>
+            <p><b>Language(s) </b>{% for l in lang %}{{ l }}, {% endfor %}</p>
+            <p><b>Education Level</b> {{ participant.education }}</p>
+                {% if participant.student == True %}
+                    <p><b>Student</b> Yes</p>
+                {% else %}
+                    <p><b>Student</b> No</p>
+                {% endif %}
+            <br> <br>
+            </div>
+        </div>
+        <a class="btn btn-default" href="{% url 'update_participant_general' %}">Update General Details</a>
+
+        <!-- Student Details -->
+        {% if user.profile.participant.student == True %}
+
+            <h2>Student Details</h2>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <p><b>University</b> {{ participant.university }}</p>
+                    <p><b>Course Name</b> {{ participant.course_name }}</p>
+                    <p><b>Year of Study</b> {{ participant.year }}</p>
+                    <p><b>Matric</b> {{ participant.matric }}</p>
+                </div>
+            </div>
+            <a class="btn btn-default" href="{% url 'update_participant_student' %}">Update Student Details</a>
+        {% endif %}
+
+        <!-- Demographic details -->
+        <h2>Demographic Details</h2>
+
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <p><b>Gender</b> {{ participant.gender }}</p>
+                <p><b>Height</b> {{ participant.height }} CM</p>
+                <p><b>Weight</b> {{ participant.weight }} KG</p>
+            </div>
+        </div>
+        <a class="btn btn-default" href="{% url 'update_participant_demo' %}">Update Demographic Details</a>
+
+    {% else %}
+    {% endif %}
+{% endblock %}
+
+

@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-{% extends 'sitebase.html' %}
+<!-- Process applications form -->
 
+{% extends 'sitebase.html' %}
 {% load staticfiles %}
 {% load bootstrap3 %}
 {% block title %}Process Applications{% endblock %}
 
 {% block body_block %}
-
-
     {% if user.profile.typex == 'Researcher' %}
-    <h1>{{ experiment.name }} Applications</h1>
+        <h1>{{ experiment.name }} Applications</h1>
         {% for t in time %}
             <p><b>Timeslot: </b>{{ t.date }}, {{ t.start_time }} - {{ t.end_time }}</p>
             {% if t.is_full %}
@@ -35,19 +34,19 @@
             {% for Application in app %}
 
             <tr>
-                    <td>{{ Application.participant.userprofile.user.first_name }} {{ Application.participant.userprofile.user.last_name }}
+                <td>{{ Application.participant.userprofile.user.first_name }} {{ Application.participant.userprofile.user.last_name }}
                     <p><a href="mailto:{{ Application.participant.userprofile.user.email }}">{{ Application.participant.userprofile.user.email }}</a></p>
-                    </td>
-                    <td>{{ Application.timeslot.date }}</td>
-                    <td>{{ Application.timeslot.start_time }} - {{ Application.timeslot.end_time }}</td>
-                    <td>{{ Application.status }}</td>
-                    <td><a href="/part_finder/update_status/{{ experiment.id }}/{{ Application.id }}"><button type="button" class="btn btn-default btn-xs">Update</button></a></td>
+                </td>
+                <td>{{ Application.timeslot.date }}</td>
+                <td>{{ Application.timeslot.start_time }} - {{ Application.timeslot.end_time }}</td>
+                <td>{{ Application.status }}</td>
+                <td><a href="/part_finder/update_status/{{ experiment.id }}/{{ Application.id }}"><button type="button" class="btn btn-default btn-xs">Update</button></a></td>
             </tr>
             {% endfor %}
             </tbody>
             </table>
-            </div>
-            <a class="btn btn-default" href="{% url 'researcher_experiments' %}">Back to Current Experiments</a>
+        </div>
+        <a class="btn btn-default" href="{% url 'researcher_experiments' %}">Back to Current Experiments</a>
 
     {% else %}
     {% endif %}

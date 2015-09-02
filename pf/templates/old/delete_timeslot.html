@@ -1,31 +1,23 @@
 <!DOCTYPE html>
-{% extends 'sitebase.html' %}
 
+<!-- Template to delete timeslot-->
+{% extends 'sitebase.html' %}
 {% load staticfiles %}
 {% load bootstrap3 %}
 
 {% block title %}My Experiments{% endblock %}
 
 {% block body_block %}
-
     {% if user.profile.typex == 'Researcher' %}
-    <h1>Delete Timeslot</h1>
-
-    <p>Are you sure you want to delete the "{{ experiment.name }}" timeslot?</p>
-
-    <form action="" method="POST">
-      {% csrf_token %}
-
-      <input class="btn-danger btn" type="submit" value="Yes, delete." />
-      <a class="btn btn-default" href="{% url 'researcher_experiments' %}">No, cancel.</a>
-    </form>
+        <h1>Delete Timeslot</h1>
+        <p>Are you sure you want to delete the "{{ experiment.name }}" timeslot?</p>
+        <form action="" method="POST">
+        {% csrf_token %}
+            <input class="btn-danger btn" type="submit" value="Yes, delete." />
+            <a class="btn btn-default" href="{% url 'researcher_experiments' %}">No, cancel.</a>
+        </form>
     {% else %}
     {% endif %}
-
-
-
-
-
 {% endblock %}
 
 

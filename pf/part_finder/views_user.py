@@ -114,7 +114,7 @@ def profile_page(request):
 
         context_dict = {'participant': participant, 'lang': lang, 'user': user}
 
-        return render (request, 'part_finder/profile.html', context_dict)
+        return render (request, 'part_finder/participant_profile.html', context_dict)
 
 
 #Participant general details update
@@ -278,7 +278,7 @@ def participant_experiments(request):
     context_dict = {}
 
     if request.user.profile.typex != 'Participant':
-        return HttpResponseRedirect("/part_finder/")
+        return HttpResponseRedirect(reverse('index'))
     else:
         applications = Application.objects.filter(participant=request.user.profile.participant)
 

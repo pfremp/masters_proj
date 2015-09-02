@@ -1,6 +1,6 @@
 <!DOCTYPE html>
+<!-- process application status -->
 {% extends 'sitebase.html' %}
-
 {% load staticfiles %}
 {% load bootstrap3 %}
 {% block title %}Process Applications{% endblock %}
@@ -9,21 +9,21 @@
     <h2>{{ experiment.name }} Application: {{ application.participant.userprofile.user.first_name }} {{ application.participant.userprofile.user.last_name }}</h2>
     <p><b>Timeslot: </b>{{ application.timeslot.date }}, {{ application.timeslot.start_time }} - {{ application.timeslot.end_time }}</p>
     {% if application.timeslot.is_full %}
-    <p><b>Participants: </b>{{ application.timeslot.current_parts }} <span style="color: #f00">(FULL)</span></p>
+        <p><b>Participants: </b>{{ application.timeslot.current_parts }} <span style="color: #f00">(FULL)</span></p>
         <p style="color: #f00;">As this timeslot is now full, you cannot accept any more participants.</p>
     {% else %}
-    <p><b>Participants: </b>{{ application.timeslot.current_parts}} / {{ application.timeslot.no_of_parts }}</p>
+        <p><b>Participants: </b>{{ application.timeslot.current_parts}} / {{ application.timeslot.no_of_parts }}</p>
     {% endif %}
-    </p>
+    <p>
 
 
     <form id="appform" method="post" action="">
         {% csrf_token %}
         {% bootstrap_form update_form %}
         <input class="btn btn-default" type="submit" name="submit" value="submit" />
-        </form>
+    </form>
         <br>
-        <a href="/part_finder/process_applications/{{ experiment.researcher_slug }}/{{ experiment.slug }}/"><button type="button" class="btn btn-default">Back</button></a>
+        <a href="{% url 'process_applications' experiment.researcher_slug experiment.slug %}"><button type="button" class="btn btn-default">Back</button></a>
 
 {% endblock %}
 

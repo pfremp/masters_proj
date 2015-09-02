@@ -1,42 +1,37 @@
 <!DOCTYPE html>
-{% extends 'sitebase.html' %}
 
+<!-- Template that displays experiment history -->
+{% extends 'sitebase.html' %}
 {% load staticfiles %}
 {% load bootstrap3 %}
 
 {% block title %}My Experiments{% endblock %}
-
 {% block body_block %}
-
     {% if user.profile.typex == 'Researcher' %}
-    <h1>Experiment History</h1>
+        <h1>Experiment History</h1>
 
-
-    <div class="table table-responsive" data-example-id="simple-table" >
-    <table class="table">
-      <caption></caption>
-      <thead>
-        <tr>
-          <th>Name</th>
-        </tr>
-      </thead>
-      <tbody>
-    {% for experiment in experiments %}
-        {% if experiment.has_ended == True %}
-        <tr>
-          <td><a href="/part_finder/experiments/{{ experiment.researcher_slug }}/{{ experiment.slug }}">{{ experiment.name }}</a></td>
-          <td><a href="{% url 'reac_experiment' experiment.id %}"><button type="button" class="btn btn-default btn-xs">Re-activate</button></a></td>
-        </tr>
-        {% endif %}
-    {% endfor %}
-      </tbody>
-    </table>
-  </div>
+        <div class="table table-responsive" data-example-id="simple-table" >
+            <table class="table">
+                <caption></caption>
+                <thead>
+                <tr>
+                    <th>Name</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for experiment in experiments %}
+                    {% if experiment.has_ended == True %}
+                        <tr>
+                            <td><a href="{% url 'experiment' experiment.researcher_slug experiment.slug %}">{{ experiment.name }}</a></td>
+                            <td><a href="{% url 'reac_experiment' experiment.id %}"><button type="button" class="btn btn-default btn-xs">Re-activate</button></a></td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     {% else %}
     {% endif %}
-
-
-
 {% endblock %}
 
 

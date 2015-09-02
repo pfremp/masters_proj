@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-{% extends 'sitebase.html' %}
 
+<!-- Template for experiment update -->
+{% extends 'sitebase.html' %}
 {% load staticfiles %}
 {% load bootstrap3 %}
 
@@ -13,7 +14,7 @@
             <input class="btn btn-default" type="submit" value="Update" />
         </form>
         <br>
-    <a class="btn btn-default" href="{% url 'researcher_experiments' %}">Back to Current Experiments</a>
+        <a class="btn btn-default" href="{% url 'researcher_experiments' %}">Back to Current Experiments</a>
     {% else %}
     {% endif %}
 {% endblock %}

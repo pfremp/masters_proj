@@ -1,277 +1,134 @@
 <!DOCTYPE html>
 
+<!-- Template for 'Add Experiments' page. -->
+
 {% extends 'sitebase.html' %}
 {% load staticfiles %}
-{##}
 {% load bootstrap3 %}
 
+{% block extra_head %}
+    <!-- JS Code to add timeslot box -->
+    <script type="text/javascript">
 
-<html>
-{#    <head>#}
-        {% block extra_head %}
-{#        <style type="text/css">#}
-{#html {#}
-{#  background-color: #ededed;#}
-{#}#}
-{#body {#}
-{#  font-family: Frutiger, "Frutiger Linotype", Univers, Calibri, "Gill Sans", "Gill Sans MT", "Myriad Pro", Myriad, "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif;#}
-{#  width: 600px;#}
-{#  padding: 20px 40px 40px;#}
-{#  margin: 0 auto;#}
-{#  margin-top: 15px;#}
-{#  border: 1px solid #ccc;#}
-{#  background-color: #fff;#}
-{#}#}
-{#h1 {#}
-{#  color: #000;#}
-{#}#}
-{#h2 {#}
-{#  color: #333;#}
-{#}#}
-{#.section, .item {#}
-{#  padding: 0px 15px;#}
-{#}#}
-{#.item {#}
-{#  background-color: #dcf0f7;#}
-{#  border: 1px solid #ddd;#}
-{#  margin-bottom: 4px;#}
-{#  padding: 5px 15px;#}
-{#}#}
-{#.helptext {#}
-{#  color: #999;#}
-{#  padding-left: 10px;#}
-{#}#}
-{#a.delete:hover {#}
-{#  color: red;#}
-{#}#}
-{##}
-{#</style>#}
-{#        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>#}
+        $(document).ready(function() {
+          // Code adapted from http://djangosnippets.org/snippets/1389/
+          function updateElementIndex(el, prefix, ndx) {
+            var id_regex = new RegExp('(' + prefix + '-\\d+-)');
+            var replacement = prefix + '-' + ndx + '-';
+            if ($(el).attr("for")) $(el).attr("for", $(el).attr("for").replace(id_regex,
+         replacement));
+            if (el.id) el.id = el.id.replace(id_regex, replacement);
+            if (el.name) el.name = el.name.replace(id_regex, replacement);
+          }
+          function deleteForm(btn, prefix) {
+            var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+            if (formCount > 1) {
+              // Delete the item/form
+              $(btn).parents('.item').remove();
+              var forms = $('.item'); // Get all the forms
+              // Update the total number of forms (1 less than before)
+              $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
+              var i = 0;
+              // Go through the forms and set their indices, names and IDs
+              for (formCount = forms.length; i < formCount; i++) {
+                $(forms.get(i)).children().children().each(function() {
+                  updateElementIndex(this, prefix, i);
+                });
+              }
+            } // End if
+            else {
+                alert("You have to enter at least one timeslot!");
+            }
+            return false;
+          }
+          function addForm(btn, prefix) {
+            var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+            // You can only submit a maximum of 10 todo items
+            if (formCount < 10) {
+              // Clone a form (without event handlers) from the first form
+              var row = $(".item:first").clone(false).get(0);
+              // Insert it after the last form
+              $(row).removeAttr('id').hide().insertAfter(".item:last").slideDown(300);
 
-        <script type="text/javascript">
+              // Remove the bits we don't want in the new row/form
+              // e.g. error messages
+              $(".errorlist", row).remove();
+              $(row).children().removeClass('error');
 
+              // Relabel/rename all the relevant bits
+              $(row).children().children().each(function() {
+                updateElementIndex(this, prefix, formCount);
+                if ( $(this).attr('type') == 'text' )
+                  $(this).val('');
+              });
 
+              // Add an event handler for the delete item/form link
+              $(row).find('.delete').click(function() {
+                return deleteForm(this, prefix);
+              });
+              // Update the total form count
+              $('#id_' + prefix + '-TOTAL_FORMS').val(formCount + 1);
+            } // End if
+            else {
+              alert("Sorry, you can only enter a maximum of ten timeslots.");
+            }
+            return false;
+          }
+          // Register the click event handlers
+          $("#add").click(function() {
+            return addForm(this, 'form');
+          });
 
-
-
-
-$(document).ready(function() {
-  // Code adapted from http://djangosnippets.org/snippets/1389/
-  function updateElementIndex(el, prefix, ndx) {
-    var id_regex = new RegExp('(' + prefix + '-\\d+-)');
-    var replacement = prefix + '-' + ndx + '-';
-    if ($(el).attr("for")) $(el).attr("for", $(el).attr("for").replace(id_regex,
- replacement));
-    if (el.id) el.id = el.id.replace(id_regex, replacement);
-    if (el.name) el.name = el.name.replace(id_regex, replacement);
-  }
-  function deleteForm(btn, prefix) {
-    var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
-    if (formCount > 1) {
-      // Delete the item/form
-      $(btn).parents('.item').remove();
-      var forms = $('.item'); // Get all the forms
-      // Update the total number of forms (1 less than before)
-      $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
-      var i = 0;
-      // Go through the forms and set their indices, names and IDs
-      for (formCount = forms.length; i < formCount; i++) {
-        $(forms.get(i)).children().children().each(function() {
-          updateElementIndex(this, prefix, i);
+          $(".delete").click(function() {
+            return deleteForm(this, 'form');
+          });
         });
-      }
-    } // End if
-    else {
-        alert("You have to enter at least one timeslot!");
-    }
-    return false;
-  }
-  function addForm(btn, prefix) {
-    var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
-    // You can only submit a maximum of 10 todo items
-    if (formCount < 10) {
-      // Clone a form (without event handlers) from the first form
-      var row = $(".item:first").clone(false).get(0);
-      // Insert it after the last form
-      $(row).removeAttr('id').hide().insertAfter(".item:last").slideDown(300);
+    </script>
 
-      // Remove the bits we don't want in the new row/form
-      // e.g. error messages
-      $(".errorlist", row).remove();
-      $(row).children().removeClass('error');
-
-      // Relabel/rename all the relevant bits
-      $(row).children().children().each(function() {
-        updateElementIndex(this, prefix, formCount);
-        if ( $(this).attr('type') == 'text' )
-          $(this).val('');
-      });
-
-      // Add an event handler for the delete item/form link
-      $(row).find('.delete').click(function() {
-        return deleteForm(this, prefix);
-      });
-      // Update the total form count
-      $('#id_' + prefix + '-TOTAL_FORMS').val(formCount + 1);
-    } // End if
-    else {
-      alert("Sorry, you can only enter a maximum of ten timeslots.");
-    }
-    return false;
-  }
-  // Register the click event handlers
-  $("#add").click(function() {
-    return addForm(this, 'form');
-  });
-
-  $(".delete").click(function() {
-    return deleteForm(this, 'form');
-  });
-});
-
-
-</script>
-
-
-
-        <title>Participant Finder</title>
-{#    </head>#}
     {% endblock %}
 
     {% block body_block %}
-{% if user.profile.typex == 'Researcher' %}
-<body>
-        <h1>Add an Experiment</h1>
+        {% if user.profile.typex == 'Researcher' %}
+            <h1>Add an Experiment</h1>
 
-
-
-{#        <form id="experiment_form" method="post" novalidate action="/part_finder/add_experiment/?next={{ 'index' }}">#}
-        <form id="experiment_form" method="post" action="/part_finder/add_experiment/">
-
-            {% csrf_token %}
-            {% for hidden in form.hidden_fields %}
+            <!-- Experiment General Details Form -->
+            <form id="experiment_form" method="post" action="/part_finder/add_experiment/">
+                {% csrf_token %}
+                {% for hidden in form.hidden_fields %}
                 {{ hidden }}
+                {% endfor %}
+                {% bootstrap_form form %}
+
+            <!-- Experiment Payment Details Form -->
+            <h2 style="border: black; border-width: thick">Payment Details</h2>
+                {% bootstrap_form payment_form %}
+
+            <!-- Experiment Requirement Details Form -->
+
+            <h2>Participant Requirements</h2>
+            <p><b>Target your experiment at a specific demographic!</b></p>
+            {% bootstrap_form requirement_form %}
+
+
+            <!-- Experiment Timeslot Details Form -->
+            <h2>Time Slots</h2>
+            {{ time_slot_formset.management_form }}
+            {% for form in time_slot_formset.forms %}
+            <div class=" item">
+                {% bootstrap_form form  %}
+            <hr>
+
+            <p style=""><a class="delete" href="#">Delete</a></p>
+            </div>
             {% endfor %}
 
-            {% bootstrap_form form %}
-
-
-{#            {% for field in form.visible_fields %}#}
-{##}
-{#            <!-- check for date field -->#}
-{#                {% if field.name == 'Name'  %}#}
-{##}
-{##}
-{#                {{ field.errors }}#}
-{#                {{ field.label }}#}
-{#                {% bootstrap_field field %}#}
-{##}
-{#                {% endif %}#}
-{#            {% endfor %}#}
-
-            <h2 style="border: black; border-width: thick">Payment Details</h2>
-            {% bootstrap_form payment_form %}
-{#            {% for field in payment_form.visible_fields %}#}
-{##}
-{#            <!-- check for date field -->#}
-{#                {% if field.name == 'Name'  %}#}
-{##}
-{##}
-{#                {{ field.errors }}#}
-{#                {{ field.label }}#}
-{#                {% bootstrap_field field %}#}
-{##}
-{#                {% endif %}#}
-{#            {% endfor %}#}
-
-        <h2>Participant Requirements</h2>
-        <p><b>Target your experiment at a specific demographic!</b></p>
-        {% bootstrap_form requirement_form %}
-{#        {% for field in requirement_form.visible_fields %}#}
-{##}
-{#            <!-- check for date field -->#}
-{#                {% if field.name == 'Name'  %}#}
-{##}
-{##}
-{#                {{ field.errors }}#}
-{#                {{ field.label }}#}
-{#                {% bootstrap_field field %}#}
-{##}
-{#                {% endif %}#}
-{#            {% endfor %}#}
-
-
-
-
-        <h2>Time Slots</h2>
-    {{ time_slot_formset.management_form }}
-{#    {% bootstrap_formset time_slot_formset %}#}
-    {% for form in time_slot_formset.forms %}
-    <div class=" item">
-{#      {{ form.as_p }}#}
-{#      {% bootstrap_form form layout='inline'%}#}
-      {% bootstrap_form form  %}
-        <hr>
-{#        {{ form.date }}#}
-
-{#                    <table>#}
-{#              <tr>#}
-{#                <td>{% bootstrap_field form.date %}</td>#}
-{#                 <td>{% bootstrap_field form.start_time %}</td>#}
-{#                <td>{% bootstrap_field form.end_time %}</td>#}
-{#                <td>{% bootstrap_field form.no_of_parts %}</td>#}
-{#              </tr>#}
-{##}
-{#            </table>#}
-
-
-
-{#                <p>{% bootstrap_field form.date %}</p>#}
-{#                 <p>{% bootstrap_field form.start_time %}</p>#}
-{#                <p>{% bootstrap_field form.end_time %}</p>#}
-{#                <p>{% bootstrap_field form.no_of_parts %}</p>#}
-
-
-
-
-      <p style=""><a class="delete" href="#">Delete</a></p>
-    </div>
-    {% endfor %}
-
-    <p><a id="add" href="#">Add another timeslot</a></p>
+            <p><a id="add" href="#">Add another timeslot</a></p>
 
 
             <input class="btn btn-default"type="submit" name="submit" value="Create Experiment" />
         </form>
 
-
-
-{#        <h2>Time Slots</h2>#}
-
-
-{#    <form action="" method="POST">{% csrf_token %}#}
-{#    <div class="section">#}
-{#        {{ todo_list_form.as_p }}#}
-{#    </div>#}
-{##}
-{#    <h2>Todo Items</h2>#}
-{#    {{ todo_item_formset.management_form }}#}
-{#    {% for form in todo_item_formset.forms %}#}
-{#    <div class="item">#}
-{#      {{ form.as_p }}#}
-{#      <p style=""><a class="delete" href="#">Delete</a></p>#}
-{#    </div>#}
-{#    {% endfor %}#}
-{##}
-{#    <p><a id="add" href="#">Add another item</a></p>#}
-{##}
-{#    <input type="submit" value=" Submit " />#}
-{##}
-{#</form>#}
-    </body>
         {% else %}
-
         {% endif %}
 {% endblock %}
 
-</html>

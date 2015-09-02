@@ -1,78 +1,72 @@
 <!DOCTYPE html>
-{% extends 'sitebase.html' %}
+<!-- Template to display researcher experiment applications -->
 
+{% extends 'sitebase.html' %}
 {% load staticfiles %}
 {% load bootstrap3 %}
-
 {% block title %} My Experiments{% endblock %}
 
 {% block body_block %}
     {% if user.profile.typex == 'Researcher' %}
     <h1>Current Experiments</h1>
+        <p>You currently have {{ exp_count }} experiments.</p>
+        <div class="table table-responsive" data-example-id="simple-table" >
+            <table class="table">
+                <caption></caption>
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
 
-    <p>You currently have {{ exp_count }} experiments.</p>
-    <div class="table table-responsive" data-example-id="simple-table" >
-    <table class="table">
-      <caption></caption>
-      <thead>
-        <tr>
-          <th>Name</th>
-{#          <th>Edit</th>#}
-{#          <th>Applications</th>#}
-        </tr>
-      </thead>
-      <tbody>
-    {% for experiment in experiments %}
-        {% if experiment.has_ended == False %}
-        <tr>
-          <td><a href="/part_finder/experiments/{{ experiment.researcher_slug }}/{{ experiment.slug }}">{{ experiment.name }}</a></td>
-          <td><a href="/part_finder/process_applications/{{ experiment.researcher_slug }}/{{ experiment.slug }}"><button type="button" class="btn btn-default btn-xs">Applications</button></a></td>
-          <td>
+                {% for experiment in experiments %}
+                    {% if experiment.has_ended == False %}
+                        <tr>
+                            <td><a href="{% url 'experiment' experiment.researcher_slug experiment.slug %}">{{ experiment.name }}</a></td>
+                            <td><a href="{% url 'process_applications' experiment.researcher_slug experiment.slug  %}"><button type="button" class="btn btn-default btn-xs">Applications</button></a></td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Edit <span class="caret"></span></button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{% url 'update_experiment' experiment.id %}">Experiment</a></li>
 
-          <div class="btn-group">
-            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Edit <span class="caret"></span></button>
-              <ul class="dropdown-menu">
-                <li><a href="{% url 'update_experiment' experiment.id %}">Experiment</a></li>
-                {% for p in payment %}
-                {% if p.experiment == experiment %}
-                <li><a href="../experiment/payment/update/{{ p.id }}/{{ experiment.id }}">Payment</a></li>
-                {% endif %}
-                {% endfor %}
-                <li><a href="{% url 'experiment_timeslots' experiment.id %}">Timeslot</a></li>
-                {% for r in requirements %}
-                    {% if r.experiment == experiment %}
-                  <li><a href="../experiment/requirement/update/{{ r.id }}/{{ experiment.id }}">Requirements</a></li>
+                                        {% for p in payment %}
+                                            {% if p.experiment == experiment %}
+                                                <li><a href="{% url 'update_payment' p.id experiment.id%}">Payment</a></li>
+                                            {% endif %}
+                                        {% endfor %}
+
+                                        <li><a href="{% url 'experiment_timeslots' experiment.id %}">Timeslot</a></li>
+                                        {% for r in requirements %}
+                                            {% if r.experiment == experiment %}
+                                                <li><a href="{% url 'update_requirement' r.id experiment.id %}">Requirements</a></li>
+                                            {% endif %}
+                                            {% if r.match == True and r.experiment == experiment %}
+                                                {% for m in match_details %}
+                                                    {% if m.requirement == r %}
+                                                        <li><a href="{% url 'update_requirement_details' m.id r.id%}">Req Details</a></li>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </td>
+                            <td><a href="{% url 'end_experiment' experiment.id %}"><button type="button" class="btn btn-default btn-xs">End</button></a></td>
+                            <td><a href="{% url 'experiment-delete' experiment.id %}"><button type="button" class="btn btn-default btn-xs">Delete</button></a></td>
+                        </tr>
                     {% endif %}
-                    {% if r.match == True and r.experiment == experiment %}
-                        {% for m in match_details %}
-                            {% if m.requirement == r %}
-                    <li><a href="../experiment/requirement/details/update/{{ m.id }}/{{ r.id }}">Req Details</a></li>
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
                 {% endfor %}
-
-
-{#                <li role="separator" class="divider"></li>#}
-{#                <li><a href="#">Separated link</a></li>#}
-              </ul>
-          </div>
-
-          </td>
-          <td><a href="{% url 'end_experiment' experiment.id %}"><button type="button" class="btn btn-default btn-xs">End</button></a></td>
-          <td><a href="{% url 'experiment-delete' experiment.id %}"><button type="button" class="btn btn-default btn-xs">Delete</button></a></td>
-
-        </tr>
-        {% endif %}
-    {% endfor %}
-      </tbody>
-    </table>
-  </div>
+                </tbody>
+            </table>
+        </div>
     {% else %}
     {% endif %}
-
-
-
 {% endblock %}
 
 

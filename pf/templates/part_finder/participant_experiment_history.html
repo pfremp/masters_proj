@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-{% extends 'sitebase.html' %}
+<!-- template for participant experiment history -->
 
+{% extends 'sitebase.html' %}
 {% load staticfiles %}
 {% load bootstrap3 %}
 
@@ -8,34 +9,31 @@
 
 {% block body_block %}
     {% if user.profile.typex == 'Participant' %}
-    <h1>Experiment History</h1>
+        <h1>Experiment History</h1>
 
+        <div class="table table-responsive" data-example-id="simple-table" >
+            <table class="table">
+                <caption></caption>
+                <thead>
+                <tr>
+                    <th>Name</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for a in applications %}
+                    <tr>
+                    {% if a.experiment.has_ended == True and a.status != 'Pending' %}
 
-    <div class="table table-responsive" data-example-id="simple-table" >
-    <table class="table">
-      <caption></caption>
-      <thead>
-        <tr>
-          <th>Name</th>
-        </tr>
-      </thead>
-      <tbody>
-    {% for a in applications %}
-        <tr>
-        {% if a.experiment.has_ended == True and a.status != 'Pending' %}
+                      <td><a href="{% url 'experiment' a.experiment.researcher_slug a.experiment.slug %}">{{ a.experiment.name }}</a></td>
 
-          <td><a href="/part_finder/experiments/{{ a.experiment.researcher_slug }}/{{ a.experiment.slug }}">{{ a.experiment.name }}</a></td>
-
-        {% endif %}
-        </tr>
-    {% endfor %}
-      </tbody>
-    </table>
-  </div>
+                    {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     {% else %}
     {% endif %}
-
-
 {% endblock %}
 
 
