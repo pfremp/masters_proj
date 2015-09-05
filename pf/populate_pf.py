@@ -153,8 +153,8 @@ def populate():
     add_lang_to_part(par2, l4)
     add_lang_to_part(par2, l5)
 
-    req1 = add_req(match=False, student='0', age='0', language='0',height='0', weight='0', gender='0', experiment=exp1)
-    req2 = add_req(match=True, student='1', age='1', language='1',height='1', weight='1', gender='1', experiment=exp2)
+    req1 = add_req(match=False, student='0', age='0', language='0',height='0', weight='0', gender='0', experiment=exp2)
+    req2 = add_req(match=True, student='1', age='1', language='1',height='1', weight='1', gender='1', experiment=exp1)
     female = add_req(match=True, student='0', age='0', language='0',height='0', weight='0', gender='1', experiment=exp3)
     student = add_req(match=True, student='1', age='0', language='0',height='0', weight='0', gender='0', experiment=exp4)
     height = add_req(match=True, student='0', age='0', language='0',height='1', weight='0', gender='0', experiment=exp5)

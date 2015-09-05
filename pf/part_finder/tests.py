@@ -12,11 +12,73 @@ from selenium import webdriver
 from selenium.webdriver.support import expected_conditions as EC
 from part_finder.models import TimeSlot, Experiment, University, Researcher, UserProfile
 from part_finder.forms import TimeSlotForm, ExperimentForm
+from part_finder.models_search import Requirement, MatchingDetail
+from part_finder.views_user import refresh_reqs
 import datetime
 from django.core.exceptions import ValidationError
 
 # driver = webdriver.Firefox()
 # driver.implicitly_wait(10) # seconds
+
+
+class ViewTests(TestCase):
+
+    def setUp(self):
+        print "Setup"
+        populate_pf.populate()
+        # self.single_exp = Experiment.objects.all()[0]
+        # Create Experiment
+        # self.single_exp = Experiment.objects.create(name="Science Experiment", long_description="Long Des..", duration=60, address="George Square, Glasgow", url="http://google.com", city=None, researcher=Researcher.objects.all()[0])
+        self.single_exp = Experiment.objects.all()[0]
+        print "Experiemnt: " + str(self.single_exp)
+        print self.single_exp.id
+        self.req = Requirement.objects.get(experiment=self.single_exp)
+        print "Reqiremnt: " + str(self.req)
+        print self.req.id
+        self.req.student = True
+        self.req.save()
+        refresh_reqs(self.single_exp)
+        print "match at setup " + str(self.req.match)
+        # self.requirements = Requirement.objects.create(experiment=self.single_exp, student=False, age=False,language=False, height=False, weight=False, gender=False)
+        # print self.single_exp.requirement.all().count()
+
+
+    # Test if requirement's match boolean is updated to false when there are no experiments selected
+    # or true when there is ateast one requirement selected.
+    def test_refresh_reqs(self):
+        print "match at t1s " + str(self.req.match)
+
+        print "test 1"
+        # reqs = Experiment.objects.get()
+        self.req.student = True
+        self.req.save()
+        refresh_reqs(self.single_exp)
+        # "match" should be false as no requirements are set to true
+        self.assertFalse(self.req.match)
+        print self.single_exp.id
+        print self.req.id
+        print "match at t1e " + str(self.req.student)
+
+
+
+    def test_refresh_reqs_true(self):
+        print "test 2"
+        self.req.student = True
+        # self.req.match = True
+
+        refresh_reqs(self.single_exp)
+        # self.requirements.save()
+        print refresh_reqs(self.single_exp)
+        # print self.requirements
+        # print "All Req Objects " + str(self.requirements.match)
+        self.assertTrue(self.req.match)
+        # print "reqs stu " + str(self.requirements.student)
+        print self.single_exp.id
+        print self.req.id
+
+
+
+
 
 
 
