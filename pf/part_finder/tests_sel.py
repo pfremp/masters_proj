@@ -43,10 +43,10 @@ class MySeleniumTests(StaticLiveServerTestCase):
 
 
 
-    # @classmethod
-    # def tearDownClass(cls):
-    #     cls.selenium.quit()
-    #     super(MySeleniumTests, cls).tearDownClass()
+    @classmethod
+    def tearDownClass(cls):
+        cls.selenium.quit()
+        super(MySeleniumTests, cls).tearDownClass()
 
     def test_login(self):
         populate_pf.populate()

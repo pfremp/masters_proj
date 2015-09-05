@@ -37,7 +37,7 @@
 
                                         {% for p in payment %}
                                             {% if p.experiment == experiment %}
-                                                <li><a href="{% url 'update_payment' p.id experiment.id%}">Payment</a></li>
+                                                <li><a href="{% url 'update_payment' p.id experiment.id %}">Payment</a></li>
                                             {% endif %}
                                         {% endfor %}
 

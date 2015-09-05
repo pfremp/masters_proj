@@ -11,30 +11,30 @@
     <form id="experiment_form" method="post" novalidate action="">
         {% csrf_token %}
 
-        {% if r_student == '1' %}
+        {% if r_student %}
             {% bootstrap_field match_form.student %}
         {% endif %}
 
-        {% if r_gender == '1' %}
+        {% if r_gender %}
             {% bootstrap_field match_form.gender %}
         {% endif %}
 
-        {% if r_age == '1' %}
+        {% if r_age %}
             {% bootstrap_field match_form.min_age %}
             {% bootstrap_field match_form.max_age %}
         {% endif %}
 
-        {% if r_height == '1' %}
+        {% if r_height %}
             {% bootstrap_field match_form.min_height %}
             {% bootstrap_field match_form.max_height %}
         {% endif %}
 
-        {% if r_weight == '1' %}
+        {% if r_weight %}
             {% bootstrap_field match_form.min_weight %}
             {% bootstrap_field match_form.max_weight %}
         {% endif %}
 
-        {% if r_language == '1' %}
+        {% if r_language %}
             {% bootstrap_field match_form.l %}
         {% endif %}
 

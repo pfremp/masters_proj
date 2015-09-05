@@ -29,7 +29,7 @@ def populate():
     strath = add_uni(name='University of Strathclyde')
     edin = add_uni(name='University of Edinburgh')
 
-    # Remaining Univeisities
+    # Remaining Universities
     with open("list_of_universities.txt") as f:
         for uni in f:
             add_uni(uni)
@@ -111,24 +111,24 @@ def populate():
     payment3 = add_payment(is_paid=ip1, currency=cur_voucher, payment_type=pay_type_voucher_total, amount=30, experiment=exp5)
     payment3 = add_payment(is_paid=ip1, currency=cur_voucher, payment_type=pay_type_voucher_total, amount=30, experiment=exp10)
 
-    ts1 = add_timeslot(date='2015-09-17', start_time='10:00:00', end_time='11:00:00',no_of_parts=5, experiment=exp1)
-    ts2 = add_timeslot(date='2015-10-16', start_time='11:00:00', end_time='12:00:00',no_of_parts=2, experiment=exp4)
-    ts3 = add_timeslot(date='2015-11-12', start_time='11:00:00', end_time='13:00:00',no_of_parts=1, experiment=exp5)
-    ts4 = add_timeslot(date='2015-12-05', start_time='12:00:00', end_time='14:00:00',no_of_parts=3, experiment=exp6)
-    ts5 = add_timeslot(date='2015-09-07', start_time='14:00:00', end_time='15:00:00',no_of_parts=1, experiment=exp7)
-    ts5 = add_timeslot(date='2015-10-08', start_time='14:00:00', end_time='16:00:00',no_of_parts=5, experiment=exp8)
-    ts5 = add_timeslot(date='2015-11-09', start_time='16:00:00', end_time='17:00:00',no_of_parts=2, experiment=exp9)
-    ts5 = add_timeslot(date='2015-12-09', start_time='17:00:00', end_time='18:00:00',no_of_parts=4, experiment=exp10)
-    ts5 = add_timeslot(date='2015-08-10', start_time='17:00:00', end_time='19:00:00',no_of_parts=10, experiment=exp1)
-    ts1 = add_timeslot(date='2015-09-17', start_time='09:00:00', end_time='12:00:00',no_of_parts=5, experiment=exp2)
-    ts2 = add_timeslot(date='2015-10-16', start_time='10:00:00', end_time='13:00:00',no_of_parts=2, experiment=exp3)
-    ts3 = add_timeslot(date='2015-11-12', start_time='07:00:00', end_time='09:00:00',no_of_parts=1, experiment=exp4)
-    ts4 = add_timeslot(date='2015-12-05', start_time='17:00:00', end_time='19:00:00',no_of_parts=3, experiment=exp5)
-    ts5 = add_timeslot(date='2015-09-07', start_time='13:00:00', end_time='14:00:00',no_of_parts=1, experiment=exp6)
-    ts5 = add_timeslot(date='2015-10-08', start_time='14:00:00', end_time='16:00:00',no_of_parts=5, experiment=exp7)
-    ts5 = add_timeslot(date='2015-11-09', start_time='16:00:00', end_time='17:00:00',no_of_parts=2, experiment=exp8)
-    ts5 = add_timeslot(date='2015-12-09', start_time='17:00:00', end_time='19:00:00',no_of_parts=4, experiment=exp9)
-    ts5 = add_timeslot(date='2015-08-10', start_time='09:00:00', end_time='11:00:00',no_of_parts=10, experiment=exp10)
+    ts1 = add_timeslot(date='2015-09-17', start_time='10:00:00', no_of_parts=5, experiment=exp1)
+    ts2 = add_timeslot(date='2015-10-16', start_time='11:00:00', no_of_parts=2, experiment=exp4)
+    ts3 = add_timeslot(date='2015-11-12', start_time='11:00:00', no_of_parts=1, experiment=exp5)
+    ts4 = add_timeslot(date='2015-12-05', start_time='12:00:00', no_of_parts=3, experiment=exp6)
+    ts5 = add_timeslot(date='2015-09-07', start_time='14:00:00', no_of_parts=1, experiment=exp7)
+    ts5 = add_timeslot(date='2015-10-08', start_time='14:00:00', no_of_parts=5, experiment=exp8)
+    ts5 = add_timeslot(date='2015-11-09', start_time='16:00:00', no_of_parts=2, experiment=exp9)
+    ts5 = add_timeslot(date='2015-12-09', start_time='17:00:00', no_of_parts=4, experiment=exp10)
+    ts5 = add_timeslot(date='2015-08-10', start_time='17:00:00', no_of_parts=10, experiment=exp1)
+    ts1 = add_timeslot(date='2015-09-17', start_time='09:00:00', no_of_parts=5, experiment=exp2)
+    ts2 = add_timeslot(date='2015-10-16', start_time='10:00:00', no_of_parts=2, experiment=exp3)
+    ts3 = add_timeslot(date='2015-11-12', start_time='07:00:00', no_of_parts=1, experiment=exp4)
+    ts4 = add_timeslot(date='2015-12-05', start_time='17:00:00', no_of_parts=3, experiment=exp5)
+    ts5 = add_timeslot(date='2015-09-07', start_time='13:00:00', no_of_parts=1, experiment=exp6)
+    ts5 = add_timeslot(date='2015-10-08', start_time='14:00:00', no_of_parts=5, experiment=exp7)
+    ts5 = add_timeslot(date='2015-11-09', start_time='16:00:00', no_of_parts=2, experiment=exp8)
+    ts5 = add_timeslot(date='2015-12-09', start_time='17:00:00', no_of_parts=4, experiment=exp9)
+    ts5 = add_timeslot(date='2015-08-10', start_time='09:00:00', no_of_parts=10, experiment=exp10)
 
     #add languages
     l1 = add_lang(language="English")
@@ -138,7 +138,7 @@ def populate():
     l5 = add_lang(language="Mandarin")
 
     # Add remaining Languages
-    # Remaining Univeisities
+    # Remaining Languages
     with open("languages.txt") as f:
         for lang in f:
             add_lang(lang)
@@ -286,8 +286,8 @@ def add_payment(is_paid, currency, payment_type, amount, experiment):
     ap.save()
     return ap
 
-def add_timeslot(date, start_time, end_time, no_of_parts, experiment):
-    t = TimeSlot.objects.get_or_create(date=date, start_time=start_time, end_time=end_time, no_of_parts=no_of_parts, experiment=experiment)[0]
+def add_timeslot(date, start_time, no_of_parts, experiment):
+    t = TimeSlot.objects.get_or_create(date=date, start_time=start_time, no_of_parts=no_of_parts, experiment=experiment)[0]
     t.save()
     return t
 

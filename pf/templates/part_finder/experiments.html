@@ -12,169 +12,168 @@
 {% block body_block %}
     {% if experiment %}
         <div class="container-fluid">
-        <div class="row" style="min-height: 300px;">
-            <!-- left column -->
-            <div class="col-md-6">
-                <h1>{{ experiment.name }}</h1>
-                <p><b>{{ experiment.city }}</b></p>
-                <br>
-                <p><b>Description</b></p>
-                <p>{{ experiment.long_description }}</p>
-                <br>
+            <div class="row" style="min-height: 300px;">
+                <!-- left column -->
+                <div class="col-md-6">
+                    <h1>{{ experiment.name }}</h1>
+                    <p><b>{{ experiment.city }}</b></p>
+                    <br>
+                    <p><b>Description</b></p>
+                    <p>{{ experiment.long_description }}</p>
+                    <br>
 
-                <!-- Application form -->
-                <h2>Apply</h2>
-                {%  if user.is_authenticated and user.profile.typex == 'Participant' %}
-                    {% if experiment.has_ended %}
-                        <p style="color: #ff0000">This Experiment Has Ended</p>
-                    {% elif experiment.is_full == True %}
-                        <p>Sorry, this experiment is now full</p>
-                    {% elif user_applied == True %}
-                        <p>You have already applied for this experiment. <a href="{% url 'participant_experiments' %}">View here.</a> </p>
-                    {% elif valid != True %}
-                        <p>Based on your profile, you do not meet the requirements for this experiment.</p>
+                    <!-- Application form -->
+                    <h2>Apply</h2>
+                    {%  if user.is_authenticated and user.profile.typex == 'Participant' %}
+                        {% if experiment.has_ended %}
+                            <p style="color: #ff0000">This Experiment Has Ended</p>
+                        {% elif experiment.is_full == True %}
+                            <p>Sorry, this experiment is now full</p>
+                        {% elif user_applied == True %}
+                            <p>You have already applied for this experiment. <a href="{% url 'participant_experiments' %}">View here.</a> </p>
+                        {% elif valid != True %}
+                            <p>Based on your profile, you do not meet the requirements for this experiment.</p>
+                        {% else %}
+                            <p>Pick a time slot and accept the terms</p>
+                            <form id="appform" method="post" action="">
+                                {% csrf_token %}
+                                {% bootstrap_form appform %}
+                                <input class="btn btn-default" type="submit" name="submit"  value="Apply" />
+                            </form>
+                        {% endif %}
+
+                        <!-- Check if user is a reaseacher, researchers cannot apply -->
+                    {% elif user.profile.typex == 'Researcher'%}
+                        <p>You must be a registered participant to apply.</p>
                     {% else %}
-                        <p>Pick a time slot and accept the terms</p>
-                        <form id="appform" method="post" action="">
-                            {% csrf_token %}
-                            {% bootstrap_form appform %}
-{#                            {% bootstrap_form_errors appform %}#}
-                            <input class="btn btn-default" type="submit" name="submit"  value="Apply" />
-                        </form>
+                        <!-- Ensure that user is logged in to apply. -->
+                        <p>Please <a href="/accounts/login">login</a> to apply.</p>
                     {% endif %}
-
-                    <!-- Check if user is a reaseacher, researchers cannot apply -->
-                {% elif user.profile.typex == 'Researcher'%}
-                    <p>You must be a registered participant to apply.</p>
-                {% else %}
-                    <!-- Ensure that user is logged in to apply. -->
-                    <p>Please <a href="/accounts/login">login</a> to apply.</p>
-                {% endif %}
-            </div>
-
-            <!-- Right column -->
-            <div class="col-md-6">
-                <!-- Well containing exp information -->
-                <div style="margin-top: 20px;">
-                    <span class='st_sharethis_large' displayText='ShareThis'></span>
-                    <span class='st_facebook_large' displayText='Facebook'></span>
-                    <span class='st_twitter_large' displayText='Tweet'></span>
-                    <span class='st_email_large' displayText='Email'></span>
-                    <span></span>
                 </div>
 
-                <!-- right half 2 of page, more info -->
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                    {% easy_map experiment.address 500 350 using 'part_finder/map.html' %}
+                <!-- Right column -->
+                <div class="col-md-6">
+                    <!-- Well containing exp information -->
+                    <div style="margin-top: 20px;">
+                        <span class='st_sharethis_large' displayText='ShareThis'></span>
+                        <span class='st_facebook_large' displayText='Facebook'></span>
+                        <span class='st_twitter_large' displayText='Tweet'></span>
+                        <span class='st_email_large' displayText='Email'></span>
+                        <span></span>
+                    </div>
+
+                    <!-- right half 2 of page, more info -->
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            {% easy_map experiment.address 500 350 using 'part_finder/map.html' %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <br>
+            <!-- Bottom half, more details -->
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <!-- left col-->
+                    <div class="col-md-6">
+                        <h4><b>Requirements</b></h4>
+
+                        {% if reqs %}
+                            {% if match_detail %}
+
+                                <!-- check for student -->
+                                {% if reqs.student %}
+                                    <p><b>Student Participants Only</b></p>
+                                {% endif %}
+
+                                <!-- check for language -->
+                                {% if reqs.language %}
+                                    <p><b>Language(s):</b> {{ lang_req }}</p>
+                                {% endif %}
+
+                                <!-- check for gender -->
+                                {% if reqs.gender %}
+                                    <p><b>Gender:</b> {{ match_detail.gender }}</p>
+                                {% endif %}
+
+                                <!-- check for age -->
+                                {% if reqs.age %}
+                                    <p><b>Min Age:</b> {{ match_detail.min_age }}<b> Max Age:</b> {{ match_detail.max_age }}</p>
+                                {% endif %}
+
+
+                                <!-- check for height -->
+                                {% if reqs.height %}
+                                    <p><b>Min Height:</b> {{ match_detail.min_height }} CM<b> Max Height:</b> {{ match_detail.max_height }} CM</p>
+                                {% endif %}
+
+                                <!-- check for weight -->
+                                {% if reqs.height %}
+                                    <p><b>Min Weight:</b> {{ match_detail.min_weight }} KG<b> Max Weight:</b> {{ match_detail.max_weight }} KG</p>
+                                {% endif %}
+
+                                {% if reqs.match == False %}
+                                    <p><b>Available to all</b></p>
+                                {% endif %}
+                            {% endif %}
+
+                        {% else %}
+                            <p><b>Available to all</b></p>
+                        {% endif %}
+
+                        <br>
+
+                        <!-- more info section -->
+                        <h4><b>More info</b></h4>
+                        <p><b><a href="{% url 'researcher_profile' researcher.userprofile.user.username %}">Researcher Profile</a></b></p>
+                        <b>Experiment URL: </b><a href="{{ experiment.url }}">{{ experiment.url }}</a>
+                        <br>
+                        <br>
+                        <h4><b>Address:</b></h4>
+                        {{ experiment.address }}
+                    </div>
+
+                    <!-- right col-->
+                    <div class="col-md-6">
+                        <h4><b>Payment</b></h4>
+                        <!-- payment info -->
+                        {% if payment.is_paid.is_paid == 'Yes' %}
+                            <p><b>Type:</b> {{ payment.currency }}&nbsp;&nbsp;&nbsp;<b>Amount (£)</b>: {{ payment.amount|floatformat:2 }}&nbsp;&nbsp;&nbsp;   <b>Frequency</b>: {{ payment.payment_type }}&nbsp;&nbsp;&nbsp;</p>
+                        {% else %}
+                            <p>N/A</p>
+                        {% endif %}
+
+
+                        <br>
+                        <!-- Timeslots table -->
+                        <h4><b>Timeslots</b></h4>
+                        <p><b>Duration:</b> {{ experiment.duration }} mins</p>
+                        <div class="table table-responsive table-striped" data-example-id="simple-table" >
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th><span class="glyphicon glyphicon-time" aria-hidden="true"> Date</span></th>
+                                    <th><span class="glyphicon glyphicon-time" aria-hidden="true"> Time</span></th>
+                                    <th><span class="glyphicon glyphicon-user" aria-hidden="true"> Capacity</span></th>
+                                </tr>
+                                </thead>
+
+                                <body>
+                                {% for t in timeslots %}
+                                    <tr>
+                                        <td><b>{{ t.date }}</b> </td>
+                                        <td>{{ t.start_time }} - {{ t.end_time }}</td>
+                                        <td>{% if t.is_full %}<span style="color: #f00;">FULL</span>{% else %}{{ t.current_parts }} / {{ t.no_of_parts }}{% endif %}</td>
+                                    </tr>
+                                {% endfor %}
+                                </body>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-<br>
-<br>
-        <!-- Bottom half, more details -->
-            <div class="panel panel-default">
-                <div class="panel-body">
-                <!-- left col-->
-                <div class="col-md-6">
-                    <h4><b>Requirements</b></h4>
-
-                    {% if reqs %}
-                        {% if match_detail %}
-
-                        <!-- check for student -->
-                        {% if reqs.student == '1' %}
-                            <p><b>Student Participants Only</b></p>
-                        {% endif %}
-
-                        <!-- check for language -->
-                        {% if reqs.language == '1' %}
-                            <p><b>Language(s):</b> {{ lang_req }}</p>
-                        {% endif %}
-
-                        <!-- check for gender -->
-                        {% if reqs.gender == '1' %}
-                            <p><b>Gender:</b> {{ match_detail.gender }}</p>
-                        {% endif %}
-
-                        <!-- check for age -->
-                        {% if reqs.age == '1' %}
-                            <p><b>Min Age:</b> {{ match_detail.min_age }}<b> Max Age:</b> {{ match_detail.max_age }}</p>
-                        {% endif %}
-
-
-                        <!-- check for height -->
-                        {% if reqs.height == '1' %}
-                            <p><b>Min Height:</b> {{ match_detail.min_height }} CM<b> Max Height:</b> {{ match_detail.max_height }} CM</p>
-                        {% endif %}
-
-                        <!-- check for weight -->
-                        {% if reqs.height == '1' %}
-                            <p><b>Min Weight:</b> {{ match_detail.min_weight }} KG<b> Max Weight:</b> {{ match_detail.max_weight }} KG</p>
-                        {% endif %}
-
-                        {% if reqs.match == False %}
-                            <p><b>Available to all</b></p>
-                        {% endif %}
-                        {% endif %}
-
-                    {% else %}
-                        <p><b>Available to all</b></p>
-                    {% endif %}
-
-                    <br>
-
-                    <!-- more info section -->
-                    <h4><b>More info</b></h4>
-                    <p><b><a href="{% url 'researcher_profile' researcher.userprofile.user.username %}">Researcher Profile</a></b></p>
-                    <b>Experiment URL: </b><a href="{{ experiment.url }}">{{ experiment.url }}</a>
-                    <br>
-                    <br>
-                    <h4><b>Address:</b></h4>
-                    {{ experiment.address }}
-                </div>
-
-                <!-- right col-->
-                <div class="col-md-6">
-                    <h4><b>Payment</b></h4>
-                    <!-- payment info -->
-                    {% if payment.is_paid.is_paid == 'Yes' %}
-                        <p><b>Type:</b> {{ payment.currency }}&nbsp;&nbsp;&nbsp;<b>Amount (£)</b>: {{ payment.amount }}&nbsp;&nbsp;&nbsp;   <b>Frequency</b>: {{ payment.payment_type }}&nbsp;&nbsp;&nbsp;</p>
-                    {% else %}
-                        <p>N/A</p>
-                    {% endif %}
-
-
-                    <br>
-                    <!-- Timeslots table -->
-                    <h4><b>Timeslots</b></h4>
-                    <p><b>Duration:</b> {{ experiment.duration }} mins</p>
-                    <div class="table table-responsive table-striped" data-example-id="simple-table" >
-                    <table class="table table-bordered">
-                        <thead>
-                        <tr>
-                            <th><span class="glyphicon glyphicon-time" aria-hidden="true"> Date</span></th>
-                            <th><span class="glyphicon glyphicon-time" aria-hidden="true"> Time</span></th>
-                            <th><span class="glyphicon glyphicon-user" aria-hidden="true"> Capacity</span></th>
-                            </tr>
-                        </thead>
-
-                    <body>
-                    {% for t in timeslots %}
-                        <tr>
-                        <td><b>{{ t.date }}</b> </td>
-                        <td>{{ t.start_time }} - {{ t.end_time }}</td>
-                        <td>{% if t.is_full %}<span style="color: #f00;">FULL</span>{% else %}{{ t.current_parts }} / {{ t.no_of_parts }}{% endif %}</td>
-                    </tr>
-                    {% endfor %}
-                    </body>
-                     </table>
-                    </div>
-                </div>
-            </div>
-            </div>
-    </div>
 
 
     {% else %}

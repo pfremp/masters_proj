@@ -21,12 +21,12 @@ class Requirement(models.Model):
     CHOICES = (('0','NO'),('1','YES'))
     DEF = 'NO'
     match = models.BooleanField(default=False)
-    student = models.CharField(max_length=128, null=False, choices=CHOICES)
-    age = models.CharField(max_length=128, null=False, choices=CHOICES)
-    language = models.CharField(max_length=128, null=False, choices=CHOICES)
-    height = models.CharField(max_length=128, null=False, choices=CHOICES)
-    weight = models.CharField(max_length=128, null=False, choices=CHOICES)
-    gender = models.CharField(max_length=128, null=False, choices=CHOICES)
+    student = models.BooleanField(default=False)
+    age = models.BooleanField(default=False)
+    language = models.BooleanField(default=False)
+    height = models.BooleanField(default=False)
+    weight = models.BooleanField(default=False)
+    gender = models.BooleanField(default=False)
     experiment = models.ForeignKey(Experiment, null=False, related_name="requirement")
 
     def __unicode__(self):

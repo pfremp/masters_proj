@@ -30,32 +30,27 @@ from django.template import RequestContext # For CSRF
 # Create your views here.
 
 
-
-#Homepage
+# Homepage
 def index(request):
     experiments_list = Experiment.objects.all()[:10]
-    payment_list = Payment.objects.all()
-    request = request
-    app = None
     filtered_exp = []
 
     # Display experiments based on user preferences
     for e in experiments_list:
         try:
             if request.user.is_authenticated() and request.user.profile.typex == 'Participant' and request.user.profile.participant != None :
-                if participant_pref_filter(request, e) == 0:
+                if participant_pref_filter(request, e):
                     filtered_exp.append(e)
             else:
                 filtered_exp = experiments_list
         except AttributeError:
             pass
 
-    context_dict = {'experiments' : experiments_list, 'payment_list': payment_list, 'request': request, 'filtered_exp':filtered_exp, 'app': app}
+    context_dict = {'experiments' : experiments_list, 'payment_list': Payment.objects.all(), 'request': request, 'filtered_exp':filtered_exp}
     return render(request, 'part_finder/index.html', context_dict)
 
 
-
-#Experiment timeslots
+# Experiment timeslots
 @login_required
 def exp_timeslots(request, experiment_id):
     researcher = request.user.profile.researcher
@@ -67,8 +62,7 @@ def exp_timeslots(request, experiment_id):
     return render(request, 'part_finder/timeslots.html', context_dict)
 
 
-
-#Displays list of ended experiments belonging to a researcher
+# Displays list of ended experiments belonging to a researcher
 @login_required
 def experiment_history(request):
     experiments = Experiment.objects.filter(researcher=request.user.profile.researcher)
@@ -89,17 +83,11 @@ def application_counter(exp):
         #increment if status is updated to accepted
         if app.status == 'Accepted':
             app.timeslot.current_parts += 1
-            app.timeslot.save()
-            print sys.stdout.write('Increment')
 
         #check to see if experiments are full
-        if app.timeslot.current_parts >= app.timeslot.no_of_parts:
-            app.timeslot.is_full = True
-            app.timeslot.save()
-        elif app.timeslot.current_parts <= app.timeslot.no_of_parts:
-            app.timeslot.is_full = False
-            app.timeslot.save()
+        app.timeslot.is_full = app.timeslot.current_parts >= app.timeslot.no_of_parts
 
+        app.timeslot.save()
 
 # Displays page for researcher to process experiment applications
 @login_required
@@ -116,17 +104,15 @@ def process_application(request, experiment_name_slug, r_slug):
 # Displays page to update application status
 @login_required
 def update_application_status(request, exp_id, app_id):
-    context_dict = {}
 
     researcher = request.user.profile.researcher
     experiment = Experiment.objects.get(id=exp_id)
     application = Application.objects.get(researcher=researcher, experiment=experiment, id=app_id)
-    timeslot = TimeSlot.objects.get(application=application)
 
     if request.method == 'POST':
         #if timeslot is full, dont allow applicant to be marked as accepted
         def get_app_form_post():
-            if application.timeslot.is_full == True:
+            if application.timeslot.is_full:
                 return UpdateStatusFormFull(request.POST)
             else:
                 return UpdateStatusForm(request.POST)
@@ -151,7 +137,7 @@ def update_application_status(request, exp_id, app_id):
             print temp_app_form.errors
     else:
         def get_app_form():
-            if application.timeslot.is_full == True:
+            if application.timeslot.is_full:
                 return UpdateStatusFormFull()
             else:
                 return UpdateStatusForm()
@@ -163,24 +149,13 @@ def update_application_status(request, exp_id, app_id):
     return render(request, 'part_finder/process_application_status.html', context_dict)
 
 
-
-#Check if all timeslots for an experiment are full
+# Check if all timeslots for an experiment are full
 def experiment_full(experiment):
     timeslots = TimeSlot.objects.filter(experiment=experiment)
-    counter =0
-    ts = 0
 
-    for timeslot in timeslots:
-        counter+= 1
-        ts += timeslot.is_full
-
-    if ts == counter:
-        experiment.is_full = True
-        experiment.save()
-    else:
-        experiment.is_full = False
-        experiment.save()
-
+    # iterates all timeslots and returns true if all satisfy the condition that they are full
+    experiment.is_full = all(slot.is_full for slot in timeslots)
+    experiment.save()
 
 
 # Display all experiments
@@ -194,7 +169,7 @@ def all_experiments(request):
     try:
         for e in experiments:
             if request.user.is_authenticated() and request.user.profile.typex == 'Participant' and request.user.profile.participant != None:
-                if participant_pref_filter(request, e) == 0:
+                if participant_pref_filter(request, e):
                     filtered_exp.append(e)
             else:
                 filtered_exp = experiments
@@ -203,18 +178,7 @@ def all_experiments(request):
 
     context_dict = {'experiments': experiments, 'payment_list': payment_list, 'request': request, 'filtered_exp':filtered_exp}
 
-    return render (request, 'part_finder/all_experiments.html', context_dict)
-
-
-# Get requirements for an experiment
-def get_requirements(experiment):
-    reqs = Requirement.objects.get(experiment=experiment)
-
-    for attr, value in reqs.__dict__.iteritems.filter(id):
-        if attr == 'id' or attr == 'match' or attr == 'experiment_id' or attr == '_state':
-           pass
-        else:
-            print attr, value
+    return render(request, 'part_finder/all_experiments.html', context_dict)
 
 
 # Display single experiment
@@ -230,82 +194,48 @@ def experiment (request, experiment_name_slug, r_slug):
         valid = ''
         part_valid = ''
 
-
-        #check if all experiment timeslots are full
+        # check if all experiment timeslots are full
         experiment_full(experiment)
 
         # get user applications
         def get_user_apps():
             if request.user.is_anonymous():
-                a = Application.objects.all()
-                return a
+                return Application.objects.all()
             else:
-                a = Application.objects.filter(participant=request.user.profile.participant)
-                return a
+                return Application.objects.filter(participant=request.user.profile.participant)
 
-        a = get_user_apps()
+        # checks to see if user has already applied for this experiment
+        userapplied = any(application.experiment.id == experiment.id for application in get_user_apps())
 
-        #check if user has already applied for experiment
-        def check_already_applied():
-            applied = False
-
-            for Application in a:
-                if Application.experiment.id == experiment.id:
-                    applied = True
-
-            return applied
-
-        userapplied = check_already_applied()
-
-        #get participant requirment details
+        # get participant requirement details
         try:
             reqs = Requirement.objects.get(experiment=experiment)
             match_detail = MatchingDetail.objects.get(requirement=reqs)
             # Remove special characters from language_req string
             language_req = match_detail.l.replace('[','').replace('u','').replace("'",'').replace(']','')
 
-        except (Requirement.DoesNotExist, MatchingDetail.DoesNotExist) , e:
+        except (Requirement.DoesNotExist, MatchingDetail.DoesNotExist):
             reqs = None
             match_detail = None
             language_req = None
 
-
-        if views_user.no_user_profile(request) == True:
-            pass
-            # return redirect_to_reg(request)
-        else:
-
+        if not views_user.no_user_profile(request):
             try:
-            #Check if logged in participant meets requirements.
+                # Check if logged in participant meets requirements.
                 if request.user.is_authenticated() and request.user.profile.typex == 'Participant':
-                    check_eligible_valid = check_applicant_validity(request, experiment)
+                    valid = check_applicant_validity(request, experiment)
 
-                    if check_eligible_valid == 0:
-                        valid = True
-                    else:
-                        valid = False
+                    # check against participant preferences
+                    part_valid = participant_pref_filter(request, experiment)
 
-                    #check against participant preferences
-                    check_part_pref_valid = participant_pref_filter(request, experiment)
-
-
-                    if check_part_pref_valid == 0:
-                        part_valid = True
-                    else:
-                        part_valid = False
-
-            except (MatchingDetail.DoesNotExist , Requirement.DoesNotExist , reqs.DoesNotExist) , e:
+            except (MatchingDetail.DoesNotExist , Requirement.DoesNotExist , reqs.DoesNotExist):
                 reqs = None
                 match_detail = None
 
-
-        # check if eparticipant preferences
-
-
         context_dict= {'appform': appform, 'experiment_name': experiment.name, 'single_experiment': experiment_list,
-                       'experiment': experiment, 'user_applied': userapplied, 'timeslots': timeslots, 'researcher': researcher, 'payment': payment, 'valid': valid,
-                       'reqs': reqs, 'match_detail': match_detail, 'lang_req': language_req, 'part_valid': part_valid }
-
+                       'experiment': experiment, 'user_applied': userapplied, 'timeslots': timeslots, 'researcher': researcher,
+                       'payment': payment, 'valid': valid, 'reqs': reqs, 'match_detail': match_detail, 'lang_req': language_req,
+                       'part_valid': part_valid }
 
         # process experiment application form
         if request.method == 'POST':
@@ -326,11 +256,10 @@ def experiment (request, experiment_name_slug, r_slug):
              else:
                 print appform.errors
 
-    except (Experiment.DoesNotExist , Payment.DoesNotExist) , p:
+    except (Experiment.DoesNotExist , Payment.DoesNotExist):
         payment = None
 
     return render(request, 'part_finder/experiments.html', context_dict )
-
 
 
 # Add experiment
@@ -358,47 +287,34 @@ def add_experiment(request):
             experiment.researcher = res
             form.save()
 
-            #payment form details
+            # payment form details
             payment = payment_form.save(commit=False)
             payment.experiment = experiment
             payment_form.save()
 
-            #requirement form details
+            # requirement form details
             requirement = requirement_form.save(commit=False)
             requirement.experiment = experiment
-            # requirement_form.save()
 
-            #check experiment to see if it is matched and
-            #set matched bool to true.
+            # check experiment to see if it is matched and
+            # set matched bool to true.
 
-
-            # # set matched experiment to true
-            if requirement.age == '1':
-                requirement.match = True
-            if requirement.language == '1':
-                requirement.match = True
-            if requirement.height == '1':
-                requirement.match = True
-            if requirement.weight == '1':
-                requirement.match = True
-            if requirement.gender == '1':
-                requirement.match = True
-            if requirement.student == '1':
-                requirement.match = True
+            requirement.match = (requirement.age or requirement.language or
+                                requirement.height or requirement.weight or
+                                requirement.gender)
 
             requirement_form.save()
 
             for form in time_slot_formset.forms:
                 time_slot = form.save(commit=False)
-                # todo_item.list = todo_list
                 time_slot.experiment = experiment
+                # add duration to start time in order to get end time
+                time_slot.end_time = str(datetime.timedelta(hours=time_slot.start_time.hour, minutes=time_slot.start_time.minute) + datetime.timedelta(minutes=experiment.duration))[-8:]
                 time_slot.save()
 
-            # if only student is true then redirect to res exp area
-            if (requirement.age == '0' and requirement.language == '0' and requirement.height == '0' and requirement.weight == '0' and requirement.gender == '0' and requirement.student == '1'):
-                return HttpResponseRedirect(reverse('researcher_experiments'))
-            elif requirement.match == True:
-                return HttpResponseRedirect(reverse('set_match', args=[experiment.id] ))
+            # if experiment is matched redirect to details form
+            if requirement.match:
+                return HttpResponseRedirect(reverse('set_match', args=[experiment.id]))
             else:
                 return HttpResponseRedirect(reverse('researcher_experiments'))
 
@@ -409,17 +325,16 @@ def add_experiment(request):
 
     else:
         form = ExperimentForm()
-
         time_slot_formset = TimeSlotFormSet()
         payment_form = PaymentForm()
         requirement_form = RequirementForm()
 
-    c = {'form':form, 'time_slot_formset': time_slot_formset, 'payment_form': payment_form, 'requirement_form': requirement_form}
+    c = {'form':form, 'time_slot_formset': time_slot_formset, 'payment_form': payment_form,
+         'requirement_form': requirement_form}
+
     c.update(csrf(request))
 
     return render(request, 'part_finder/add_experiment.html', c)
-
-
 
 
 # Update experiment
@@ -427,22 +342,19 @@ class ExperimentUpdate(UpdateView):
     model = Experiment
     form_class = ExperimentForm
     template_name = 'part_finder/experiment_update.html'
-    success_url='/part_finder/current_experiments/'
-
+    success_url = '/part_finder/current_experiments/'
 
     def get_queryset(self):
         qs = super(ExperimentUpdate, self).get_queryset()
-        exp = qs.filter(researcher=self.request.user.profile.researcher)
-        return exp
+        return qs.filter(researcher=self.request.user.profile.researcher)
 
 
-
-#Update experiment payment info.
+# Update experiment payment info.
 class PaymentUpdate(UpdateView):
     model = Payment
     form_class = PaymentForm
     template_name = 'part_finder/experiment_update.html'
-    success_url='/part_finder/current_experiments/'
+    success_url = '/part_finder/current_experiments/'
 
     def get_queryset(self):
         qs = super(PaymentUpdate, self).get_queryset()
@@ -450,14 +362,12 @@ class PaymentUpdate(UpdateView):
         return qs.filter(experiment=exp)
 
 
-
-#Update experiment timeslot
+# Update experiment timeslot
 class TimeSlotUpdate(UpdateView):
     model = TimeSlot
     form_class = TimeSlotForm
     template_name = 'part_finder/experiment_update.html'
-    success_url='/part_finder/current_experiments/'
-
+    success_url = '/part_finder/current_experiments/'
 
     def get_queryset(self):
         qs = super(TimeSlotUpdate, self).get_queryset()
@@ -470,8 +380,7 @@ class RequirementUpdate(UpdateView):
     model = Requirement
     form_class = RequirementForm
     template_name = 'part_finder/experiment_update.html'
-    success_url='/part_finder/current_experiments/'
-
+    success_url = '/part_finder/current_experiments/'
 
     def get_queryset(self):
         qs = super(RequirementUpdate, self).get_queryset()
@@ -485,8 +394,7 @@ class MatchDetailsUpdate(UpdateView):
     model = MatchingDetail
     form_class = MatchingDetailForm
     template_name = 'part_finder/experiment_update.html'
-    success_url='/part_finder/current_experiments/'
-
+    success_url = '/part_finder/current_experiments/'
 
     def get_queryset(self):
         qs = super(MatchDetailsUpdate, self).get_queryset()
@@ -494,13 +402,11 @@ class MatchDetailsUpdate(UpdateView):
         return qs.filter(requirement=req)
 
 
-
 @login_required
-#Delete experiment
+# Delete experiment
 def delete_experiment(request, experiment_id):
     r = request.user.profile.researcher
     e = Experiment.objects.get(id=experiment_id, researcher=r)
-
 
     if request.method == 'POST':
         e.delete()
@@ -510,9 +416,8 @@ def delete_experiment(request, experiment_id):
     return render(request, 'part_finder/delete_experiment.html', context_dict)
 
 
-
 @login_required
-#Delete participant experiment
+# Delete participant experiment
 def delete_participant_experiment(request, experiment_id):
     p = request.user.profile.participant
 
@@ -527,13 +432,11 @@ def delete_participant_experiment(request, experiment_id):
     return render(request, 'part_finder/delete_experiment.html', context_dict)
 
 
-
 @login_required
-#Mark experiment as ended
+# Mark experiment as ended
 def end_experiment(request, experiment_id):
     r = request.user.profile.researcher
     e = Experiment.objects.get(id=experiment_id, researcher=r)
-
 
     if request.method == 'POST':
         e.has_ended = True
@@ -546,11 +449,10 @@ def end_experiment(request, experiment_id):
 
 
 @login_required
-#Reactivate experiment as ended
+# Reactivate experiment as ended
 def reac_experiment(request, experiment_id):
     r = request.user.profile.researcher
     e = Experiment.objects.get(id=experiment_id, researcher=r)
-
 
     if request.method == 'POST':
         e.has_ended = False
@@ -560,6 +462,3 @@ def reac_experiment(request, experiment_id):
     context_dict = {'experiment': e}
 
     return render(request, 'part_finder/reactivate_experiment.html', context_dict)
-
-
-

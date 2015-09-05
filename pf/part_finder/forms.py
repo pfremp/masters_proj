@@ -58,12 +58,12 @@ class TimeSlotForm(ModelForm):
     CHOICES = (('choice','choice'),('choice1','choice1') )
     date = forms.DateField(required=False, label="Experiment Date (DD/MM/YYYY)", initial=date.today(), validators=[validate_date], widget=SelectDateWidget)
     start_time = forms.TimeField(label="Start Time (HH:MM)", required=False, help_text="Please enter the start time using the 24hr format. e.g. 2.30pm = 14:30")
-    end_time = forms.TimeField(label="End Time (HH:MM)", required=False, help_text="Please enter the start time using the 24hr format. e.g. 2.30pm = 14:30")
+    # end_time = forms.TimeField(label="End Time (HH:MM)", required=False, help_text="Please enter the start time using the 24hr format. e.g. 2.30pm = 14:30")
     no_of_parts = forms.IntegerField(label="No of Participants Required", required=False, validators=[validate_gt1])
 
     class Meta:
         model = TimeSlot
-        fields = ('date', 'start_time', 'end_time', 'no_of_parts',)
+        fields = ('date', 'start_time', 'no_of_parts',)
 
 
 # Payment form
