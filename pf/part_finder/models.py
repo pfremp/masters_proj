@@ -12,9 +12,10 @@ from smart_selects.db_fields import ChainedForeignKey
 from django.core.exceptions import ValidationError
 import datetime
 
-#Education Levels
+
+# Education Levels
 EDUCATION = (('HS' , 'High School Level'),
-            ('SCQF3', '  -Access 3 / Foundation Standard Grade'),
+             ('SCQF3', '  -Access 3 / Foundation Standard Grade'),
              ('SCQF4', '-Intermediate 1 / General Standard Grade'),
              ('SCQF5','-Intermediate 2 / Credit Standard Grade'),
              ('GCSE','-GCSE'),
@@ -34,6 +35,7 @@ SEX = (('Male','Male'), ('Female','Female'), ('PNTS','Prefer not to say'))
 
 YOS = (('1' , '1'), ('2' , '2'),('3' , '3'),('4' , '4'),('5' , '5'))
 
+
 # Validate Int is grater than 1
 def validate_gt1(value):
     if value <= 0:
@@ -46,6 +48,7 @@ class University(models.Model):
 
     def __unicode__(self):
         return self.name
+
 
 # Researcher
 class Researcher(models.Model):
@@ -93,8 +96,6 @@ class Experiment(models.Model):
         return self.name
 
 
-
-
 # Participant
 class Participant(models.Model):
     dob = models.DateField(("Date"), default=date.today, null=True)
@@ -105,19 +106,19 @@ class Participant(models.Model):
     education = models.CharField(choices=EDUCATION, blank=True, max_length=1000)
     student = models.BooleanField(default=False, blank=True)
 
-    #Student Information
+    # Student Information
     university = models.ForeignKey(University, blank=True, null=True)
     course_name = models.CharField(max_length=100, null=True, blank=True)
     year = models.IntegerField(null=True)
     matric = models.CharField(max_length=20, null=True)
 
-    #Demographic informatuon
+    # Demographic informatuon
     gender = models.CharField(max_length=128, blank=True, choices=SEX)
     #Health information
     height = models.IntegerField(blank=True, null=True)
     weight = models.IntegerField(blank=True, null=True )
 
-    #Preferences
+    # Preferences
     city_only = models.BooleanField(blank=True, default=False)
     my_uni_only = models.BooleanField(default=False, blank=True)
     online_only = models.BooleanField(default=False, blank=True)
@@ -132,7 +133,7 @@ class Participant(models.Model):
         return self.userprofile.user.username
 
 
-#User Profile
+# User Profile
 class UserProfile(models.Model):
     user = models.OneToOneField(User, related_name='profile', unique=True)
     typex = models.CharField("type", max_length=128, blank=False)

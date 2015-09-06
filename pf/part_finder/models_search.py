@@ -15,6 +15,7 @@ from part_finder.models import Experiment, Languages
 
 GENDER = (('male', 'Male'), ('female','Female'))
 
+
 # Experiemnt requirements :-
 # Stores whether a particular requirement will be used for an experiment
 class Requirement(models.Model):
@@ -31,6 +32,7 @@ class Requirement(models.Model):
 
     def __unicode__(self):
         return self.experiment.name + " Requirement"
+
 
 # Experiment requirement details
 # Stores the specific requirement details for an experiment

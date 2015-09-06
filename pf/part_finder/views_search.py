@@ -15,7 +15,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.context_processors import csrf
 from django.core.urlresolvers import reverse
 import sys
-import  datetime
+import datetime
 
 
 # Retrieve active participant user
@@ -101,8 +101,7 @@ def check_applicant_validity(request, experiment):
     return True
 
 
-
-#participant preferences matching
+# participant preferences matching
 def participant_pref_filter(request, experiment):
     participant = get_participant(request)
     payment = Payment.objects.get(experiment=experiment)
@@ -122,14 +121,14 @@ def participant_pref_filter(request, experiment):
         return False
 
     # check for city only - only show experiemnts from the participant's city
-    if participant.city_only and experiment.city !=  participant.city:
+    if participant.city_only and experiment.city != participant.city:
         return False
 
     # check for eligibility - only show experiments that participant is eligible for
     if participant.eligible_only and eligible != 0:
         return False
 
-    # Dont show experiments that have already been applied for
+    # Don't show experiments that have already been applied for
     if participant.non_applied_only and (experiment in [a.experiment for a in applications]):
         return False
 
@@ -139,6 +138,7 @@ def participant_pref_filter(request, experiment):
 # check if gender matches experiment gender
 def match_gender(participant, match_details):
     return participant.gender.lower() == match_details.gender.lower()
+
 
 # check is participant age meets the requirements
 def match_age(participant, match_details):

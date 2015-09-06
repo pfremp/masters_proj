@@ -16,7 +16,8 @@ from django.forms import ModelForm
 from smart_selects.db_fields import GroupedForeignKey
 from autocomplete_light_registry import *
 
-# Requirment form
+
+# Requirement form
 # Form will be displayed on "Add Experiment" page
 class RequirementForm (forms.ModelForm):
 

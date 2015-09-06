@@ -17,9 +17,9 @@ from smart_selects.db_fields import GroupedForeignKey
 from django.forms.extras.widgets import *
 
 
-#Education Levels
+# Education Levels
 EDUCATION = (('HS' , 'High School Level'),
-            ('SCQF3', '  -Access 3 / Foundation Standard Grade'),
+             ('SCQF3', '  -Access 3 / Foundation Standard Grade'),
              ('SCQF4', '-Intermediate 1 / General Standard Grade'),
              ('SCQF5','-Intermediate 2 / Credit Standard Grade'),
              ('GCSE','-GCSE'),
@@ -62,9 +62,7 @@ class SignupForm(forms.Form):
         userprofile.save()
 
 
-
-
-#participant form1 - general details
+# participant form1 - general details
 class ParticipantForm1 (autocomplete_light.ModelForm):
 
     contact_number = forms.IntegerField(required=False, label="Contact No" , help_text="07712345678")
@@ -79,25 +77,24 @@ class ParticipantForm1 (autocomplete_light.ModelForm):
         fields = ('city','contact_number','dob','student')
 
 
-#participant form 2 - extra info used for matching experiments
+# participant form 2 - extra info used for matching experiments
 class ParticipantForm2 (autocomplete_light.ModelForm):
     education = forms.ChoiceField(choices=EDUCATION, label="Level of Education", required=True)
     occupation = forms.CharField(required=False, label="Occupation", max_length=128)
 
-    #university details
-    # university = forms.ModelChoiceField(label="University", queryset=University.objects.all(), required=False)
+    # university details
     course_name = forms.CharField(label="Course Name",max_length=128, required=False)
     year_of_study = forms.ChoiceField(choices=YOS, label="Year of Study", required=False)
     matric = forms.CharField(label="Matric", required=False)
 
-    #Demographic
+    # Demographic
     gender = forms.ChoiceField(required=False, label="Gender", choices=SEX)
 
-    #Health information
+    # Health information
     height = forms.IntegerField(label="Height (CM)", required=False)
     weight = forms.IntegerField(label="Weight (KG)", required=False)
 
-    #preferences
+    # preferences
     online_only = forms.BooleanField(label="Online Only", required=False, help_text="Only show online experiments.")
     paid_only = forms.BooleanField(label="Paid Only", required=False, help_text="Only show paid experiments.")
     my_uni_only = forms.BooleanField(label="My Uni Only", required=False, help_text="Only show experiments from my univerisy.")
@@ -128,9 +125,9 @@ class PartGeneralUpdateForm (autocomplete_light.ModelForm):
         model = Participant
         fields = ('dob','city','contact_number','occupation','education', 'language', 'student')
 
+
 # Participant Update form - Student Details
 class PartStudentUpdateForm (autocomplete_light.ModelForm):
-    # university = forms.ModelChoiceField(label="University", queryset=University.objects.all(), required=False)
     course_name = forms.CharField(label="Course Name",max_length=128, required=False)
     year_of_study = forms.ChoiceField(choices=YOS, label="Year of Study", required=False)
     matric = forms.CharField(label="Matric", required=False)
@@ -142,15 +139,15 @@ class PartStudentUpdateForm (autocomplete_light.ModelForm):
         model = Participant
         fields = ('university', 'course_name', 'year_of_study', 'matric')
 
+
 # Participant Update form - Demographic Details
 class PartDemoUpdateForm (forms.ModelForm):
     SEX = (('Male','Male'), ('Female','Female'), ('PNTS','Prefer not to say'))
-    #Demographic
+    # Demographic
     gender = forms.ChoiceField(choices=SEX, required=False, label="Gender")
-    #Health information
+    # Health information
     height = forms.IntegerField(label="Height (cm)", required=False)
     weight = forms.IntegerField(label="Weight (kg)", required=False)
-
 
     class Meta():
         model = Participant
@@ -166,10 +163,10 @@ class PartPrefUpdateForm (forms.ModelForm):
     eligible_only = forms.BooleanField(label="Eligible Only", required=False, help_text="Only show experiments that I am eligible for")
     non_applied_only = forms.BooleanField(label="Non Applied Experiments Only", required=False, help_text="Don't show listings for experiments you have already applied for")
 
-
     class Meta():
         model = Participant
         fields = ('online_only', 'paid_only' , 'my_uni_only', 'eligible_only','city_only', 'non_applied_only')
+
 
 # Participant Update form - Preference Details (Non student)
 class PartPrefUpdateFormNS (forms.ModelForm):
@@ -179,10 +176,10 @@ class PartPrefUpdateFormNS (forms.ModelForm):
     eligible_only = forms.BooleanField(label="Eligible Only", required=False, help_text="Only show experiments that I am eligible for")
     non_applied_only = forms.BooleanField(label="Non Applied Experiments Only", required=False, help_text="Don't show listings for experiments you have already applied for")
 
-
     class Meta():
         model = Participant
         fields = ('online_only', 'paid_only' , 'eligible_only','city_only', 'non_applied_only')
+
 
 # User account update form
 class UserAccountUpdateForm(forms.ModelForm):
@@ -192,13 +189,12 @@ class UserAccountUpdateForm(forms.ModelForm):
         exclude = ('is_superuser', 'last_login', 'groups', 'user_permissions', 'is_staff', 'is_active', 'date_joined')
 
 
-#Researcher Details Form
+# Researcher Details Form
 class ResearcherForm (autocomplete_light.ModelForm):
-   # university = forms.ModelChoiceField(label="University", queryset=University.objects.all(), required=False)
-   department = forms.CharField(label="Department Name", max_length=128)
-   contact_no = forms.IntegerField(label="Contact Number", help_text="e.g. 07712345678")
-   url = forms.CharField(label="URL (Format: http://yoursite.com)")
+    department = forms.CharField(label="Department Name", max_length=128)
+    contact_no = forms.IntegerField(label="Contact Number", help_text="e.g. 07712345678")
+    url = forms.CharField(label="URL (Format: http://yoursite.com)")
 
-   class Meta():
+    class Meta():
         model = Researcher
         fields =  ('university','department', 'contact_no', 'url')

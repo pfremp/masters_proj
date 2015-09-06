@@ -240,9 +240,9 @@ def experiment (request, experiment_name_slug, r_slug):
         # process experiment application form
         if request.method == 'POST':
 
-             appform = ApplicationForm(experiment, request.POST)
+            appform = ApplicationForm(experiment, request.POST)
 
-             if appform.is_valid():
+            if appform.is_valid():
                 application = appform.save(commit=False)
                 application.researcher = experiment.researcher
                 application.participant = request.user.profile.participant
@@ -253,7 +253,7 @@ def experiment (request, experiment_name_slug, r_slug):
 
                 return HttpResponseRedirect(reverse('participant_experiments'))
 
-             else:
+            else:
                 print appform.errors
 
     except (Experiment.DoesNotExist , Payment.DoesNotExist):
@@ -300,8 +300,8 @@ def add_experiment(request):
             # set matched bool to true.
 
             requirement.match = (requirement.age or requirement.language or
-                                requirement.height or requirement.weight or
-                                requirement.gender)
+                                 requirement.height or requirement.weight or
+                                 requirement.gender)
 
             requirement_form.save()
 

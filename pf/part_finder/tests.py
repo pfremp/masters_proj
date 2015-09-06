@@ -119,20 +119,20 @@ class ModelTests(TestCase):
         self.assertIsNone(exp.full_clean(), True)
 
 
-    # # Ensure timeslot has experiment
-    # def test_timeslot_has_exp(self):
-    #     timeslot = self.ts
-    #
-    #     timeslot.experiment=None
-    #     self.assertRaises(ValidationError,  )
-    #     print timeslot.experiment
+        # # Ensure timeslot has experiment
+        # def test_timeslot_has_exp(self):
+        #     timeslot = self.ts
+        #
+        #     timeslot.experiment=None
+        #     self.assertRaises(ValidationError,  )
+        #     print timeslot.experiment
 
 
 # Tests for all forms
 class FormTests(TestCase):
 
 
-     # Setup Timeslot, Experiment and Researcher
+    # Setup Timeslot, Experiment and Researcher
     def setUp(self):
         populate_pf.populate()
 

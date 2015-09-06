@@ -20,8 +20,6 @@ from django.forms.extras.widgets import SelectDateWidget
 from django.forms.widgets import SplitDateTimeWidget
 
 
-
-
 # Validators
 
 # Validate Date - experiment date cannot be a historic date

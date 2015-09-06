@@ -200,13 +200,13 @@ def refresh_reqs(experiment):
         # check requirements to see what reqs
         # the participant needs to have.
         if (requirement.age or requirement.language or requirement.height or
-            requirement.gender or requirement.weight or requirement.student):
+                requirement.gender or requirement.weight or requirement.student):
             requirement.match = True
             requirement.save()
 
         # If the requirements have been removed, set "match" back to false.
         if (requirement.age == False and requirement.language == False and requirement.height == False and
-            requirement.weight == False and requirement.gender == False and requirement.student == False):
+                    requirement.weight == False and requirement.gender == False and requirement.student == False):
             requirement.match = False
             requirement.save()
 

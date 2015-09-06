@@ -3,6 +3,7 @@ from django.core.mail import send_mail
 from pf.settings import SITE_ADDRESS
 from django.core.urlresolvers import reverse
 
+
 # email for experiment application
 def experiment_app_email(application):
     # send email to researcher
@@ -16,7 +17,7 @@ def experiment_app_email(application):
               'participantfinder1@gmail.com', (application.participant.userprofile.user.email,), fail_silently=False)
 
 
-#email for experiment status update
+# email for experiment status update
 def app_status_update_email(application):
     # send email to researcher
     send_mail('Application Status Update: ' + application.experiment.name, 'Hello '+ application.researcher.userprofile.user.first_name +', '+'\n\nThis email confirms that you have updated the status for "'+ application.participant.userprofile.user.first_name +' ' + application.participant.userprofile.user.last_name +"'s " +

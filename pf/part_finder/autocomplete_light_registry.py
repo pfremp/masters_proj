@@ -5,7 +5,7 @@ import autocomplete_light.shortcuts as al
 
 # countries auto complete
 autocomplete_light.register(Country, search_fields=('name', 'name_ascii',),
-    autocomplete_js_attributes={'placeholder': 'country name ..'})
+                            autocomplete_js_attributes={'placeholder': 'country name ..'})
 
 # Auto complete region - filter by city
 class AutocompleteRegion(autocomplete_light.AutocompleteModelBase):
