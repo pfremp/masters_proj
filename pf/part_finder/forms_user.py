@@ -84,7 +84,7 @@ class ParticipantForm2 (autocomplete_light.ModelForm):
 
     # university details
     course_name = forms.CharField(label="Course Name",max_length=128, required=False)
-    year_of_study = forms.ChoiceField(choices=YOS, label="Year of Study", required=False)
+    year = forms.ChoiceField(choices=YOS, label="Year of Study", required=False)
     matric = forms.CharField(label="Matric", required=False)
 
     # Demographic
@@ -106,7 +106,7 @@ class ParticipantForm2 (autocomplete_light.ModelForm):
 
     class Meta():
         model = Participant
-        fields = ('education','occupation','language', 'university', 'course_name', 'year_of_study', 'matric', 'gender' ,'height', 'weight', 'online_only', 'paid_only' , 'my_uni_only', 'eligible_only','city_only')
+        fields = ('education','occupation','language', 'university', 'course_name', 'year', 'matric', 'gender' ,'height', 'weight', 'online_only', 'paid_only' , 'my_uni_only', 'eligible_only','city_only')
 
 
 # Participant Update form - General Details
@@ -129,7 +129,7 @@ class PartGeneralUpdateForm (autocomplete_light.ModelForm):
 # Participant Update form - Student Details
 class PartStudentUpdateForm (autocomplete_light.ModelForm):
     course_name = forms.CharField(label="Course Name",max_length=128, required=False)
-    year_of_study = forms.ChoiceField(choices=YOS, label="Year of Study", required=False)
+    year = forms.ChoiceField(choices=YOS, label="Year of Study", required=False)
     matric = forms.CharField(label="Matric", required=False)
 
     class Media:
@@ -137,7 +137,7 @@ class PartStudentUpdateForm (autocomplete_light.ModelForm):
 
     class Meta():
         model = Participant
-        fields = ('university', 'course_name', 'year_of_study', 'matric')
+        fields = ('university', 'course_name', 'year', 'matric')
 
 
 # Participant Update form - Demographic Details
