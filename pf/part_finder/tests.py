@@ -75,8 +75,15 @@ class ViewTests(TestCase):
         print self.req.id
 
 
+# Test participant validity
+# Create participant
+# Create requirement
+# Create requirement detail
 
+class ViewsParticipantValidity(TestCase):
 
+    def setUp(self):
+        populate_pf.populate()
 
 
 

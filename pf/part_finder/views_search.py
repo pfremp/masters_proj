@@ -80,10 +80,12 @@ def check_applicant_validity(request, experiment):
 
     # check student status
     if requirement.student and not participant.student:
+        print False
         return False
 
     # check age
     if requirement.age and not match_age(participant,match_details):
+        print False
         return False
 
     # check language
@@ -149,7 +151,7 @@ def match_age(participant, match_details):
     max_age_date = date - (datetime.timedelta(days=max_years*365.25))
     participant_age = participant.dob
 
-    return not (participant_age <= min_age_date or participant_age >= max_age_date)
+    return not (participant_age >= min_age_date or participant_age <= max_age_date)
 
 
 # check if the participant has the required languages
@@ -159,7 +161,7 @@ def match_lang(participant, match_details):
     exp_lang = experiment_languages.split()
 
     # converts languages in participant languages list to lowercase and converts list to set
-    participant_languages_lower = set([lang.lower() for lang in participant_languages])
+    participant_languages_lower = set([str(lang).lower() for lang in participant_languages])
     # converts languages in required languages list to lowercase and converts list to set
     required_languages_lower = set([lang.lower() for lang in exp_lang])
 
@@ -168,12 +170,12 @@ def match_lang(participant, match_details):
 
 # check if the participant meets the height requirements
 def match_height(participant, match_details):
-    return participant.height > match_details.min_height and participant.height < match_details.max_height
+    return participant.height >= match_details.min_height and participant.height <= match_details.max_height
 
 
 # check if participant has the correct weight
 def match_weight(participant, match_details):
-    return participant.height > match_details.min_weight and participant.height < match_details.max_weight
+    return participant.weight >= match_details.min_weight and participant.weight <= match_details.max_weight
 
 
 

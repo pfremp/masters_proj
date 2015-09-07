@@ -44,7 +44,7 @@ def populate():
 
     #participant
     par1 = add_par(dob='1960-04-15',  city=None, contact_number='02154785985', occupation='Student', education='School', student=True, university=gla, course_name='Information Technology', year='3', height=150, weight=80, matric='325414785', gender='Male', online_only=False, paid_only=False, city_only=False, my_uni_only=False, eligible_only=False, reg_2_completed=False )
-    par2 = add_par(dob='1970-02-13', city=None, contact_number='08965785985', occupation='Student', education='School', student=True, university=gcu, course_name='Marketing', year='1', height=185, weight=50, matric='1478514525', gender='Female', online_only=False, paid_only=False, city_only=False, my_uni_only=False, eligible_only=False, reg_2_completed=False)
+    par2 = add_par(dob='1970-02-13', city=None, contact_number='08965785985', occupation='Student', education='School', student=True, university=gcu, course_name='Marketing', year=True, height=185, weight=50, matric='1478514525', gender='Female', online_only=False, paid_only=False, city_only=False, my_uni_only=False, eligible_only=False, reg_2_completed=False)
 
 
     #userprofile
@@ -153,14 +153,14 @@ def populate():
     add_lang_to_part(par2, l4)
     add_lang_to_part(par2, l5)
 
-    req1 = add_req(match=False, student='0', age='0', language='0',height='0', weight='0', gender='0', experiment=exp2)
-    req2 = add_req(match=True, student='1', age='1', language='1',height='1', weight='1', gender='1', experiment=exp1)
-    female = add_req(match=True, student='0', age='0', language='0',height='0', weight='0', gender='1', experiment=exp3)
-    student = add_req(match=True, student='1', age='0', language='0',height='0', weight='0', gender='0', experiment=exp4)
-    height = add_req(match=True, student='0', age='0', language='0',height='1', weight='0', gender='0', experiment=exp5)
-    weight = add_req(match=True, student='0', age='0', language='0',height='0', weight='1', gender='0', experiment=exp6)
-    age = add_req(match=True, student='0', age='1', language='0',height='0', weight='0', gender='0', experiment=exp7)
-    lang = add_req(match=True, student='0', age='0', language='1',height='0', weight='0', gender='0', experiment=exp8)
+    req1 = add_req(match=False, student=False, age=False, language=False,height=False, weight=False, gender=False, experiment=exp2)
+    req2 = add_req(match=True, student=True, age=True, language=True,height=True, weight=True, gender=True, experiment=exp1)
+    female = add_req(match=True, student=False, age=False, language=False,height=False, weight=False, gender=True, experiment=exp3)
+    student = add_req(match=True, student=True, age=False, language=False,height=False, weight=False, gender=False, experiment=exp4)
+    height = add_req(match=True, student=False, age=False, language=False,height=True, weight=False, gender=False, experiment=exp5)
+    weight = add_req(match=True, student=False, age=False, language=False,height=False, weight=True, gender=False, experiment=exp6)
+    age = add_req(match=True, student=False, age=True, language=False,height=False, weight=False, gender=False, experiment=exp7)
+    lang = add_req(match=True, student=False, age=False, language=True,height=False, weight=False, gender=False, experiment=exp8)
 
     # rte1 = add_exp_req(req1, exp1)
     # rte2 = add_exp_req(req2, exp2)
@@ -270,6 +270,7 @@ def is_paid(is_paid):
     ip = Is_paid.objects.get_or_create(is_paid=is_paid)[0]
     ip.save()
     return ip
+
 
 def add_currency(currency, is_paid):
     c = Currency.objects.get_or_create(currency=currency, is_paid=is_paid)[0]
