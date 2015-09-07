@@ -18,6 +18,7 @@ from part_finder.views_search import check_applicant_validity
 import datetime
 from django.http import HttpResponse, request, HttpRequest
 from django.contrib.auth.models import User
+import datetime
 
 
 from django.core.exceptions import ValidationError
@@ -275,8 +276,60 @@ class ViewsParticipantValidity(TestCase):
         # Test for required languages
         self.assertTrue(check_applicant_validity(self.participant.userprofile, self.experiment))
 
-    # Test Combinations of requirements
-    # Student
+    def test_age(self):
+        # Set age requirement to true
+        self.requirement.age = True
+        self.requirement.save()
+
+        # Set requirement detail
+        self.requirement_detail.min_age = 18
+        self.requirement_detail.max_age = 26
+        self.requirement_detail.save()
+
+        # Set participant age to meet requirements
+        self.participant.dob = datetime.date(year=1990, month=10, day=10)
+        self.participant.save()
+
+        # test
+        self.assertTrue(check_applicant_validity(self.participant.userprofile, self.experiment))
+
+    def test_student_gender_age(self):
+        # Test Combinations of requirements
+        # Student, Gender, Age
+
+        # set height, gender and age requirements to true
+        # self.requirement.student = True
+        self.requirement.age = True
+        # self.requirement.gender = True
+        self.requirement.save()
+
+        # set requirement details
+        # Age
+        self.requirement_detail.min_age = 18
+        self.requirement_detail.max_age = 25
+        # Gender
+        self.requirement_detail.gender = 'Male'
+        self.requirement.save()
+
+        # Update participant details to meet requirements
+        self.participant.dob = datetime.date(year=1992, month=10, day=10)
+        self.participant.gender = 'Male'
+        self.participant.student = True
+        self.participant.save()
+
+        # Test for student meeting all three requirements
+        self.assertTrue(check_applicant_validity(self.participant.userprofile, self.experiment))
+
+        # Test for student only meeting 2/3 requirements
+        self.participant.dob = datetime.date(year=1980, month=10, day=10)
+        self.participant.save()
+        self.assertFalse(check_applicant_validity(self.participant.userprofile, self.experiment))
+        # self.assertTrue(check_applicant_validity(self.participant.userprofile, self.experiment))
+
+
+
+
+
 
 # Tests for all models
 class ModelTests(TestCase):
