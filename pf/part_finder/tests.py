@@ -10,7 +10,7 @@ import populate_pf
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium import webdriver
 from selenium.webdriver.support import expected_conditions as EC
-from part_finder.models import TimeSlot, Experiment, University, Researcher, UserProfile, Participant
+from part_finder.models import TimeSlot, Experiment, University, Researcher, UserProfile, Participant, Languages
 from part_finder.forms import TimeSlotForm, ExperimentForm
 from part_finder.models_search import Requirement, MatchingDetail
 from part_finder.views_user import refresh_reqs
@@ -137,7 +137,6 @@ class ViewsParticipantValidity(TestCase):
         self.requirement_detail.gender = "Male"
         self.requirement_detail.save()
 
-
         # set participant gender to male
         self.participant.gender = "Male"
         self.participant.save()
@@ -183,15 +182,101 @@ class ViewsParticipantValidity(TestCase):
         self.requirement_detail.max_height = 150
         self.requirement_detail.save()
 
-        # Set participant height
+        # Set participant height - 100cm
         self.participant.height = 100
         self.participant.save()
 
-        # Test Min Height (equal to minimum)
-        
+        # Test Min Height (equal to minimum accepted)
+        self.assertTrue(check_applicant_validity(self.participant.userprofile, self.experiment))
 
+        # Set participant height - 125cm
+        self.participant.height = 125
+        self.participant.save()
 
+        # Test height in between min and max
+        self.assertTrue(check_applicant_validity(self.participant.userprofile, self.experiment))
 
+        # Set participant height to 150cm
+        self.participant.height = 150
+        self.participant.save()
+
+        # Test max height (equal to max accepted)
+        self.assertTrue(check_applicant_validity(self.participant.userprofile, self.experiment))
+
+        # Test lower than min height
+        self.participant.height = 80
+        self.participant.save()
+        self.assertFalse(check_applicant_validity(self.participant.userprofile, self.experiment))
+
+        # Test higher that max height
+        self.participant.height = 200
+        self.participant.save()
+        self.assertFalse(check_applicant_validity(self.participant.userprofile, self.experiment))
+
+    def test_weight(self):
+        # Set height requirement to true
+        self.requirement.weight = True
+        self.requirement.save()
+        # Set weight details
+        self.requirement_detail.min_weight = 60
+        self.requirement_detail.max_weight = 65
+        self.requirement_detail.save()
+
+        # Set participant weight - 60kg
+        self.participant.weight = 60
+        self.participant.save()
+
+        # Test Min Weight (equal to minimum accepted)
+        self.assertTrue(check_applicant_validity(self.participant.userprofile, self.experiment))
+
+        # Set participant weight - 61
+        self.participant.weight = 61
+        self.participant.save()
+
+        # Test wweight in between min and max
+        self.assertTrue(check_applicant_validity(self.participant.userprofile, self.experiment))
+
+        # Set participant weight to 65
+        self.participant.weight = 65
+        self.participant.save()
+
+        # Test max weight (equal to max accepted)
+        self.assertTrue(check_applicant_validity(self.participant.userprofile, self.experiment))
+
+        # Test lower than min weight
+        self.participant.weight = 59
+        self.participant.save()
+        self.assertFalse(check_applicant_validity(self.participant.userprofile, self.experiment))
+
+        # Test higher that max weight
+        self.participant.weight = 66
+        self.participant.save()
+        self.assertFalse(check_applicant_validity(self.participant.userprofile, self.experiment))
+
+    def test_language(self):
+        # Set language requirement to true
+        self.requirement.language = True
+        self.requirement.save()
+
+        # Set required languages(french and spanish)
+        self.requirement_detail.l = "French, Spanish"
+        self.requirement_detail.save()
+
+        # Test for when participant doesn't have all of the required languages
+        self.assertFalse(check_applicant_validity(self.participant.userprofile, self.experiment))
+
+        # Make sure student has the required languages
+        french = Languages.objects.get(language="French")
+        spanish = Languages.objects.get(language="Spanish")
+        self.participant.language.add(french)
+        self.participant.language.add(spanish)
+        self.participant.save()
+
+        # Test for required languages
+        self.assertTrue(check_applicant_validity(self.participant.userprofile, self.experiment))
+
+    # Test Combinations of requirements
+    # Student
 
 # Tests for all models
 class ModelTests(TestCase):
