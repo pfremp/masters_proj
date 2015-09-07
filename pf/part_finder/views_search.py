@@ -80,12 +80,10 @@ def check_applicant_validity(request, experiment):
 
     # check student status
     if requirement.student and not participant.student:
-        print False
         return False
 
     # check age
     if requirement.age and not match_age(participant,match_details):
-        print False
         return False
 
     # check language

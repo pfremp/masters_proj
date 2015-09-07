@@ -1,7 +1,7 @@
 # from django.test import TestCase
 import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "pf.settings")
-# from django.test import LiveServerTestCase
+from django.test import LiveServerTestCase
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.firefox.webdriver import WebDriver
 from django.contrib.auth.models import User
@@ -10,11 +10,16 @@ import populate_pf
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium import webdriver
 from selenium.webdriver.support import expected_conditions as EC
-from part_finder.models import TimeSlot, Experiment, University, Researcher, UserProfile
+from part_finder.models import TimeSlot, Experiment, University, Researcher, UserProfile, Participant
 from part_finder.forms import TimeSlotForm, ExperimentForm
 from part_finder.models_search import Requirement, MatchingDetail
 from part_finder.views_user import refresh_reqs
+from part_finder.views_search import check_applicant_validity
 import datetime
+from django.http import HttpResponse, request, HttpRequest
+from django.contrib.auth.models import User
+
+
 from django.core.exceptions import ValidationError
 
 # driver = webdriver.Firefox()
@@ -75,15 +80,116 @@ class ViewTests(TestCase):
         print self.req.id
 
 
-# Test participant validity
+# Test participant validity view
 # Create participant
 # Create requirement
 # Create requirement detail
-
 class ViewsParticipantValidity(TestCase):
 
     def setUp(self):
         populate_pf.populate()
+        self.participant = Participant.objects.all()[0]
+
+        # print self.participant
+        self.experiment = Experiment.objects.get(name="It's all in the face!")
+        # print experiment.name
+        self.requirement = Requirement.objects.get(experiment=self.experiment)
+        # print requirement
+        self.requirement_detail = MatchingDetail.objects.get(requirement=self.requirement)
+        # print requirement_detail
+
+        # set all requirements to false
+        self.requirement.student=False
+        self.requirement.age = False
+        self.requirement.language = False
+        self.requirement.height = False
+        self.requirement.weight = False
+        self.requirement.gender = False
+        self.requirement.save()
+        refresh_reqs(self.experiment)
+        # self.participant.userprofile.user.is_authenticated()
+
+    def test_valid_student(self):
+        # set requirement to require student participants
+        self.requirement.student = True
+        self.requirement.save()
+
+        # Set participant as student
+        self.participant.student = True
+        self.participant.save()
+
+        # Test to make sure valid student is eligible
+        self.assertTrue(check_applicant_validity(self.participant.userprofile, self.experiment))
+
+        # Test to make sure non-student is not eligible
+        # Set participant.student to False
+        self.participant.student = False
+        self.participant.save()
+        self.assertFalse(check_applicant_validity(self.participant.userprofile, self.experiment))
+        # # exception should be raised
+        # self.assertTrue(check_applicant_validity(self.participant.userprofile, self.experiment))
+
+    def test_gender_male(self):
+        # set gender requirement to true
+        self.requirement.gender = True
+        self.requirement.save()
+        # Set required gender to female
+        self.requirement_detail.gender = "Male"
+        self.requirement_detail.save()
+
+
+        # set participant gender to male
+        self.participant.gender = "Male"
+        self.participant.save()
+
+        # Test to make sure male participant is eligible
+        self.assertTrue(check_applicant_validity(self.participant.userprofile, self.experiment))
+
+        # set participant gender to female
+        self.participant.gender = "Female"
+        self.participant.save()
+
+        # Test to make sure non male applicants are not eligible
+        self.assertFalse(check_applicant_validity(self.participant.userprofile, self.experiment))
+
+    def test_gender_female(self):
+        # set gender requirement to true
+        self.requirement.gender = True
+        self.requirement.save()
+        # Set required gender to female
+        self.requirement_detail.gender = "Female"
+        self.requirement_detail.save()
+
+        # set participant gender to female
+        self.participant.gender = "Female"
+        self.participant.save()
+
+        # Test to make sure male participant is eligible
+        self.assertTrue(check_applicant_validity(self.participant.userprofile, self.experiment))
+
+        # set participant gender to male
+        self.participant.gender = "Male"
+        self.participant.save()
+
+        # Test to make sure non male applicants are not eligible
+        self.assertFalse(check_applicant_validity(self.participant.userprofile, self.experiment))
+
+    def test_height(self):
+        # Set height requirement to true
+        self.requirement.height = True
+        self.requirement.save()
+        # Set height details
+        self.requirement_detail.min_height = 100
+        self.requirement_detail.max_height = 150
+        self.requirement_detail.save()
+
+        # Set participant height
+        self.participant.height = 100
+        self.participant.save()
+
+        # Test Min Height (equal to minimum)
+        
+
 
 
 
@@ -105,7 +211,6 @@ class ModelTests(TestCase):
 
         # Timeslot
         self.ts = TimeSlot.objects.create(date=datetime.date(2016,12,12), start_time='12:00', end_time='14:00', no_of_parts=5, current_parts = 0, experiment = Experiment.objects.all()[0])
-
 
     # Test Historic Date - model
     def test_ts_historic_date_model(self):

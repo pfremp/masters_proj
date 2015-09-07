@@ -23,6 +23,7 @@ def populate():
     res_user2 = add_user(first_name='Dr. Angela', last_name='Matthews', username='amatthew', email='dramatthews@gcu.ac.uk', password=111111, is_active=True)
     res_user3 = add_user(first_name='Dr John', last_name='Thomas', username='jenkins', email='tjenkins@strath.ac.uk', password=111111, is_active=True)
 
+
     #universities
     gla = add_uni(name='University of Glasgow')
     gcu = add_uni(name='Glasgow Caledonian University')
