@@ -59,8 +59,6 @@ class ViewTests(TestCase):
         print self.req.id
         print "match at t1e " + str(self.req.student)
 
-
-
     def test_refresh_reqs_true(self):
         print "test 2"
         self.req.student = True

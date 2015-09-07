@@ -197,4 +197,4 @@ class ResearcherForm (autocomplete_light.ModelForm):
 
     class Meta():
         model = Researcher
-        fields =  ('university','department', 'contact_no', 'url')
+        fields = ('university','department', 'contact_no', 'url')

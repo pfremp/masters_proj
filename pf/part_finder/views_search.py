@@ -75,27 +75,27 @@ def check_applicant_validity(request, experiment):
         return True
 
     # check gender
-    if requirement.gender == '1' and not match_gender(participant, match_details):
+    if requirement.gender and not match_gender(participant, match_details):
         return False
 
     # check student status
-    if requirement.student == '1' and not participant.student:
+    if requirement.student and not participant.student:
         return False
 
     # check age
-    if requirement.age == '1' and not match_age(participant,match_details):
+    if requirement.age and not match_age(participant,match_details):
         return False
 
     # check language
-    if requirement.language == '1'and not match_lang(participant, match_details):
+    if requirement.language and not match_lang(participant, match_details):
         return False
 
     # check height
-    if requirement.height == '1' and not match_height(participant, match_details):
+    if requirement.height and not match_height(participant, match_details):
         return False
 
     # check weight
-    if requirement.weight == '1'and not match_weight(participant, match_details):
+    if requirement.weight and not match_weight(participant, match_details):
         return False
 
     return True
