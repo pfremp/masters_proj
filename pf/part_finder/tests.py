@@ -292,15 +292,16 @@ class ViewsParticipantValidity(TestCase):
 
         # test
         self.assertTrue(check_applicant_validity(self.participant.userprofile, self.experiment))
+        # self.assertFalse(check_applicant_validity(self.participant.userprofile, self.experiment))
 
     def test_student_gender_age(self):
         # Test Combinations of requirements
         # Student, Gender, Age
 
         # set height, gender and age requirements to true
-        # self.requirement.student = True
+        self.requirement.student = True
         self.requirement.age = True
-        # self.requirement.gender = True
+        self.requirement.gender = True
         self.requirement.save()
 
         # set requirement details
@@ -309,26 +310,22 @@ class ViewsParticipantValidity(TestCase):
         self.requirement_detail.max_age = 25
         # Gender
         self.requirement_detail.gender = 'Male'
-        self.requirement.save()
+        self.requirement_detail.save()
 
         # Update participant details to meet requirements
         self.participant.dob = datetime.date(year=1992, month=10, day=10)
         self.participant.gender = 'Male'
         self.participant.student = True
         self.participant.save()
-
         # Test for student meeting all three requirements
         self.assertTrue(check_applicant_validity(self.participant.userprofile, self.experiment))
 
         # Test for student only meeting 2/3 requirements
         self.participant.dob = datetime.date(year=1980, month=10, day=10)
         self.participant.save()
+
+        # Test for student being too old
         self.assertFalse(check_applicant_validity(self.participant.userprofile, self.experiment))
-        # self.assertTrue(check_applicant_validity(self.participant.userprofile, self.experiment))
-
-
-
-
 
 
 # Tests for all models
@@ -338,10 +335,10 @@ class ModelTests(TestCase):
     def setUp(self):
         populate_pf.populate()
 
-        #user
+        # user
         self.user = User.objects.get(username="fsmith")
 
-        #User profile
+        # User profile
         self.up = UserProfile.objects.get(user=self.user)
 
         # Create Experiment
@@ -354,7 +351,6 @@ class ModelTests(TestCase):
     def test_ts_historic_date_model(self):
         ts = TimeSlot(date=datetime.date(2016,12,12), start_time='12:00', end_time='14:00', no_of_parts=5, current_parts = 0, experiment = Experiment.objects.all()[0])
         self.assertIsNone(ts.full_clean())
-
 
     # Test timeslot number of participant - model
     def test_ts_parts_model(self):
