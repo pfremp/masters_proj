@@ -14,7 +14,7 @@ import datetime
 
 
 # Education Levels
-EDUCATION = (('HS' , 'High School Level'),
+EDUCATION = (('HS', 'High School Level'),
              ('SCQF3', '  -Access 3 / Foundation Standard Grade'),
              ('SCQF4', '-Intermediate 1 / General Standard Grade'),
              ('SCQF5','-Intermediate 2 / Credit Standard Grade'),
@@ -33,7 +33,7 @@ EDUCATION = (('HS' , 'High School Level'),
 
 SEX = (('Male','Male'), ('Female','Female'), ('PNTS','Prefer not to say'))
 
-YOS = (('1' , '1'), ('2' , '2'),('3' , '3'),('4' , '4'),('5' , '5'))
+YOS = (('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5'))
 
 
 # Validate Int is grater than 1
@@ -56,7 +56,6 @@ class Researcher(models.Model):
     department = models.CharField(max_length=128, blank=True, null=True)
     contact_no = models.IntegerField(null=True, blank=True)
     url = models.URLField(max_length=128, blank=True)
-
 
     def __unicode__(self):
         return self.userprofile.user.username
@@ -114,7 +113,7 @@ class Participant(models.Model):
 
     # Demographic informatuon
     gender = models.CharField(max_length=128, blank=True, choices=SEX)
-    #Health information
+    # Health information
     height = models.IntegerField(blank=True, null=True)
     weight = models.IntegerField(blank=True, null=True )
 
@@ -159,7 +158,7 @@ class TimeSlot(models.Model):
     is_full = models.BooleanField(default=False)
 
     def clean(self):
-        #Validate date
+        # Validate date
         if self.date < datetime.date.today():
             raise ValidationError('Date cannot be in the past.')
 
@@ -174,6 +173,7 @@ class Is_paid(models.Model):
     def __unicode__(self):
         return self.is_paid
 
+
 # Currency - Credits, Voucher, Cash
 class Currency(models.Model):
     currency = models.CharField(max_length=128, null=True)
@@ -182,6 +182,7 @@ class Currency(models.Model):
     def __unicode__(self):
         return self.currency
 
+
 # Payment Frequency - Total or Hourly
 class Payment_type(models.Model):
     payment_type = models.CharField(max_length=128, null=True)
@@ -189,6 +190,7 @@ class Payment_type(models.Model):
 
     def __unicode__(self):
         return self.payment_type
+
 
 # Experiment Payment method :-
 # Chained Fields, Is Paid,
@@ -207,6 +209,7 @@ class Payment(models.Model):
 
     def __unicode__(self):
         return str(self.amount)
+
 
 # Experiment Application
 class Application(models.Model):

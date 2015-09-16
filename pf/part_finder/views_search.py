@@ -108,7 +108,7 @@ def participant_pref_filter(request, experiment):
     eligible = check_applicant_validity(request, experiment)
     applications = Application.objects.filter(participant=participant)
 
-    #check for online exps - only show online experiments
+    # check for online exps - only show online experiments
     if participant.online_only and not experiment.online:
         return False
 

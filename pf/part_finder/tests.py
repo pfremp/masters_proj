@@ -14,7 +14,7 @@ from part_finder.models import TimeSlot, Experiment, University, Researcher, Use
 from part_finder.forms import TimeSlotForm, ExperimentForm
 from part_finder.models_search import Requirement, MatchingDetail
 from part_finder.views_user import refresh_reqs
-from part_finder.views_search import check_applicant_validity
+from part_finder.views_search import check_applicant_validity, match_gender, match_age, match_height, match_lang, match_weight
 import datetime
 from django.http import HttpResponse, request, HttpRequest
 from django.contrib.auth.models import User
@@ -298,7 +298,7 @@ class ViewsParticipantValidity(TestCase):
         # Test Combinations of requirements
         # Student, Gender, Age
 
-        # set height, gender and age requirements to true
+        # set student, gender and age requirements to true
         self.requirement.student = True
         self.requirement.age = True
         self.requirement.gender = True
@@ -326,6 +326,86 @@ class ViewsParticipantValidity(TestCase):
 
         # Test for student being too old
         self.assertFalse(check_applicant_validity(self.participant.userprofile, self.experiment))
+
+    # Test combination of requirements:
+    # height, weight and language
+    def test_height_weight_lang(self):
+        # Set height, weight and language requirements to true
+        self.requirement.height = True
+        self.requirement.weight = True
+        self.requirement.language = True
+        self.requirement.save()
+
+        # set requirement details
+        # Weight
+        self.requirement_detail.min_weight = 50
+        self.requirement_detail.max_weight = 60
+
+        # Height
+        self.requirement_detail.min_height = 120
+        self.requirement_detail.max_height = 150
+
+        # Language
+        self.requirement_detail.l = "German, Spanish"
+
+        self.requirement_detail.save()
+
+        # Update Participant details to meet requirements
+        self.participant.height = 150
+        self.participant.weight = 50
+
+        # Get Spanish lang
+        spanish = Languages.objects.get(language="Spanish")
+        german = Languages.objects.get(language="German")
+        self.participant.language.add(spanish)
+        self.participant.language.add(german)
+        print self.participant.language
+        self.participant.save()
+
+        # Test for student meeting all three requirements
+        self.assertTrue(check_applicant_validity(self.participant.userprofile, self.experiment))
+
+        # Test for missing one language, assertFalse
+        self.participant.language.remove(german)
+        self.participant.save()
+        self.assertFalse(check_applicant_validity(self.participant.userprofile, self.experiment))
+
+
+# Test individual matching tests in views_search
+class ViewsIndividualSearch(TestCase):
+
+    def setUp(self):
+        populate_pf.populate()
+        self.participant = Participant.objects.all()[0]
+
+        # print self.participant
+        self.experiment = Experiment.objects.get(name="It's all in the face!")
+        # print experiment.name
+        self.requirement = Requirement.objects.get(experiment=self.experiment)
+        # print requirement
+        self.requirement_detail = MatchingDetail.objects.get(requirement=self.requirement)
+        # print requirement_detail
+
+    def test_match_gender(self):
+        # Set up gender requirement details
+        self.requirement_detail.gender = "Female"
+        self.requirement_detail.save()
+
+        # Set up participant
+        self.participant.gender = "Female"
+        self.participant.save()
+
+        # Test - assertTrue
+        self.assertTrue(match_gender(self.participant, self.requirement_detail))
+
+        # Test if gender does not meet requirement
+        self.requirement_detail.gender = "Male"
+        self.requirement_detail.save()
+        print self.requirement_detail.gender
+        print self.participant.gender
+        # Test - assertFalse
+        self.assertFalse(match_gender(self.participant, self.requirement_detail))
+
 
 
 # Tests for all models

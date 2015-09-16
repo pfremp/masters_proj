@@ -213,7 +213,8 @@ def refresh_reqs(experiment):
         # Update timeslots
         timeslots = TimeSlot.objects.filter(experiment=experiment)
         for time_slot in timeslots:
-            time_slot.end_time = str(datetime.timedelta(hours=time_slot.start_time.hour, minutes=time_slot.start_time.minute) + datetime.timedelta(minutes=experiment.duration))[-8:]
+            time_slot.end_time = str(datetime.timedelta(hours=time_slot.start_time.hour, minutes=time_slot.start_time.minute)
+                                     + datetime.timedelta(minutes=experiment.duration))[-8:]
             time_slot.save()
 
         # Check if req details object exists, if it doesn't exist, create one
