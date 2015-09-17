@@ -196,6 +196,7 @@ def refresh_reqs(experiment):
 
     try:
         requirement = Requirement.objects.get(experiment=experiment)
+        print "ID in met - " + str(requirement.id)
 
         # check requirements to see what reqs
         # the participant needs to have.
@@ -203,12 +204,17 @@ def refresh_reqs(experiment):
                 requirement.gender or requirement.weight or requirement.student):
             requirement.match = True
             requirement.save()
+            # print "Req match in met- " + str(requirement.match)
 
         # If the requirements have been removed, set "match" back to false.
         if (requirement.age == False and requirement.language == False and requirement.height == False and
                     requirement.weight == False and requirement.gender == False and requirement.student == False):
             requirement.match = False
             requirement.save()
+            # print "Req match in met - " + str(requirement.match)
+
+
+
 
         # Update timeslots
         timeslots = TimeSlot.objects.filter(experiment=experiment)

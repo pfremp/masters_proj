@@ -30,55 +30,40 @@ from django.core.exceptions import ValidationError
 class ViewTests(TestCase):
 
     def setUp(self):
-        print "Setup"
         populate_pf.populate()
-        # self.single_exp = Experiment.objects.all()[0]
-        # Create Experiment
-        # self.single_exp = Experiment.objects.create(name="Science Experiment", long_description="Long Des..", duration=60, address="George Square, Glasgow", url="http://google.com", city=None, researcher=Researcher.objects.all()[0])
-        self.single_exp = Experiment.objects.all()[0]
-        print "Experiemnt: " + str(self.single_exp)
-        print self.single_exp.id
-        self.req = Requirement.objects.get(experiment=self.single_exp)
-        print "Reqiremnt: " + str(self.req)
-        print self.req.id
-        self.req.student = True
-        self.req.save()
-        refresh_reqs(self.single_exp)
-        print "match at setup " + str(self.req.match)
-        # self.requirements = Requirement.objects.create(experiment=self.single_exp, student=False, age=False,language=False, height=False, weight=False, gender=False)
-        # print self.single_exp.requirement.all().count()
+        self.participant = Participant.objects.all()[0]
 
+        # print self.participant
+        self.experiment = Experiment.objects.get(name="It's all in the face!")
+        # print experiment.name
+        self.requirement = Requirement.objects.get(experiment=self.experiment)
+        # print requirement
+        self.requirement_detail = MatchingDetail.objects.get(requirement=self.requirement)
+        # print requirement_detail
+
+        # set all requirements to false
+        self.requirement.student=False
+        self.requirement.age = False
+        self.requirement.language = False
+        self.requirement.height = False
+        self.requirement.weight = False
+        self.requirement.gender = False
+        self.requirement.save()
+        refresh_reqs(self.experiment)
 
     # Test if requirement's match boolean is updated to false when there are no experiments selected
-    # or true when there is ateast one requirement selected.
+    # or true when there is at least one requirement selected.
     def test_refresh_reqs(self):
-        print "match at t1s " + str(self.req.match)
+        refresh_reqs(self.experiment)
+        self.assertFalse(Requirement.objects.get(experiment=self.experiment).match)
 
-        print "test 1"
-        # reqs = Experiment.objects.get()
-        self.req.student = True
-        self.req.save()
-        refresh_reqs(self.single_exp)
-        # "match" should be false as no requirements are set to true
-        self.assertFalse(self.req.match)
-        print self.single_exp.id
-        print self.req.id
-        print "match at t1e " + str(self.req.student)
-
+    # Match will be set to true as the student requirement is set to true
     def test_refresh_reqs_true(self):
-        print "test 2"
-        self.req.student = True
-        # self.req.match = True
+        self.requirement.student = True
+        self.requirement.save()
+        refresh_reqs(self.experiment)
+        self.assertTrue(Requirement.objects.get(experiment=self.experiment).match)
 
-        refresh_reqs(self.single_exp)
-        # self.requirements.save()
-        print refresh_reqs(self.single_exp)
-        # print self.requirements
-        # print "All Req Objects " + str(self.requirements.match)
-        self.assertTrue(self.req.match)
-        # print "reqs stu " + str(self.requirements.student)
-        print self.single_exp.id
-        print self.req.id
 
 
 # Test participant validity view
@@ -401,11 +386,57 @@ class ViewsIndividualSearch(TestCase):
         # Test if gender does not meet requirement
         self.requirement_detail.gender = "Male"
         self.requirement_detail.save()
-        print self.requirement_detail.gender
-        print self.participant.gender
         # Test - assertFalse
         self.assertFalse(match_gender(self.participant, self.requirement_detail))
 
+    def test_match_age(self):
+        # Set up age detail requirement
+        self.requirement_detail.min_age = 18
+        self.requirement_detail.max_age = 25
+        self.requirement_detail.save()
+
+        # Set up participant details
+        self.participant.dob = datetime.date(year=1992, month=10, day=10)
+        self.participant.save()
+
+        # Test - assertTrue
+        self.assertTrue(match_age(self.participant, self.requirement_detail))
+
+    def test_match_height(self):
+        # Set up height detail requirements
+        self.requirement_detail.min_height = 125
+        self.requirement_detail.max_height = 150
+        self.requirement_detail.save()
+
+        # Set up participant details
+        self.participant.height = 150
+        self.participant.save()
+
+        # Test - assertTrue
+        self.assertTrue(match_height(self.participant, self.requirement_detail))
+
+        # Test - assertFalse - too tall
+        self.participant.height = 155
+        self.participant.save()
+        self.assertFalse(match_height(self.participant, self.requirement_detail))
+
+    def test_match_weight(self):
+        # Set up weight detail requirements
+        self.requirement_detail.min_weight = 70
+        self.requirement_detail.max_weight = 70
+        self.requirement_detail.save()
+
+        # Set up participant details
+        self.participant.weight = 70
+        self.participant.save()
+
+        # Test - assertTrue
+        self.assertTrue(match_weight(self.participant, self.requirement_detail))
+
+        # Test - assertFalse - too heavy
+        self.participant.weight = 100
+        self.participant.save()
+        self.assertFalse(match_weight(self.participant, self.requirement_detail))
 
 
 # Tests for all models
