@@ -2,14 +2,14 @@ Steps to get app working:
 
 1. Create new Virtual Env: virtualenv masters
 
-2. Install requirements: pip install -r requirements.txt
+2. Clone repository: https://github.com/pfremp/masters_proj.git 
 
-3. Clone this repository
+3. Install requirements: pip install -r requirements.txt
 
 4. Make migrations: ./manage.py makemigrations
 
 5. Sync Database: ./manage.py syncdb
-	- Create Super User
+        - Create Super User
 
 6. Populate django cities light: ./manage.py cities_light or ./manage.py cities_light —force-all
 
@@ -22,8 +22,8 @@ b. Select ‘Social Applications’
 c. Select ‘Add new social application’
 
 Localhost Credentials:
-Client ID:448376006900-lfudj54u02f955pucnd4usp66epbgvd.apps.googleusercontent.com 
-Secret:NqaB8QaEtnPsXAlIEjQ0C-H0 
+Client ID:448376006900-lfudj54u02f955pucnd4usp66epbgvd.apps.googleusercontent.com
+Secret:NqaB8QaEtnPsXAlIEjQ0C-H0
 Add website then save
 
 Additional Info:
