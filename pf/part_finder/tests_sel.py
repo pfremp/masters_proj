@@ -96,11 +96,11 @@ class MySeleniumTests(StaticLiveServerTestCase):
         part_1_submit = self.selenium.find_element_by_class_name("btn-default").click()
 
         # Participant Form 2
-        education_select = self.selenium.find_element_by_xpath('//select[@id="id_education"]/option[@value="HE3"]').click()
+        education_select = self.selenium.find_element_by_xpath('//select[@id="id_education"]/option[2]').click()
         # university_select = self.selenium.find_element_by_xpath('//select[@id="id_university"]/option[2]').click()
         course_name_input = self.selenium.find_element_by_id('id_course_name')
         course_name_input.send_keys('MSc Information Technology')
-        yos_select = self.selenium.find_element_by_xpath('//select[@id="id_year_of_study"]/option[@value="2"]').click()
+        yos_select = self.selenium.find_element_by_xpath('//select[@id="id_year"]/option[2]').click()
         matric_input = self.selenium.find_element_by_id('id_matric')
         matric_input.send_keys('25241254125')
         gender_select = self.selenium.find_element_by_xpath('//select[@id="id_gender"]/option[@value="Male"]').click()

@@ -47,7 +47,7 @@ autocomplete_light.register(City, AutocompleteCity)
 
 
 
-
+# # languages autocomplete
 # class LangAutocomplete(al.AutocompleteListBase):
 #     choices = ['French', 'Spanish', 'German', 'Mandarin', 'Cantonese', 'Italian', 'Portugese']
 # al.register(LangAutocomplete)

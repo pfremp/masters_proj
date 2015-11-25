@@ -77,14 +77,14 @@ def application_counter(exp):
 
     applications = Application.objects.filter(experiment=exp)
 
-    #increment the current parts counter
+    # increment the current parts counter
     for app in applications:
 
-        #increment if status is updated to accepted
+        # increment if status is updated to accepted
         if app.status == 'Accepted':
             app.timeslot.current_parts += 1
 
-        #check to see if experiments are full
+        # check to see if experiments are full
         app.timeslot.is_full = app.timeslot.current_parts >= app.timeslot.no_of_parts
 
         app.timeslot.save()

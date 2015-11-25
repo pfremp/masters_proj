@@ -61,6 +61,7 @@ urlpatterns = patterns('',
                        url(r'^match/(?P<experiment_id>[\w\-]+)/$', views_search.matched_experiment, name='set_match'),
 
                        url(r'^autocomplete/', include('autocomplete_light.urls')),
+                       # url(r'^base/$', views.base, name='base'),
 
                        )
 

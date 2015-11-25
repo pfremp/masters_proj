@@ -51,7 +51,7 @@ class ViewTests(TestCase):
         self.requirement.save()
         refresh_reqs(self.experiment)
 
-    # Test if requirement's match boolean is updated to false when there are no experiments selected
+    # Test if requirement's 'match' boolean is updated to false when there are no experiments selected
     # or true when there is at least one requirement selected.
     def test_refresh_reqs(self):
         refresh_reqs(self.experiment)
@@ -63,7 +63,6 @@ class ViewTests(TestCase):
         self.requirement.save()
         refresh_reqs(self.experiment)
         self.assertTrue(Requirement.objects.get(experiment=self.experiment).match)
-
 
 
 # Test participant validity view
@@ -149,7 +148,7 @@ class ViewsParticipantValidity(TestCase):
         self.participant.gender = "Female"
         self.participant.save()
 
-        # Test to make sure male participant is eligible
+        # Test to make sure female participant is eligible
         self.assertTrue(check_applicant_validity(self.participant.userprofile, self.experiment))
 
         # set participant gender to male
@@ -339,7 +338,7 @@ class ViewsParticipantValidity(TestCase):
         self.participant.height = 150
         self.participant.weight = 50
 
-        # Get Spanish lang
+        # Add languages to participant
         spanish = Languages.objects.get(language="Spanish")
         german = Languages.objects.get(language="German")
         self.participant.language.add(spanish)
@@ -438,6 +437,25 @@ class ViewsIndividualSearch(TestCase):
         self.participant.save()
         self.assertFalse(match_weight(self.participant, self.requirement_detail))
 
+    def test_match_lang(self):
+        # Set up language detail requirements
+        self.requirement_detail.l = "French, German"
+        self.requirement_detail.save()
+
+        # Set up participant details
+        french = Languages.objects.get(language="French")
+        german = Languages.objects.get(language="German")
+        self.participant.language.add(french)
+        self.participant.language.add(german)
+        print self.participant.language
+        self.participant.save()
+        self.assertTrue((match_lang(self.participant, self.requirement_detail)))
+
+        # Test for missing one language, assertFalse
+        self.participant.language.remove(german)
+        self.participant.save()
+        self.assertFalse(check_applicant_validity(self.participant.userprofile, self.experiment))
+
 
 # Tests for all models
 class ModelTests(TestCase):
@@ -522,3 +540,8 @@ class FormTests(TestCase):
         data = {'name': exp.name, 'long_description': exp.long_description, 'duration': exp.duration, 'address': exp.address, 'city': exp.city, 'url': exp.url}
         exp_form = ExperimentForm(data=data)
         self.assertEqual(exp_form.is_valid(), True)
+
+
+# class PrefFilterTests(TestCase):
+#
+#     # Set

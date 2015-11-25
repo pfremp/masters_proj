@@ -111,7 +111,7 @@ class Participant(models.Model):
     year = models.IntegerField(null=True)
     matric = models.CharField(max_length=20, null=True)
 
-    # Demographic informatuon
+    # Demographic information
     gender = models.CharField(max_length=128, blank=True, choices=SEX)
     # Health information
     height = models.IntegerField(blank=True, null=True)

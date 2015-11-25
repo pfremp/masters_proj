@@ -1,6 +1,7 @@
 /**
  * Created by patrickfrempong on 04/09/15.
  * JS for addition additional timeslots on "Add Experiment" page
+ * Adapted from http://stellarchariot.com/blog/2011/02/dynamically-add-form-to-formset-using-javascript-and-django/
  */
 
         $(document).ready(function() {
