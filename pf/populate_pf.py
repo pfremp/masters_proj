@@ -174,50 +174,6 @@ def populate():
     match6 = add_match_detail(gender="male", min_age=25, max_age=30, min_height=145, max_height=200, min_weight=50, max_weight=85, requirement=age, l="English")
     match6 = add_match_detail(gender="male", min_age=25, max_age=30, min_height=145, max_height=200, min_weight=50, max_weight=85, requirement=lang, l="English French German")
 
-    # a1 = add_exp_to_par(exp1, par1)
-    # a2 = add_exp_to_par(exp1, par2)
-    # a2 = add_exp_to_par(exp2, par1)
-    # a2 = add_exp_to_par(exp3, par1)
-    # a2 = add_exp_to_par(exp4, par1)
-    # a2 = add_exp_to_par(exp5, par1)
-    # a2 = add_exp_to_par(exp6, par2)
-    # a2 = add_exp_to_par(exp6, par2)
-    # a2 = add_exp_to_par(exp7, par2)
-    # a2 = add_exp_to_par(exp8, par2)
-
-
-    # add_req_match(rte1, match1)
-
-
-    # assign_timeslot(exp1,ts1)
-    #
-    # assign_payment(exp1,payment1)
-    # par1.experiments.add(exp1)
-    # update_par1 = add_exp_to_par(exp1, par1)
-
-    # #2 Researchers Users
-    # res_user1 = add_user(id='201', username='Res1', email='mrr@hotmail.com', password=1, is_active = True)
-    # res_user2 = add_user(id='202', username='Res2', email='mrsr@hotmail.com', password=1, is_active = True)
-    #
-    # # Researcher
-    # res1 = add_res(matric='201900293', user=res_user1, name='Mr Researcher')
-    # res2 = add_res(matric='301902365', user=res_user2, name='Mrs Researcher')
-    #
-    # #10 Experiments
-    # exp1 = add_exp(name='Experiment 1', expId='001', date='2015-07-01', paidEvent='Y', location='Glasgow', noOfPartsWanted='20', startTime='09:00', endTime='13:00', researcher=res1)
-    # exp2 = add_exp(name='Experiment 2', expId='002', date='2015-08-01', paidEvent='Y', location='Edinburgh', noOfPartsWanted='5', startTime='13:00', endTime='17:00', researcher=res2)
-    # exp3 = add_exp(name='Experiment 3', expId='003', date='2015-09-01', paidEvent='Y', location='Dundee', noOfPartsWanted='9', startTime='11:00', endTime='12:00', researcher=res2)
-    # exp4 = add_exp(name='Experiment 4', expId='004', date='2015-10-01', paidEvent='N', location='Glasgow', noOfPartsWanted='4', startTime='11:00', endTime='18:00', researcher=res1)
-    # exp5 = add_exp(name='Experiment 5', expId='005', date='2015-11-01', paidEvent='Y', location='Edinburgh', noOfPartsWanted='8', startTime='19:00', endTime='20:00', researcher=res1)
-    # exp6 = add_exp(name='Experiment 6', expId='006', date='2015-12-01', paidEvent='Y', location='Glasgow', noOfPartsWanted='20', startTime='09:00', endTime='13:00', researcher=res1)
-    # exp7 = add_exp(name='Experiment 7', expId='007', date='2015-08-15', paidEvent='Y', location='Edinburgh', noOfPartsWanted='5', startTime='13:00', endTime='17:00', researcher=res2)
-    # exp8 = add_exp(name='Experiment 8', expId='008', date='2015-09-20', paidEvent='Y', location='Dundee', noOfPartsWanted='9', startTime='11:00', endTime='12:00', researcher=res2)
-    # exp9 = add_exp(name='Experiment 9', expId='009', date='2015-10-30', paidEvent='N', location='Glasgow', noOfPartsWanted='4', startTime='11:00', endTime='18:00', researcher=res1)
-    # exp10 = add_exp(name='Experiment 10', expId='010', date='2015-12-01', paidEvent='Y', location='Edinburgh', noOfPartsWanted='8', startTime='19:00', endTime='20:00', researcher=res1)
-    #
-    # part1 = add_par(name='Patrick Frempong', dob='1980-02-02', matric='20091234', contactNo='07787646578', address='45 University Aveneue, Glasgow, G33 IEM', user=par_user1)
-    # part2 = add_par(name='Bob Smith', dob='1995-12-25', matric='20019384', contactNo='07864577373', address='34 Glasgow Street, Glasgow, G1 1QD', user=par_user2)
-
 
 def add_user(first_name, last_name, username, email, password, is_active):
     u = User.objects.get_or_create(first_name=first_name, last_name=last_name, username=username, password=password, email=email, is_active=is_active)[0]
@@ -225,26 +181,30 @@ def add_user(first_name, last_name, username, email, password, is_active):
     u.save()
     return u
 
+
 def add_uni(name):
     uni = University.objects.get_or_create(name=name)[0]
     uni.save()
     return uni
+
 
 def add_res(university, department, contact_no, url):
     r = Researcher.objects.get_or_create(university=university, department=department, contact_no=contact_no, url=url)[0]
     r.save()
     return r
 
+
 def add_par(dob, city, contact_number, occupation, education, student, university, course_name, year, height, weight, matric, gender, online_only, paid_only, city_only, my_uni_only, eligible_only, reg_2_completed):
     p = Participant.objects.get_or_create(dob=dob, city=city, contact_number=contact_number, occupation=occupation, education=education, student=student, university=university, course_name=course_name, year=year, height=height, weight=weight, matric=matric, gender=gender, online_only=online_only, paid_only=paid_only, city_only=city_only, my_uni_only=my_uni_only, eligible_only=eligible_only, reg_2_completed=reg_2_completed)[0]
-
     p.save()
     return p
+
 
 def add_lang(language):
     l = Languages.objects.get_or_create(language=language)[0]
     l.save()
     return l
+
 
 def add_exp(name, long_description, duration, address, city, url, is_full, has_ended, is_featured, online, student_only, researcher):
     e = Experiment.objects.get_or_create(name=name, long_description=long_description, duration=duration,  address=address, city=city, url=url, is_full=is_full, has_ended=has_ended, is_featured=is_featured, online=online, student_only=student_only, researcher=researcher)[0]
@@ -257,15 +217,14 @@ def add_up(user, typex, participant,  researcher):
     up.save()
     return up
 
+
 def add_exp_to_par(experiment, par):
-    # p = Participant.experiments.add(experiment)[0]
     par.experiments.add(experiment)
-    # p.experiments.add(experiment)[0]
-    # p.save()
-    # return p
+
 
 def add_lang_to_part(par, lang):
     par.language.add(lang)
+
 
 def is_paid(is_paid):
     ip = Is_paid.objects.get_or_create(is_paid=is_paid)[0]
@@ -278,15 +237,18 @@ def add_currency(currency, is_paid):
     c.save()
     return c
 
+
 def add_payment_type(payment_type, currency):
     pt = Payment_type.objects.get_or_create(payment_type=payment_type, currency=currency)[0]
     pt.save()
     return pt
 
+
 def add_payment(is_paid, currency, payment_type, amount, experiment):
     ap = Payment.objects.get_or_create(is_paid=is_paid, currency=currency, payment_type=payment_type, amount=amount, experiment=experiment)[0]
     ap.save()
     return ap
+
 
 def add_timeslot(date, start_time, no_of_parts, experiment):
     t = TimeSlot.objects.get_or_create(date=date, start_time=start_time, no_of_parts=no_of_parts, experiment=experiment)[0]
@@ -299,26 +261,20 @@ def add_req(match, student, age, language, height, weight, gender, experiment):
     r.save()
     return r
 
+
 def add_exp_req(req, exp):
     req.experiment.add(exp)
+
 
 def add_match_detail(gender, min_age, max_age, min_height, max_height, min_weight, max_weight, l, requirement):
     md = MatchingDetail.objects.get_or_create(gender=gender, min_age=min_age, max_age=max_age, min_height=min_height, max_height=max_height, min_weight=min_weight, max_weight=max_weight, l=l, requirement=requirement)[0]
     md.save()
     return md
 
+
 def add_req_match(req, match):
     match.requirement.add(req)
 
-# def assign_timeslot(experiment, timeslot):
-#     timeslot.experiment.add(experiment)
-#
-# def assign_payment(experiment, payment):
-#     payment.experiment.add(experiment)
-
-
-# def setup_payment():
-#     ip = I
 
 if __name__== '__main__':
     print"Starting Participants Finder Population Script..."
