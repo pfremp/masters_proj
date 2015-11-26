@@ -125,7 +125,7 @@ def participant_pref_filter(request, experiment):
         return False
 
     # check for eligibility - only show experiments that participant is eligible for
-    if participant.eligible_only and eligible != 0:
+    if participant.eligible_only and eligible == 0:
         return False
 
     # Don't show experiments that have already been applied for
@@ -145,18 +145,11 @@ def match_age(participant, match_details):
     min_years = match_details.min_age
     max_years = match_details.max_age
 
-    print min_years
-    print max_years
     date = datetime.date.today()
     min_age_date = date - (datetime.timedelta(days=min_years*365.25))
     max_age_date = date - (datetime.timedelta(days=max_years*365.25))
 
     participant_age = participant.dob
-
-    print "Min Age Date " + str(min_age_date)
-    print "DOB: " + str(participant_age)
-    print "Max Age Date " + str(max_age_date)
-    print "--" + str(participant_age <= min_age_date and participant_age >= max_age_date)
 
     return (participant_age <= min_age_date and participant_age >= max_age_date)
 

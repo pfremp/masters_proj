@@ -182,7 +182,7 @@ def all_experiments(request):
 
 
 # Display single experiment
-def experiment (request, experiment_name_slug, r_slug):
+def experiment(request, experiment_name_slug, r_slug):
     context_dict = {}
     try:
         experiment = Experiment.objects.get(slug=experiment_name_slug, researcher_slug=r_slug)

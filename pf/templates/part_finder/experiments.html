@@ -22,7 +22,7 @@
                     <p>{{ experiment.long_description }}</p>
                     <br>
 
-                    <p>{{ valid }}</p>
+
                     <!-- Application form -->
                     <h2>Apply</h2>
                     {%  if user.is_authenticated and user.profile.typex == 'Participant' %}
@@ -110,7 +110,7 @@
                                 {% endif %}
 
                                 <!-- check for weight -->
-                                {% if reqs.height %}
+                                {% if reqs.weight %}
                                     <p><b>Min Weight:</b> {{ match_detail.min_weight }} KG<b> Max Weight:</b> {{ match_detail.max_weight }} KG</p>
                                 {% endif %}
 

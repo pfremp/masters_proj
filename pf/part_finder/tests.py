@@ -19,12 +19,7 @@ import datetime
 from django.http import HttpResponse, request, HttpRequest
 from django.contrib.auth.models import User
 import datetime
-
-
 from django.core.exceptions import ValidationError
-
-# driver = webdriver.Firefox()
-# driver.implicitly_wait(10) # seconds
 
 
 class ViewTests(TestCase):
@@ -492,14 +487,6 @@ class ModelTests(TestCase):
         self.assertIsNone(exp.full_clean(), True)
 
 
-        # # Ensure timeslot has experiment
-        # def test_timeslot_has_exp(self):
-        #     timeslot = self.ts
-        #
-        #     timeslot.experiment=None
-        #     self.assertRaises(ValidationError,  )
-        #     print timeslot.experiment
-
 
 # Tests for all forms
 class FormTests(TestCase):
@@ -541,7 +528,3 @@ class FormTests(TestCase):
         exp_form = ExperimentForm(data=data)
         self.assertEqual(exp_form.is_valid(), True)
 
-
-# class PrefFilterTests(TestCase):
-#
-#     # Set
