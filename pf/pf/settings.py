@@ -290,12 +290,15 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 # #email config
+e = open("email.txt").read().split(",")
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'participantfinder1@gmail.com'
-EMAIL_HOST_PASSWORD = 'asam1111'
+EMAIL_HOST_USER = e[0]
+EMAIL_HOST_PASSWORD = e[1]
 EMAIL_USE_TLS = True
+
+
 
 
 AUTHENTICATION_BACKENDS = (
