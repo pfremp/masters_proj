@@ -89,7 +89,7 @@ class ApplicationForm(forms.ModelForm):
 
 # Experiment form to update status
 class UpdateStatusForm(forms.ModelForm):
-    STATUS = (('',''), ('Pending','Pending'),('Accepted','Accepted'),('Standby','Standby'),('Cancelled','Cancelled'),('Unsuccessful', 'Unsuccessful'))
+    STATUS = (('',''), ('Pending','Pending'),('Accepted','Accepted'),('Standby','Standby'),('Cancelled','Cancelled'),('Unsuccessful', 'Unsuccessful'), ('Complete', 'Complete'))
     status = forms.ChoiceField(label="Update Status", required=True, choices=STATUS, help_text="Select a status and click update")
 
     class Meta:
@@ -99,7 +99,7 @@ class UpdateStatusForm(forms.ModelForm):
 
 # Experiment form to update status (for full experiments)
 class UpdateStatusFormFull(forms.ModelForm):
-    STATUS = (('',''), ('Pending','Pending'), ('Standby','Standby'),('Cancelled','Cancelled'), ('Unsuccessful', 'Unsuccessful'))
+    STATUS = (('',''), ('Pending','Pending'), ('Standby','Standby'),('Cancelled','Cancelled'), ('Unsuccessful', 'Unsuccessful'), ('Complete', 'Complete'))
     status = forms.ChoiceField(label="Update Status", required=True, choices=STATUS, help_text="Select a status and click update")
 
     class Meta:

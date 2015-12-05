@@ -4,6 +4,7 @@
 {% extends 'sitebase.html' %}
 {% load staticfiles %}
 {% load bootstrap3 %}
+{% load mathfilters %}
 {% block title %} My Experiments{% endblock %}
 {% block body_block %}
     {% if user.profile.typex == 'Participant' %}
@@ -14,35 +15,53 @@
                 <caption></caption>
                 <thead>
                 <tr>
-                  <th>Experiment</th>
-                  <th>Researcher</th>
-                  <th>Date</th>
-                  <th>Time</th>
-                  <th>Status</th>
-                  <th>Cancel</th>
+                    <th>Experiment</th>
+                    <th>Researcher</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                    <th>Cancel</th>
                 </tr>
                 </thead>
                 <tbody>
-                    {% for a in applications %}
-                        {% if a.experiment.has_ended == False %}
+                {% for a in applications %}
+                    {% if a.experiment.has_ended == False %}
                         <tr>
-                          <td><a href="{% url 'experiment' a.experiment.researcher_slug a.experiment.slug %}">{{ a.experiment.name }}</a></td>
-                          <td><a href="{% url 'researcher_profile' a.experiment.researcher.userprofile.user.username %}">{{ a.experiment.researcher.userprofile.user.first_name }} {{ a.experiment.researcher.userprofile.user.last_name }}</a></td>
-                          <td>{{ a.timeslot.date }}</td>
-                          <td>{{ a.timeslot.start_time }} - {{ a.timeslot.end_time }}</td>
-                          <td>{{ a.status }}</td>
-                          {% if a.status == 'Pending' %}
-                          <td><a href="{% url 'delete_participant_experiment' a.experiment.id %}"><button type="button" class="btn btn-default btn-xs">Cancel</button></a><td>
-                          {% else %}
-                          <td>Contact*</td>
-                          {% endif %}
+                            <td><a href="{% url 'experiment' a.experiment.researcher_slug a.experiment.slug %}">{{ a.experiment.name }}</a></td>
+                            <td><a href="{% url 'researcher_profile' a.experiment.researcher.userprofile.user.username %}">{{ a.experiment.researcher.userprofile.user.first_name }} {{ a.experiment.researcher.userprofile.user.last_name }}</a></td>
+                            <td>{{ a.timeslot.date }}</td>
+                            <td>{{ a.timeslot.start_time }} - {{ a.timeslot.end_time }}</td>
+                            <td>{{ a.status }}</td>
+                            {% if a.status == 'Pending' %}
+                                <td><a href="{% url 'delete_participant_experiment' a.experiment.id %}"><button type="button" class="btn btn-default btn-xs">Cancel</button></a><td>
+                                {% elif a.status == 'Complete' %}
+                                <td></td>
+                            {% else %}
+                                <td>Contact*</td>
+                            {% endif %}
                         </tr>
-                        {% endif %}
-                    {% endfor %}
+                    {% endif %}
+                {% endfor %}
                 </tbody>
             </table>
         </div>
-            <p>*If you would like to cancel a confirmed experiment, please contact the researcher directly.</p>
+        <p>*If you would like to cancel a confirmed experiment, please contact the researcher directly.</p>
+        <h1>Points</h1>
+        <p>Participants with 1000 points or higher are achieve <b>Gold</b> member status. As a <b>Gold</b> member you get exclusive rewards including first try of our new features.</p>
+        <ul class="list-group" >
+            <li class="list-group-item">Last 30 days<span class="badge">{{ points_30 }}</span></li>
+            <li class="list-group-item">Total since joining<span class="badge">{{ points }}</span></li>
+        </ul>
+        {% if points_30 < 250 %}
+            <p>You need <b>{{ 1000|sub:points }}</b> more points to become a <b>Gold</b> member.</p>
+
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ percentage }}%;">{{ percentage }}%</div>
+            </div>
+
+        {% else %}
+            <p>You are currently a <b>Gold</b> participant!</p>
+        {% endif %}
     {% else %}
     {% endif %}
 {% endblock %}

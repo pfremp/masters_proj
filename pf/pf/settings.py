@@ -50,6 +50,7 @@ INSTALLED_APPS = (
     'formtools',
     'smart_selects',
     'easy_maps',
+    'mathfilters',
 
 
     #allauth

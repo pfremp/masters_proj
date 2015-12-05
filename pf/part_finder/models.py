@@ -213,7 +213,7 @@ class Payment(models.Model):
 
 # Experiment Application
 class Application(models.Model):
-    STATUS = (('Pending','Pending'),('Accepted','Accepted'),('Standby','Standby'))
+    STATUS = (('Pending','Pending'),('Accepted','Accepted'),('Standby','Standby'), ('Complete', 'Complete'))
     researcher = models.ForeignKey(Researcher, null=True, related_name="application")
     participant = models.ForeignKey(Participant, null=True, related_name="application")
     experiment = models.ForeignKey(Experiment, null=True, related_name="application")

@@ -81,7 +81,7 @@ def application_counter(exp):
     for app in applications:
 
         # increment if status is updated to accepted
-        if app.status == 'Accepted':
+        if app.status == 'Accepted' or 'Complete':
             app.timeslot.current_parts += 1
 
         # check to see if experiments are full
@@ -462,3 +462,16 @@ def reac_experiment(request, experiment_id):
     context_dict = {'experiment': e}
 
     return render(request, 'part_finder/reactivate_experiment.html', context_dict)
+
+# @login_required
+# # Count number of points
+# def user_points_counter(request, application):
+#     experiment = application.experiment
+#     applications = Application.objects.all()
+#     counter = 0
+#
+#     for a in applications:
+#         if a.participant == request.user.profile.participant and a.status == 'completed':
+#             counter += a.experiment.duration
+#
+#
