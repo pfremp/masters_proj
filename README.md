@@ -45,7 +45,7 @@ Setup Django All Auth in order to use Google Social Authentication
     ```
     NqaB8QaEtnPsXAlIEjQ0C-H0
     ```
-Add website and then save
+    Add website and then save
 
 #### Additional Info:
  - URI:
