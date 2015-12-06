@@ -64,7 +64,7 @@ localhost URL.
 #### Demo Researcher
  - Username: fsmith 
  - Password: 111111
-### Demo Participant
+#### Demo Participant
  - Username: andrews1 
  - Password: 111111
 
