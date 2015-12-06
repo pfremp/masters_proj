@@ -71,11 +71,6 @@ localhost URL.
 ## Deployment
 The web application is currently deployed on Python Anywhere and can be view at http://pfremp1.pythonanywhere.com/part_finder/.
 
-PythonAnywhere Hosting Login:
- - https://www.pythonanywhere.com/login/
- - Username: pfremp1 
- - Password: pfmstrs1
-
 Live Website Admin Credentials:
  - http://pfremp1.pythonanywhere.com/admin/
  - Username: Pfr1 
