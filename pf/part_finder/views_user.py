@@ -267,6 +267,7 @@ def participant_experiments(request):
 
         con_count = len([a for a in applications if a.status == 'Accepted' and not a.experiment.has_ended])
         pen_count = len([a for a in applications if a.status == 'Pending' and not a.experiment.has_ended])
+        com_count = len([a for a in applications if a.status == 'Complete' and not a.experiment.has_ended])
         min_date = datetime.date.today()-datetime.timedelta(days=30)
 
         # Count Total User Points
@@ -285,7 +286,7 @@ def participant_experiments(request):
 
         print percentage
 
-        context_dict = {'applications': applications, 'con_count': con_count, 'pen_count': pen_count, 'points': total_points, 'points_30': total_points_30, 'percentage': percentage}
+        context_dict = {'applications': applications, 'con_count': con_count, 'pen_count': pen_count, 'points': total_points, 'points_30': total_points_30, 'percentage': percentage, 'com_count': com_count}
 
         return render(request, 'part_finder/participant_experiments.html', context_dict)
 

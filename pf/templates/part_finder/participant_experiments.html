@@ -9,7 +9,7 @@
 {% block body_block %}
     {% if user.profile.typex == 'Participant' %}
         <h1>My Experiments</h1>
-        <p>You currently have <b>{{ pen_count }}</b> pending application(s) and <b>{{ con_count }}</b> confirmed experiment(s).</p>
+        <p>You currently have <b>{{ pen_count }}</b> pending application(s), <b>{{ con_count }}</b> confirmed experiment(s) and have completed <b>{{ com_count }}</b> experiments.</p>
         <div class="table table-responsive" data-example-id="simple-table" >
             <table class="table">
                 <caption></caption>
@@ -33,7 +33,7 @@
                             <td>{{ a.timeslot.start_time }} - {{ a.timeslot.end_time }}</td>
                             <td>{{ a.status }}</td>
                             {% if a.status == 'Pending' %}
-                                <td><a href="{% url 'delete_participant_experiment' a.experiment.id %}"><button type="button" class="btn btn-default btn-xs">Cancel</button></a><td>
+                                <td><a href="{% url 'delete_participant_experiment' a.experiment.id %}"><button type="button" class="btn btn-default btn-xs">Cancel</button></a></td>
                                 {% elif a.status == 'Complete' %}
                                 <td></td>
                             {% else %}
