@@ -16,6 +16,7 @@ django-classy-tags==0.6.2
 django-datetime-widget==0.9.3
 django-easy-maps==0.9.2
 django-formtools==1.0
+django-mathfilters==0.3.0
 django-registration-redux==1.2
 django-select-multiple-field==0.4.0
 django-selenium==0.9.8
