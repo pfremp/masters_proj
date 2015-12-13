@@ -21,6 +21,9 @@ Steps to get application working
    ./manage.py makemigrations
    ```
 5. Sync database (create Superuser)
+   ```
+   ./manage.py syncdb
+   ```
 6. Populate Django Cities Light:
     ```
     ./manage.py cities_light
@@ -45,7 +48,7 @@ Setup Django All Auth in order to use Google Social Authentication
     ```
     wMpbW4grIc3aXiyjqebetx7M
     ```
-    Add website and then save
+ - Add website and then save.
 
 #### Additional Info:
  - URI:
@@ -56,21 +59,24 @@ Setup Django All Auth in order to use Google Social Authentication
     ```
     http://localhost:8000/
     ```
-The website should now be working and be able to be viewed at your
-localhost URL.
+ - The website should now be working and be able to be viewed at your localhost URL.
 
-* The locations of the currently experiment need to be manually configured via the django admin area. They will currently show as “None”.
+* The locations of the preloaded experiments need to be manually configured via the django admin area. They will currently show as “None”.
 
 #### Demo Researcher
  - Username: fsmith 
  - Password: 111111
-
-#### Demo Participant
+### Demo Participant
  - Username: andrews1 
  - Password: 111111
 
 ## Deployment
 The web application is currently deployed on Python Anywhere and can be view at http://pfremp1.pythonanywhere.com/part_finder/.
+
+PythonAnywhere Hosting Login:
+ - https://www.pythonanywhere.com/login/
+ - Username: pfremp1 
+ - Password: pfmstrs1
 
 Live Website Admin Credentials:
  - http://pfremp1.pythonanywhere.com/admin/
