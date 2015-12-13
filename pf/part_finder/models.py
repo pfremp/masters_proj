@@ -33,6 +33,7 @@ EDUCATION = (('HS', 'High School Level'),
 
 SEX = (('Male','Male'), ('Female','Female'), ('PNTS','Prefer not to say'))
 
+# Year of study
 YOS = (('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5'))
 
 
