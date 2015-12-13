@@ -6,7 +6,7 @@ Steps to get application working
 
 1. Create new Virtual Env: 
     ```
-    mkfvirtualenv partfinder
+    mkvirtualenv partfinder
     ```
 2. Clone this repository:
     ```
