@@ -62,6 +62,8 @@ From the main admin area select 'Social Applications' then 'Add social applicati
  - Leave 'key' blank.
  - Add site and then save.
 
+ **Ensure that there are no spaces in and at the end of the 'client id' and 'secret'.**
+ 
 ##### Additional Info:
  - URI:
     ```
