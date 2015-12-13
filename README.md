@@ -82,8 +82,12 @@ The website should now be working and be able to be viewed at your localhost URL
  - Username: ```fsmith```
  - Password: ```111111```
 
-### Demo Participant
+#### Demo Participant
  - Username: ```andrews1``` 
+ - Password: ```111111```
+
+
+ - Username: ``mjones`` 
  - Password: ```111111```
 
 ## Video Demo
