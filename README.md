@@ -38,8 +38,19 @@ Steps to get application working
     ```
 
 # Setup Django All Auth
-Setup Django All Auth in order to use Google Social Authentication
+Setup Django All Auth in order to use Google Social Authentication.
+
+### Site Name
+Firstly, set the site name from the from the default 'example.com' to the partfinder details (this is essential for Django All Auth).
+
+ - Click on 'sites' in the main admin area.
+ - Select 'example.com'.
+ - Enter your localhost URL as the Domain Name (e.g. http://127.0.0.1:8000) and part_finder.com for the 'Display Name'.
+
+From the main admin area select 'Social Applications' then 'Add social application'. Enter the credentials below. 
 ### Localhost Credentials:
+ - Provider: ```Google```
+ - Name: ```Google```
  - Client ID: 
      ```
      448376006900-qatchgenmro1u9vbah2heqqq87ur8vgv.apps.googleusercontent.com
@@ -48,9 +59,10 @@ Setup Django All Auth in order to use Google Social Authentication
     ```
     wMpbW4grIc3aXiyjqebetx7M
     ```
- - Add website and then save.
+ - Leave 'key' blank.
+ - Add site and then save.
 
-#### Additional Info:
+##### Additional Info:
  - URI:
     ```
     http://127.0.0.1:8000/accounts/google/login/callback/
@@ -61,29 +73,15 @@ Setup Django All Auth in order to use Google Social Authentication
     ```
  - The website should now be working and be able to be viewed at your localhost URL.
 
-* The locations of the preloaded experiments need to be manually configured via the django admin area. They will currently show as “None”.
-
+##### The locations of the preloaded experiments need to be manually configured via the django admin area. They will currently show as “None”.
+##
+##
 #### Demo Researcher
  - Username: fsmith 
  - Password: 111111
 ### Demo Participant
  - Username: andrews1 
  - Password: 111111
-
-## Deployment
-The web application is currently deployed on Python Anywhere and can be view at http://pfremp1.pythonanywhere.com/part_finder/.
-
-PythonAnywhere Hosting Login:
- - https://www.pythonanywhere.com/login/
- - Username: pfremp1 
- - Password: pfmstrs1
-
-Live Website Admin Credentials:
- - http://pfremp1.pythonanywhere.com/admin/
- - Username: Pfr1 
- - Password: pf1111
-
-
 
 ## Video Demo
 A video demo exhibiting the main features of the application can be viewed here: https://youtu.be/9Z7l5_THo8s
