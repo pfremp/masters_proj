@@ -10,6 +10,7 @@ from part_finder.models import *
 from part_finder.models_search import *
 from django.contrib.auth.models import User
 from part_finder.views_user import refresh_reqs
+from part_finder.views import application_counter
 
 
 def populate():
@@ -215,6 +216,21 @@ def populate():
     app5 = add_app(status='Complete', researcher=res2, participant=par2, experiment=exp2, timeslot=ts26)
     app5 = add_app(status='Pending', researcher=res1, participant=par2, experiment=exp1, timeslot=ts1)
 
+    # Refresh Applications
+    application_counter(exp1)
+    application_counter(exp2)
+    application_counter(exp3)
+    application_counter(exp4)
+    application_counter(exp5)
+    application_counter(exp6)
+    application_counter(exp7)
+    application_counter(exp8)
+    application_counter(exp9)
+    application_counter(exp10)
+    application_counter(exp11)
+    application_counter(exp12)
+    application_counter(exp13)
+    application_counter(exp14)
 
 def add_user(first_name, last_name, username, email, password, is_active):
     u = User.objects.get_or_create(first_name=first_name, last_name=last_name, username=username, password=password, email=email, is_active=is_active)[0]
