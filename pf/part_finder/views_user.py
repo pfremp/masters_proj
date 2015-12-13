@@ -268,7 +268,7 @@ def participant_experiments(request):
         con_count = len([a for a in applications if a.status == 'Accepted' and not a.experiment.has_ended])
         pen_count = len([a for a in applications if a.status == 'Pending' and not a.experiment.has_ended])
         com_count = len([a for a in applications if a.status == 'Complete' and not a.experiment.has_ended])
-        min_date = datetime.date.today()-datetime.timedelta(days=30)
+
 
         # Count Total User Points
         total_points = 0
