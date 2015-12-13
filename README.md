@@ -79,6 +79,7 @@ The website should now be working and be able to be viewed at your localhost URL
 #### Demo Researcher
  - Username: ```fsmith```
  - Password: ```111111```
+
 ### Demo Participant
  - Username: ```andrews1``` 
  - Password: ```111111```
