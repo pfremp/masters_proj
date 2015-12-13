@@ -39,11 +39,11 @@ Setup Django All Auth in order to use Google Social Authentication
 ### Localhost Credentials:
  - Client ID: 
      ```
-     448376006900-lfudj54u02f955pucnd4usp66epbgvd.apps.googleusercontent.com
+     448376006900-qatchgenmro1u9vbah2heqqq87ur8vgv.apps.googleusercontent.com
     ```
  - Secret:
     ```
-    NqaB8QaEtnPsXAlIEjQ0C-H0
+    wMpbW4grIc3aXiyjqebetx7M
     ```
     Add website and then save
 
