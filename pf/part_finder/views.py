@@ -73,21 +73,19 @@ def experiment_history(request):
 
 
 # Application Counter - Count number of applications for an experiment
-def application_counter(exp):
+def application_counter(application):
 
-    applications = Application.objects.filter(experiment=exp)
+    app = Application.objects.get(id=application.id)
 
-    # increment the current parts counter
-    for app in applications:
-
-        # increment if status is updated to accepted
-        if app.status == 'Accepted' or 'Complete':
+    # increment if status is updated to accepted
+    if app.status == 'Accepted' or app.status == 'Complete':
             app.timeslot.current_parts += 1
 
-        # check to see if experiments are full
-        app.timeslot.is_full = app.timeslot.current_parts >= app.timeslot.no_of_parts
+    # check to see if experiments are full
+    app.timeslot.is_full = app.timeslot.current_parts >= app.timeslot.no_of_parts
 
-        app.timeslot.save()
+    app.timeslot.save()
+
 
 # Displays page for researcher to process experiment applications
 @login_required
@@ -110,7 +108,7 @@ def update_application_status(request, exp_id, app_id):
     application = Application.objects.get(researcher=researcher, experiment=experiment, id=app_id)
 
     if request.method == 'POST':
-        #if timeslot is full, dont allow applicant to be marked as accepted
+        # If timeslot is full, don't allow applicant to be marked as accepted
         def get_app_form_post():
             if application.timeslot.is_full:
                 return UpdateStatusFormFull(request.POST)
@@ -123,12 +121,13 @@ def update_application_status(request, exp_id, app_id):
             temp_app = temp_app_form.save(commit=False)
             application.status = temp_app.status
             application.save()
-            #set counter to zero
+            # reset counter and 'exp full' boolean
             application.timeslot.current_parts = 0
+            application.timeslot.is_full = False
             application.timeslot.save()
-            application_counter(experiment)
+            application_counter(application)
 
-            #emails
+            # emails
             app_status_update_email(application)
 
             return process_application(request, experiment.slug, experiment.researcher_slug)
@@ -463,15 +462,3 @@ def reac_experiment(request, experiment_id):
 
     return render(request, 'part_finder/reactivate_experiment.html', context_dict)
 
-# @login_required
-# # Count number of points
-# def user_points_counter(request, application):
-#     experiment = application.experiment
-#     applications = Application.objects.all()
-#     counter = 0
-#
-#     for a in applications:
-#         if a.participant == request.user.profile.participant and a.status == 'completed':
-#             counter += a.experiment.duration
-#
-#
