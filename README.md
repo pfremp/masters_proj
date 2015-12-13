@@ -6,7 +6,7 @@ Steps to get application working
 
 1. Create new Virtual Env: 
     ```
-    virtualenv partfinder
+    mkvirtualenv partfinder
     ```
 2. Clone this repository:
     ```
@@ -71,17 +71,17 @@ From the main admin area select 'Social Applications' then 'Add social applicati
     ```
     http://localhost:8000/
     ```
- - The website should now be working and be able to be viewed at your localhost URL.
+The website should now be working and be able to be viewed at your localhost URL.
 
 ##### The locations of the preloaded experiments need to be manually configured via the django admin area. They will currently show as “None”.
 ##
 ##
 #### Demo Researcher
- - Username: fsmith 
- - Password: 111111
+ - Username: ```fsmith```
+ - Password: ```111111```
 ### Demo Participant
- - Username: andrews1 
- - Password: 111111
+ - Username: ```andrews1``` 
+ - Password: ```111111```
 
 ## Video Demo
 A video demo exhibiting the main features of the application can be viewed here: https://youtu.be/9Z7l5_THo8s
