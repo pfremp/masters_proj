@@ -107,7 +107,6 @@ def process_application(request, experiment_name_slug, r_slug):
 @login_required
 def update_application_status(request, exp_id, app_id):
 
-    print "update app status"
     researcher = request.user.profile.researcher
     experiment = Experiment.objects.get(id=exp_id)
     application = Application.objects.get(researcher=researcher, experiment=experiment, id=app_id)
@@ -130,8 +129,6 @@ def update_application_status(request, exp_id, app_id):
             application.timeslot.current_parts = 0
             application.timeslot.is_full = False
             application.timeslot.save()
-            # application_counter(experiment)
-            # print "App counter called. for " + application.experiment.name + application.participant.userprofile.user.first_name
             application_counter(experiment, application.timeslot)
 
             #emails
