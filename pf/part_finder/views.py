@@ -73,18 +73,34 @@ def experiment_history(request):
 
 
 # Application Counter - Count number of applications for an experiment
-def application_counter(application):
+def application_counter(exp):
 
-    app = Application.objects.get(id=application.id)
+    # app = Application.objects.get(id=application.id)
+    #
+    # # increment if status is updated to accepted
+    # if app.status == 'Accepted' or app.status == 'Complete':
+    #         app.timeslot.current_parts += 1
+    #
+    # # check to see if experiments are full
+    # app.timeslot.is_full = app.timeslot.current_parts >= app.timeslot.no_of_parts
+    #
+    # app.save()
 
-    # increment if status is updated to accepted
-    if app.status == 'Accepted' or app.status == 'Complete':
+
+
+    applications = Application.objects.filter(experiment=exp)
+
+    # increment the current parts counter
+    for app in applications:
+
+        # increment if status is updated to accepted
+        if app.status == 'Accepted' or 'Complete':
             app.timeslot.current_parts += 1
 
-    # check to see if experiments are full
-    app.timeslot.is_full = app.timeslot.current_parts >= app.timeslot.no_of_parts
+        # check to see if experiments are full
+        app.timeslot.is_full = app.timeslot.current_parts >= app.timeslot.no_of_parts
 
-    app.save()
+        app.timeslot.save()
 
 
 # Displays page for researcher to process experiment applications
@@ -125,7 +141,7 @@ def update_application_status(request, exp_id, app_id):
             application.timeslot.current_parts = 0
             application.timeslot.is_full = False
             application.timeslot.save()
-            application_counter(application)
+            application_counter(experiment)
 
             # emails
             app_status_update_email(application)
