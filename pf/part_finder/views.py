@@ -84,7 +84,7 @@ def application_counter(application):
     # check to see if experiments are full
     app.timeslot.is_full = app.timeslot.current_parts >= app.timeslot.no_of_parts
 
-    app.timeslot.save()
+    app.save()
 
 
 # Displays page for researcher to process experiment applications
