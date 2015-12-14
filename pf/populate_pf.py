@@ -219,7 +219,7 @@ def populate():
     # Refresh Applications
 
     for a in Application.objects.all():
-        application_counter(a)
+        application_counter(a.experiment, a.timeslot)
 
 
 def add_user(first_name, last_name, username, email, password, is_active):
