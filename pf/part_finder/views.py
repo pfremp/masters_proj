@@ -73,18 +73,22 @@ def experiment_history(request):
 
 
 # Application Counter - Count number of applications for an experiment
-def application_counter(application):
+def application_counter(exp, ts):
 
-    app = Application.objects.get(id=application.id)
+    # Filter applications for specific timeslot
+    applications = Application.objects.filter(experiment=exp, timeslot=ts)
 
-    # increment if status is updated to accepted
-    if app.status == 'Accepted' or app.status == 'Complete':
+    # increment the current parts counter
+    for app in applications:
+
+        # increment if status is updated to accepted
+        if app.status == 'Accepted' or app.status == 'Complete':
             app.timeslot.current_parts += 1
 
-    # check to see if experiments are full
-    app.timeslot.is_full = app.timeslot.current_parts >= app.timeslot.no_of_parts
+        # check to see if experiments are full
+        app.timeslot.is_full = app.timeslot.current_parts >= app.timeslot.no_of_parts
+        app.timeslot.save()
 
-    app.timeslot.save()
 
 
 # Displays page for researcher to process experiment applications
@@ -96,13 +100,14 @@ def process_application(request, experiment_name_slug, r_slug):
 
     context_dict = {'app': application, 'time': timeslots, 'experiment': experiment}
 
-    return render(request, 'part_finder/process_applications.html', context_dict )
+    return render(request, 'part_finder/process_applications.html', context_dict)
 
 
 # Displays page to update application status
 @login_required
 def update_application_status(request, exp_id, app_id):
 
+    print "update app status"
     researcher = request.user.profile.researcher
     experiment = Experiment.objects.get(id=exp_id)
     application = Application.objects.get(researcher=researcher, experiment=experiment, id=app_id)
@@ -125,9 +130,11 @@ def update_application_status(request, exp_id, app_id):
             application.timeslot.current_parts = 0
             application.timeslot.is_full = False
             application.timeslot.save()
-            application_counter(application)
+            # application_counter(experiment)
+            # print "App counter called. for " + application.experiment.name + application.participant.userprofile.user.first_name
+            application_counter(experiment, application.timeslot)
 
-            # emails
+            #emails
             app_status_update_email(application)
 
             return process_application(request, experiment.slug, experiment.researcher_slug)
