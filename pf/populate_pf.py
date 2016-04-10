@@ -201,8 +201,6 @@ def populate():
     refresh_reqs(exp13)
     refresh_reqs(exp14)
 
-    # email info stored in txt file for security
-    e = open("email.txt").read().split(",")
 
     # Create applications
     app1 = add_app(status='Pending', researcher=res1, participant=par1, experiment=exp1, timeslot=ts1)

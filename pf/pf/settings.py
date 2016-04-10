@@ -19,10 +19,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'oi!60kkg4)9^l+(81x_dl@07!j&dhvppljy+foks_19z#_3sx+'
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 TEMPLATE_DEBUG = True
 
@@ -290,13 +290,13 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 )
 
-# #email config
-e = open("email.txt").read().split(",")
+
+# email config
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = e[0]
-EMAIL_HOST_PASSWORD = e[1]
+EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
+EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
 EMAIL_USE_TLS = True
 
 
@@ -359,3 +359,5 @@ SOUTH_MIGRATION_MODULES = {
 # # ----------------- SELENIUM ----------------------
 # SELENIUM_DRIVER = 'Firefox'
 # SELENIUM_DISPLAY = ":99.0"
+
+
