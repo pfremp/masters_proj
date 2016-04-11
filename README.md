@@ -1,5 +1,8 @@
 # Participant Finder Django Application
 This application enables researchers looking for human participants to sign up and post their experiments. Participants are then able to register and sign up for experiments.
+
+A live version of this application can be found here: http://pfremp1.pythonanywhere.com/part_finder/
+
 # Setup Application 
 
 Steps to get application working
